@@ -271,6 +271,30 @@ STYLE: [style characteristics]
 ASPECT: 16:9
 ```
 
+### Line-Sketch Style Override
+
+When `style: line-sketch`, replace standard style instructions with:
+
+```
+Minimal hand-drawn line sketch illustration. Off-white paper background (#F5F3EE). Dark gray sketch lines (#3A3A3A), single weight, slight natural tremor.
+COLORS: Gray-scale only + umbrella yellow (#D4A843) as ONE accent — use sparingly on the single most important element.
+FIGURES: Faceless round-headed human figures ONLY. Express emotion through posture and position, not facial expression.
+COMPOSITION: Single focal point, 60%+ negative space, conceptual not literal.
+QUOTE: Add one short Chinese quote in natural handwritten style near the bottom.
+RESTRICTIONS: No realism, no 3D, no painterly texture, no high saturation, no complex background, no photographic detail.
+LANGUAGE: Use Chinese wherever possible for any visible text.
+```
+
+**Scene + line-sketch**:
+```
+Single conceptual scene with one round-headed faceless figure. Sparse composition, mostly empty paper.
+ACCENT: Umbrella yellow (#D4A843) on ONE key object only (e.g., an umbrella, a door, a lamp).
+MOOD: Restrained, lucid, slightly ironic, emotionally calm.
+QUOTE: One short Chinese handwritten quote at bottom (e.g., "有些事想清楚了，反而不想说了。")
+```
+
+---
+
 ### Screen-Print Style Override
 
 When `style: screen-print`, replace standard style instructions with:

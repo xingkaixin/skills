@@ -36,6 +36,7 @@
 |----------|------|-------|----------|
 | `storytelling` | `scene` | `warm` | Personal essays, reflections, growth stories |
 | `lifestyle` | `scene` | `watercolor` | Travel, wellness, lifestyle, creative |
+| `zen-sketch` | `scene` | `line-sketch` | 随笔反思、哲思观察、克制内敛的个人叙事 |
 | `history` | `timeline` | `elegant` | Historical overviews, milestones |
 | `evolution` | `timeline` | `warm` | Progress narratives, growth journeys |
 
@@ -58,7 +59,7 @@ Use this table during Step 3 to recommend presets based on Step 2 content analys
 | Methodology / Framework | `system-design` | `architecture`, `process-flow` |
 | Data / Metrics | `data-report` | `versus`, `tech-explainer` |
 | Comparison / Review | `versus` | `business-compare`, `editorial-poster` |
-| Narrative / Personal | `storytelling` | `lifestyle`, `evolution` |
+| Narrative / Personal | `storytelling` | `lifestyle`, `evolution`, `zen-sketch` |
 | Opinion / Editorial | `opinion-piece` | `cinematic`, `editorial-poster` |
 | Historical / Timeline | `history` | `evolution` |
 | Academic / Research | `science-paper` | `tech-explainer`, `data-report` |

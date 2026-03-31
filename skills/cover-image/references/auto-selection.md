@@ -39,6 +39,7 @@ When a dimension is omitted, select based on content signals.
 | Gaming, retro, 8-bit, nostalgic | `pixel` |
 | Education, tutorial, classroom, teaching | `chalk` |
 | Poster, movie, album, concert, silhouette, mondo, limited-edition | `screen-print` |
+| 简笔画, line-sketch, doodle, 涂鸦, 手绘概念, 留白, 克制 | `line-sketch` |
 
 ## Auto Text Selection
 

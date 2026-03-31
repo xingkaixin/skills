@@ -29,6 +29,7 @@
 | `art-deco` | `elegant` | `screen-print` |
 | `propaganda` | `vivid` | `screen-print` |
 | `cinematic` | `duotone` | `screen-print` |
+| `line-sketch` | `mono` | `line-sketch` |
 
 ## Override Examples
 

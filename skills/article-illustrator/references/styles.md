@@ -10,6 +10,7 @@ Simplified style tier for quick selection:
 | `minimal-flat` | notion | General, knowledge sharing, SaaS |
 | `sci-fi` | blueprint | AI, frontier tech, system design |
 | `hand-drawn` | sketch/warm | Relaxed, reflective, casual content |
+| `line-sketch` | line-sketch | 克制留白的简笔画，个人随笔、反思类内容 |
 | `editorial` | editorial | Processes, data, journalism |
 | `scene` | warm/watercolor | Narratives, emotional, lifestyle |
 | `poster` | screen-print | Opinion, editorial, cultural, cinematic |
@@ -44,19 +45,20 @@ Use Core Styles for most cases. See full Style Gallery below for granular contro
 | `screen-print` | Bold poster art, halftone textures, limited colors | Opinion, editorial, cultural, cinematic |
 | `sketch-notes` | Soft hand-drawn warm notes | Educational, warm notes |
 | `vintage` | Aged parchment historical | Historical, heritage |
+| `line-sketch` | 简笔画：无脸小人、伞黄点缀、中文手写引言 | 个人随笔、哲思反思、克制内敛的叙事 |
 
 Full specifications: `references/styles/<style>.md`
 
 ## Type × Style Compatibility Matrix
 
-| | vector-illustration | notion | warm | minimal | blueprint | watercolor | elegant | editorial | scientific | screen-print |
-|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| infographic | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓✓ | ✓✓ | ✓ |
-| scene | ✓ | ✓ | ✓✓ | ✓ | ✗ | ✓✓ | ✓ | ✓ | ✗ | ✓✓ |
-| flowchart | ✓✓ | ✓✓ | ✓ | ✓ | ✓✓ | ✗ | ✓ | ✓✓ | ✓ | ✗ |
-| comparison | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓ | ✓ | ✓✓ | ✓✓ | ✓ | ✓ |
-| framework | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓✓ | ✗ | ✓✓ | ✓ | ✓✓ | ✓ |
-| timeline | ✓ | ✓✓ | ✓ | ✓ | ✓ | ✓✓ | ✓✓ | ✓✓ | ✓ | ✓ |
+| | vector-illustration | notion | warm | minimal | blueprint | watercolor | elegant | editorial | scientific | screen-print | line-sketch |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| infographic | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓✓ | ✓✓ | ✓ | ✓ |
+| scene | ✓ | ✓ | ✓✓ | ✓ | ✗ | ✓✓ | ✓ | ✓ | ✗ | ✓✓ | ✓✓ |
+| flowchart | ✓✓ | ✓✓ | ✓ | ✓ | ✓✓ | ✗ | ✓ | ✓✓ | ✓ | ✗ | ✓ |
+| comparison | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓ | ✓ | ✓✓ | ✓✓ | ✓ | ✓ | ✓ |
+| framework | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓✓ | ✗ | ✓✓ | ✓ | ✓✓ | ✓ | ✓ |
+| timeline | ✓ | ✓✓ | ✓ | ✓ | ✓ | ✓✓ | ✓✓ | ✓✓ | ✓ | ✓ | ✓ |
 
 ✓✓ = highly recommended | ✓ = compatible | ✗ = not recommended
 
@@ -86,6 +88,7 @@ Full specifications: `references/styles/<style>.md`
 | Productivity, SaaS, tool, app, software | infographic | notion, vector-illustration |
 | Business, professional, strategy, corporate | framework | elegant |
 | Opinion, editorial, culture, philosophy, cinematic, dramatic, poster | scene | screen-print |
+| 随笔, 反思, 哲思, 生活观察, 情绪, 克制, 留白, 涂鸦, 简笔画 | scene | line-sketch |
 | Biology, chemistry, medical, scientific | infographic | scientific |
 | Explainer, journalism, magazine, investigation | infographic | editorial |
 
@@ -175,6 +178,15 @@ Full specifications: `references/styles/<style>.md`
 - Organic flow
 - Personal journey feel
 - Growth narratives
+
+### scene + line-sketch
+
+- Off-white 纸张背景，深灰单色线条
+- 无脸圆头小人表达人物情绪
+- 伞黄（#D4A843）点缀唯一一处关键元素
+- 大量负空间，整体构图极简
+- 底部附一句短小中文手写引言
+- 情感通过姿态与构图传递，而非表情或色彩
 
 ### scene + screen-print
 - Bold silhouettes, symbolic compositions
