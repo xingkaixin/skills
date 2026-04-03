@@ -29,10 +29,10 @@
 
 ```bash
 pnpm install
-pnpm init
-pnpm sync
-pnpm check
-pnpm cleanup
+pnpm start init
+pnpm start sync
+pnpm start check
+pnpm start cleanup
 ```
 
 如果要刷新 `claude-agent-skill` 这类 script source：
