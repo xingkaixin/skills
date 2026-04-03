@@ -8,6 +8,7 @@
     "sync": "node scripts/cli.ts sync",
     "check": "node scripts/cli.ts check",
     "cleanup": "node scripts/cli.ts cleanup",
+    "generate:web-data": "node scripts/generate-web-skills.ts",
     "prepare": "git submodule update --init --recursive"
   },
   "packageManager": "pnpm@10.33.0"
