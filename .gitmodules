@@ -1,0 +1,54 @@
+[submodule "vendor/anthropics"]
+	path = vendor/anthropics
+	url = https://github.com/anthropics/skills
+[submodule "vendor/psiace"]
+	path = vendor/psiace
+	url = https://github.com/psiace/skills
+[submodule "vendor/openai"]
+	path = vendor/openai
+	url = https://github.com/openai/skills
+[submodule "vendor/antfu"]
+	path = vendor/antfu
+	url = https://github.com/antfu/skills
+[submodule "vendor/context7"]
+	path = vendor/context7
+	url = https://github.com/upstash/context7
+[submodule "vendor/playwright-cli"]
+	path = vendor/playwright-cli
+	url = https://github.com/microsoft/playwright-cli
+[submodule "vendor/dify"]
+	path = vendor/dify
+	url = https://github.com/langgenius/dify
+[submodule "vendor/hono"]
+	path = vendor/hono
+	url = https://github.com/yusukebe/hono-skill
+[submodule "vendor/design-taste-frontend"]
+	path = vendor/design-taste-frontend
+	url = https://github.com/leonxlnx/taste-skill
+[submodule "vendor/ui-ux-pro-max"]
+	path = vendor/ui-ux-pro-max
+	url = https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+[submodule "vendor/impeccable"]
+	path = vendor/impeccable
+	url = https://github.com/pbakaus/impeccable
+[submodule "vendor/shadcn"]
+	path = vendor/shadcn
+	url = https://github.com/shadcn/ui
+[submodule "vendor/agent-browser"]
+	path = vendor/agent-browser
+	url = https://github.com/vercel-labs/agent-browser
+[submodule "vendor/agent-skills"]
+	path = vendor/agent-skills
+	url = https://github.com/vercel-labs/agent-skills
+[submodule "vendor/streamdown"]
+	path = vendor/streamdown
+	url = https://github.com/vercel/streamdown
+[submodule "vendor/agent-dump"]
+	path = vendor/agent-dump
+	url = https://github.com/xingkaixin/agent-dump
+[submodule "vendor/db-ferry"]
+	path = vendor/db-ferry
+	url = https://github.com/xingkaixin/db-ferry
+[submodule "vendor/data-service-cli"]
+	path = vendor/data-service-cli
+	url = https://github.com/xingkaixin/data-service-cli

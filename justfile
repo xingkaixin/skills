@@ -5,9 +5,9 @@ default:
 
 # fetch all claude agent sdk doc by jina
 claude *args:
-    uv run data/claude-agent-skill/fetch_docs.py {{args}}
+    node scripts/fetch-source-docs.ts claude-agent-skill {{args}}
 
 
 # slowly fetch claude
 claude-slow:
-    uv run data/claude-agent-skill/fetch_docs.py -c 1 -d 5 --force
+    node scripts/fetch-source-docs.ts claude-agent-skill -c 1 -d 5 --force
