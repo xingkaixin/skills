@@ -94,6 +94,11 @@ function sync() {
 
   if (hasGitmodules()) {
     runGit(['submodule', 'update', '--init', '--recursive', '--remote'], root)
+    // Reset nested submodules in vendor repos to their recorded commits to avoid dirty state
+    for (const vendorName of Object.keys(vendors)) {
+      const vendorPath = join(root, resolveVendorPath(vendorName))
+      runGit(['submodule', 'update', '--init', '--recursive'], vendorPath)
+    }
     console.log('updated submodules')
   }
 
