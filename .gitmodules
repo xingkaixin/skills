@@ -22,12 +22,6 @@
 [submodule "vendor/hono"]
 	path = vendor/hono
 	url = https://github.com/yusukebe/hono-skill
-[submodule "vendor/design-taste-frontend"]
-	path = vendor/design-taste-frontend
-	url = https://github.com/leonxlnx/taste-skill
-[submodule "vendor/ui-ux-pro-max"]
-	path = vendor/ui-ux-pro-max
-	url = https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
 [submodule "vendor/impeccable"]
 	path = vendor/impeccable
 	url = https://github.com/pbakaus/impeccable
