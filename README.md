@@ -60,4 +60,10 @@ just claude
 - 同步产物会写入 `SYNC.md`
 - 手写 `skills/*` 不会自动纳入 source/vendor 流程
 
+
+## 致谢
+
+- Submodule 管理与 skill 同步流程参考了 [antfu/skills](https://github.com/antfu/skills)
+- `apps/web` 参考了 [himself65/finance-skills](https://github.com/himself65/finance-skills)
+
 更详细的仓库治理规则见 [AGENTS.md](/Users/Kevin/workspace/projects/personal/skills/AGENTS.md)。
