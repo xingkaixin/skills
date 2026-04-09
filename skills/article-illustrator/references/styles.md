@@ -45,20 +45,21 @@ Use Core Styles for most cases. See full Style Gallery below for granular contro
 | `screen-print` | Bold poster art, halftone textures, limited colors | Opinion, editorial, cultural, cinematic |
 | `sketch-notes` | Soft hand-drawn warm notes | Educational, warm notes |
 | `vintage` | Aged parchment historical | Historical, heritage |
+| `hand-drawn-edu` | Hand-drawn macaron educational infographic | Educational infographics, tutorials, slide summaries |
 | `line-sketch` | 简笔画：无脸小人、伞黄点缀、中文手写引言 | 个人随笔、哲思反思、克制内敛的叙事 |
 
 Full specifications: `references/styles/<style>.md`
 
 ## Type × Style Compatibility Matrix
 
-| | vector-illustration | notion | warm | minimal | blueprint | watercolor | elegant | editorial | scientific | screen-print | line-sketch |
-|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| infographic | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓✓ | ✓✓ | ✓ | ✓ |
-| scene | ✓ | ✓ | ✓✓ | ✓ | ✗ | ✓✓ | ✓ | ✓ | ✗ | ✓✓ | ✓✓ |
-| flowchart | ✓✓ | ✓✓ | ✓ | ✓ | ✓✓ | ✗ | ✓ | ✓✓ | ✓ | ✗ | ✓ |
-| comparison | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓ | ✓ | ✓✓ | ✓✓ | ✓ | ✓ | ✓ |
-| framework | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓✓ | ✗ | ✓✓ | ✓ | ✓✓ | ✓ | ✓ |
-| timeline | ✓ | ✓✓ | ✓ | ✓ | ✓ | ✓✓ | ✓✓ | ✓✓ | ✓ | ✓ | ✓ |
+| | vector-illustration | notion | warm | minimal | blueprint | watercolor | elegant | editorial | scientific | screen-print | line-sketch | hand-drawn-edu |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| infographic | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓✓ | ✓✓ | ✓ | ✓ | ✓✓ |
+| scene | ✓ | ✓ | ✓✓ | ✓ | ✗ | ✓✓ | ✓ | ✓ | ✗ | ✓✓ | ✓✓ | ✓ |
+| flowchart | ✓✓ | ✓✓ | ✓ | ✓ | ✓✓ | ✗ | ✓ | ✓✓ | ✓ | ✗ | ✓ | ✓✓ |
+| comparison | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓ | ✓ | ✓✓ | ✓✓ | ✓ | ✓ | ✓ | ✓✓ |
+| framework | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓✓ | ✗ | ✓✓ | ✓ | ✓✓ | ✓ | ✓ | ✓✓ |
+| timeline | ✓ | ✓✓ | ✓ | ✓ | ✓ | ✓✓ | ✓✓ | ✓✓ | ✓ | ✓ | ✓ | ✓ |
 
 ✓✓ = highly recommended | ✓ = compatible | ✗ = not recommended
 
@@ -66,11 +67,11 @@ Full specifications: `references/styles/<style>.md`
 
 | Type | Primary Style | Secondary Styles |
 |------|---------------|------------------|
-| infographic | vector-illustration | notion, blueprint, editorial |
+| infographic | vector-illustration | notion, blueprint, editorial, hand-drawn-edu |
 | scene | warm | watercolor, elegant |
-| flowchart | vector-illustration | notion, blueprint |
-| comparison | vector-illustration | notion, elegant |
-| framework | blueprint | vector-illustration, notion |
+| flowchart | vector-illustrator | notion, blueprint, hand-drawn-edu |
+| comparison | vector-illustrator | notion, elegant, hand-drawn-edu |
+| framework | blueprint | vector-illustration, notion, hand-drawn-edu |
 | timeline | elegant | warm, editorial |
 
 ## Auto Selection by Content Signals
@@ -78,7 +79,7 @@ Full specifications: `references/styles/<style>.md`
 | Content Signals | Recommended Type | Recommended Style |
 |-----------------|------------------|-------------------|
 | API, metrics, data, comparison, numbers | infographic | blueprint, vector-illustration |
-| Knowledge, concept, tutorial, learning, guide | infographic | vector-illustration, notion |
+| Knowledge, concept, tutorial, learning, guide | infographic | vector-illustration, notion, hand-drawn-edu |
 | Tech, AI, programming, development, code | infographic | vector-illustration, blueprint |
 | How-to, steps, workflow, process, tutorial | flowchart | vector-illustration, notion |
 | Framework, model, architecture, principles | framework | blueprint, vector-illustration |
@@ -206,3 +207,11 @@ Full specifications: `references/styles/<style>.md`
 - Limited color coding (one color per concept level)
 - Clean silhouette-based iconography
 - Poster-style hierarchy with bold typography
+
+### infographic + hand-drawn-edu
+- Hand-drawn wobble on all elements with warm cream paper background
+- Macaron color blocks with intentional partial-fill
+- Graph-first minimal text with bold keywords and warm gray annotations
+- Auto-selects layout: flow=arrows, comparison=split, cycle=circular, composition=cards, hierarchy=nested
+- Doodle decorations (stars, underlines, arrows) with generous whitespace
+- Bold centered summary quote at bottom

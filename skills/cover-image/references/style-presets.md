@@ -30,6 +30,7 @@
 | `propaganda` | `vivid` | `screen-print` |
 | `cinematic` | `duotone` | `screen-print` |
 | `line-sketch` | `mono` | `line-sketch` |
+| `hand-drawn-edu` | `macaron` | `hand-drawn` |
 
 ## Override Examples
 
