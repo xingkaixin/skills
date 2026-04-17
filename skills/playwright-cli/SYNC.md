@@ -3,5 +3,5 @@
 - Managed-By: skills-sync
 - Source Repo: `https://github.com/microsoft/playwright-cli`
 - Source Path: `vendor/playwright-cli/skills/playwright-cli`
-- Git SHA: `a0d5bfd4d9658073029d33f979ac5a027568caec`
-- Synced At: 2026-04-06T15:29:32.177Z
+- Git SHA: `0406adaed4c6ba95bbfa6952229e76188bc59993`
+- Synced At: 2026-04-17T04:29:32.546Z

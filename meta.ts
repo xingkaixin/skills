@@ -88,32 +88,6 @@ export const vendors: Record<string, VendorSpec> = {
       hono: 'hono',
     },
   },
-  impeccable: {
-    source: 'https://github.com/pbakaus/impeccable',
-    skillsRoot: '.agents/skills',
-    skills: {
-      critique: 'critique',
-      audit: 'audit',
-      polish: 'polish',
-      optimize: 'optimize',
-      harden: 'harden',
-      normalize: 'normalize',
-      bolder: 'bolder',
-      quieter: 'quieter',
-      adapt: 'adapt',
-      clarify: 'clarify',
-      distill: 'distill',
-      animate: 'animate',
-      typeset: 'typeset',
-      delight: 'delight',
-      arrange: 'arrange',
-      colorize: 'colorize',
-      onboard: 'onboard',
-      overdrive: 'overdrive',
-      extract: 'extract',
-      'teach-impeccable': 'teach-impeccable'
-    },
-  },
   shadcn: {
     source: 'https://github.com/shadcn-ui/ui',
     skills: {

@@ -4,4 +4,4 @@
 - Source Repo: `https://github.com/vercel/streamdown`
 - Source Path: `vendor/streamdown/skills/streamdown`
 - Git SHA: `5f6475139a87dee8af08fcf7b01475292bc064d2`
-- Synced At: 2026-04-06T15:29:32.397Z
+- Synced At: 2026-04-17T04:29:32.598Z
