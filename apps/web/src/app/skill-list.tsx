@@ -1,8 +1,7 @@
 "use client";
 
 import { startTransition, useDeferredValue, useMemo, useState, type ReactNode } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
+import { useSearchParams, useLocation, useNavigate, Link } from "react-router-dom";
 import { type SkillRecord } from "@/data/skill-record";
 
 export function SkillList({
@@ -12,10 +11,10 @@ export function SkillList({
   skills: SkillRecord[];
   tags: string[];
 }) {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
-  const initialTag = searchParams.get("tag");
+  const [urlSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const initialTag = urlSearchParams.get("tag");
   const [activeTag, setActiveTag] = useState<string>(initialTag && tags.includes(initialTag) ? initialTag : "all");
   const deferredTag = useDeferredValue(activeTag);
 
@@ -27,14 +26,14 @@ export function SkillList({
   function handleFilterChange(tag: string) {
     setActiveTag(tag);
     startTransition(() => {
-      const nextParams = new URLSearchParams(searchParams.toString());
+      const nextParams = new URLSearchParams(urlSearchParams.toString());
       if (tag === "all") {
         nextParams.delete("tag");
       } else {
         nextParams.set("tag", tag);
       }
       const nextQuery = nextParams.toString();
-      router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
+      navigate(nextQuery ? `${location.pathname}?${nextQuery}` : location.pathname, { replace: true });
     });
   }
 
@@ -58,9 +57,8 @@ export function SkillList({
         {filteredSkills.map((skill) => (
           <Link
             key={skill.slug}
-            href={`/skills/${skill.slug}`}
+            to={`/skills/${skill.slug}`}
             className="flex items-baseline gap-6 py-3 px-1 transition-colors hover:bg-accent-soft group"
-
           >
             <span className="w-44 shrink-0 font-medium text-sm text-text truncate">
               {skill.slug}

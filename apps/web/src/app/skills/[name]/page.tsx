@@ -1,23 +1,14 @@
 import { SiteBrand } from "@/app/brand";
-import { getSkill, getSkills } from "@/data/skills";
+import { getSkill } from "@/data/skills";
 import { formatRepoLabel } from "@/data/skill-record";
-import { notFound } from "next/navigation";
-import Link from "next/link";
+import { Link, useParams, Navigate } from "react-router-dom";
 
-export async function generateStaticParams() {
-  const skills = getSkills();
-  return skills.map((skill) => ({ name: skill.slug }));
-}
+export function SkillDetail() {
+  const { name } = useParams<{ name: string }>();
+  const skill = name ? getSkill(name) : undefined;
 
-export default async function SkillDetailPage({
-  params,
-}: {
-  params: Promise<{ name: string }>;
-}) {
-  const { name } = await params;
-  const skill = getSkill(name);
   if (!skill) {
-    notFound();
+    return <Navigate to="/" replace />;
   }
 
   return (
@@ -26,8 +17,7 @@ export default async function SkillDetailPage({
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-6">
           <SiteBrand subtle />
           <Link
-            href="/"
-            scroll={false}
+            to="/"
             className="rounded-md border border-border px-3 py-1.5 text-xs text-text-secondary transition hover:border-text hover:text-text"
           >
             Catalog
@@ -38,7 +28,7 @@ export default async function SkillDetailPage({
       <div className="border-b border-border px-6 py-2">
         <div className="mx-auto max-w-5xl">
           <p className="text-xs text-text-muted">
-            <Link href="/" scroll={false} className="transition hover:text-text-secondary">
+            <Link to="/" className="transition hover:text-text-secondary">
               xingkaixin&nbsp;/&nbsp;skills
             </Link>
             <span className="mx-1.5">/</span>
@@ -70,8 +60,7 @@ export default async function SkillDetailPage({
               {skill.tags.map((tag) => (
                 <Link
                   key={tag}
-                  href={`/?tag=${tag}`}
-                  scroll={false}
+                  to={`/?tag=${tag}`}
                   className="tag-pill hover:border-text hover:text-text"
                 >
                   {tag}

@@ -1,36 +1,32 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { useLocation } from "react-router-dom";
 import { useEffect, useRef } from "react";
 
 const scrollPositions = new Map<string, number>();
 
 export function ScrollRestoration() {
-  const pathname = usePathname();
-  const prevPathname = useRef(pathname);
+  const location = useLocation();
+  const prevPathname = useRef(location.pathname);
 
-  // Save scroll position on scroll events
   useEffect(() => {
     const save = () => {
-      scrollPositions.set(pathname, window.scrollY);
+      scrollPositions.set(location.pathname, window.scrollY);
     };
 
     window.addEventListener("scroll", save, { passive: true });
     return () => window.removeEventListener("scroll", save);
-  }, [pathname]);
+  }, [location.pathname]);
 
-  // Restore scroll position after navigation
   useEffect(() => {
-    if (prevPathname.current !== pathname) {
-      const saved = scrollPositions.get(pathname);
+    if (prevPathname.current !== location.pathname) {
+      const saved = scrollPositions.get(location.pathname);
       if (saved !== undefined) {
-        // Wait for the view transition animation to finish (300ms total)
-        // before restoring, so the transition doesn't override scroll.
         setTimeout(() => window.scrollTo({ top: saved, behavior: "smooth" }), 350);
       }
-      prevPathname.current = pathname;
+      prevPathname.current = location.pathname;
     }
-  }, [pathname]);
+  }, [location.pathname]);
 
   return null;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, type ReactNode } from "react";
-import { usePathname } from "next/navigation";
+import { useLocation } from "react-router-dom";
 
 type Direction = "forward" | "back";
 
@@ -12,18 +12,18 @@ export function useNavDirection(): Direction {
 }
 
 export function NavDirectionProvider({ children }: { children: ReactNode }) {
-  const pathname = usePathname();
+  const location = useLocation();
   const [state, setState] = useState<{ direction: Direction; prev: string }>({
     direction: "forward",
-    prev: pathname,
+    prev: location.pathname,
   });
 
-  if (state.prev !== pathname) {
+  if (state.prev !== location.pathname) {
     const prevDepth = state.prev.split("/").filter(Boolean).length;
-    const currDepth = pathname.split("/").filter(Boolean).length;
+    const currDepth = location.pathname.split("/").filter(Boolean).length;
     setState({
       direction: currDepth >= prevDepth ? "forward" : "back",
-      prev: pathname,
+      prev: location.pathname,
     });
   }
 

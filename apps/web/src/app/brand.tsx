@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
 export function SiteBrand({
   subtle = false,
@@ -7,8 +7,7 @@ export function SiteBrand({
 }) {
   return (
     <Link
-      href="/"
-      scroll={false}
+      to="/"
       className="inline-flex items-center gap-3 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
     >
       <span className="brand-mark" aria-hidden="true">

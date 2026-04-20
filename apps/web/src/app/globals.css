@@ -16,6 +16,9 @@
 
 :root {
   background: #ffffff;
+  --font-sora: 'Sora', sans-serif;
+  --font-cormorant: 'Cormorant Garamond', serif;
+  --font-ibm-plex-mono: 'IBM Plex Mono', monospace;
 }
 
 html {

@@ -4,7 +4,7 @@ import { SiteBrand } from "@/app/brand";
 import { SITE_REPO } from "@/data/catalog";
 import { getSkills, getSkillTags } from "@/data/skills";
 
-export default function Home() {
+export function Home() {
   const skills = getSkills();
   const tags = getSkillTags();
 
