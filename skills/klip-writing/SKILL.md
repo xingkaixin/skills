@@ -1,13 +1,6 @@
 ---
 name: klip-writing
-description: >-
-  Write KLIP (Kevin's Lightweight Improvement Proposal) documents for Fin-Agent
-  and related projects. Use when user says "写klip", "klip", "KLIP",
-  "improvement proposal", "设计文档", "技术方案", "RFC", "proposal",
-  or wants to produce a structured technical design/evaluation/migration document
-  for a software project. Also trigger when user asks to document a technical
-  decision, evaluate a technology migration, design a new feature, or review
-  codebase optimization opportunities.
+description: Write KLIP (Kevin's Lightweight Improvement Proposal) documents for Fin-Agent and related projects. Use when user says "写klip", "klip", "KLIP","improvement proposal", "设计文档", "技术方案", "RFC", "proposal",or wants to produce a structured technical design/evaluation/migration document for a software project. Also trigger when user asks to document a technical decision, evaluate a technology migration, design a new feature, or review codebase optimization opportunities.
 ---
 
 # KLIP Writing Skill
