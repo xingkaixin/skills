@@ -3,5 +3,5 @@
 - Managed-By: skills-sync
 - Source Repo: `https://github.com/vercel-labs/agent-browser`
 - Source Path: `vendor/agent-browser/skills/agent-browser`
-- Git SHA: `717d1b09e1c841a4c0206033886a1a861e3ca5d9`
-- Synced At: 2026-04-17T04:29:32.637Z
+- Git SHA: `57405f93614fae46e5c955ce662b4785283e1301`
+- Synced At: 2026-04-25T02:50:03.463Z

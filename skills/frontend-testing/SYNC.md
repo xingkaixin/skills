@@ -3,5 +3,5 @@
 - Managed-By: skills-sync
 - Source Repo: `https://github.com/langgenius/dify`
 - Source Path: `vendor/dify/.agents/skills/frontend-testing`
-- Git SHA: `13a935919182b059739be37282b4678724277113`
-- Synced At: 2026-04-17T04:29:32.560Z
+- Git SHA: `e6ef774fd5aac14ec5a1d878df0fe52548bd218a`
+- Synced At: 2026-04-25T02:50:03.292Z
