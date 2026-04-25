@@ -59,6 +59,7 @@ export const skillCatalog: Record<string, SkillCatalogEntry> = {
   "playwright-cli": { tags: ["frontend"] },
   "react-best-practices": { tags: ["frontend"] },
   "react-view-transitions": { tags: ["frontend"] },
+  "save-the-cat-writing": { tags: ["writing"] },
   shadcn: { tags: ["frontend"] },
   slidev: { tags: ["writing"] },
   "stock-report": { tags: ["finance"] },
