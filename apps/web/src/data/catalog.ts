@@ -9,6 +9,7 @@ export interface SkillCatalogEntry {
 }
 
 export const SITE_REPO = "https://github.com/xingkaixin/skills";
+export const SITE_URL = "https://skills.xingkaixin.me";
 
 export const skillCatalog: Record<string, SkillCatalogEntry> = {
   "agent-browser": { tags: ["other"] },

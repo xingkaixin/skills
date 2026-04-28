@@ -1,6 +1,7 @@
 import { SiteBrand } from "@/app/brand";
 import { getSkill } from "@/data/skills";
 import { formatRepoLabel } from "@/data/skill-record";
+import { SITE_URL } from "@/data/catalog";
 import { Link, useParams, Navigate } from "react-router-dom";
 
 export function SkillDetail() {
@@ -11,8 +12,20 @@ export function SkillDetail() {
     return <Navigate to="/" replace />;
   }
 
+  const pageUrl = `${SITE_URL}/skills/${skill.slug}`;
+  const pageTitle = `${skill.slug} — XingKaiXin's Skills`;
+  const pageDesc = skill.description.length > 160
+    ? skill.description.slice(0, 157) + "..."
+    : skill.description;
+
   return (
     <div className="min-h-screen">
+      <title>{pageTitle}</title>
+      <meta name="description" content={pageDesc} />
+      <link rel="canonical" href={pageUrl} />
+      <meta property="og:title" content={pageTitle} />
+      <meta property="og:description" content={pageDesc} />
+      <meta property="og:url" content={pageUrl} />
       <nav className="border-b border-border px-6 py-4">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-6">
           <SiteBrand subtle />

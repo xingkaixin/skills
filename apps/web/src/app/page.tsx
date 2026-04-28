@@ -1,8 +1,11 @@
 import { Suspense } from "react";
 import { SkillList } from "@/app/skill-list";
 import { SiteBrand } from "@/app/brand";
-import { SITE_REPO } from "@/data/catalog";
+import { SITE_REPO, SITE_URL } from "@/data/catalog";
 import { getSkills, getSkillTags } from "@/data/skills";
+
+const PAGE_TITLE = "XingKaiXin's Skills — AI Agent Skill Catalog";
+const PAGE_DESC = "Browse and install AI agent skills for Claude Code and other AI coding tools. A curated catalog covering frontend, backend, writing, design, and more.";
 
 export function Home() {
   const skills = getSkills();
@@ -10,6 +13,12 @@ export function Home() {
 
   return (
     <div className="min-h-screen">
+      <title>{PAGE_TITLE}</title>
+      <meta name="description" content={PAGE_DESC} />
+      <link rel="canonical" href={SITE_URL} />
+      <meta property="og:title" content={PAGE_TITLE} />
+      <meta property="og:description" content={PAGE_DESC} />
+      <meta property="og:url" content={SITE_URL} />
       <nav className="border-b border-border px-6 py-4">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-6">
           <SiteBrand />
