@@ -66,4 +66,4 @@ just claude
 - Submodule 管理与 skill 同步流程参考了 [antfu/skills](https://github.com/antfu/skills)
 - `apps/web` 参考了 [himself65/finance-skills](https://github.com/himself65/finance-skills)
 
-更详细的仓库治理规则见 [AGENTS.md](/Users/Kevin/workspace/projects/personal/skills/AGENTS.md)。
+更详细的仓库治理规则见 [AGENTS.md](AGENTS.md)。
