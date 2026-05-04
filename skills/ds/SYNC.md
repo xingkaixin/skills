@@ -4,4 +4,4 @@
 - Source Repo: `https://github.com/xingkaixin/data-service-cli`
 - Source Path: `vendor/data-service-cli/skills/ds`
 - Git SHA: `f6a736cd46e521ec55b9f2c660f480fe22a7455e`
-- Synced At: 2026-04-25T02:50:03.443Z
+- Synced At: 2026-05-04T16:21:22.322Z

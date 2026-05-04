@@ -4,4 +4,4 @@
 - Source Repo: `https://github.com/vercel-labs/agent-skills`
 - Source Path: `vendor/agent-skills/skills/composition-patterns`
 - Git SHA: `ce3e64e468f8fa09a2d075d102771838061fdac0`
-- Synced At: 2026-04-25T02:50:03.595Z
+- Synced At: 2026-05-04T16:21:22.403Z

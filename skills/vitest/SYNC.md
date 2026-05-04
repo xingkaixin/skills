@@ -3,5 +3,5 @@
 - Managed-By: skills-sync
 - Source Repo: `https://github.com/antfu/skills`
 - Source Path: `vendor/antfu/skills/vitest`
-- Git SHA: `c35a5588a5158b5b404a14fb10469b2b6dc1952b`
-- Synced At: 2026-04-25T02:50:03.215Z
+- Git SHA: `50deaeb269d80d92db7a2c5a677290309ae307fc`
+- Synced At: 2026-05-04T16:21:22.179Z
