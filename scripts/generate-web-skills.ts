@@ -1,11 +1,14 @@
+import { execFile } from "node:child_process";
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { promisify } from "node:util";
 import { SITE_REPO, skillCatalog } from "../apps/web/src/data/catalog.ts";
 import type { SkillRecord } from "../apps/web/src/data/skill-record.ts";
 
 const repoRoot = process.cwd();
 const skillsRoot = path.join(repoRoot, "skills");
 const outputPath = path.join(repoRoot, "apps", "web", "src", "data", "skills.generated.ts");
+const execFileAsync = promisify(execFile);
 
 type Frontmatter = Record<string, string>;
 
@@ -56,6 +59,7 @@ async function readSkill(slug: string): Promise<SkillRecord | null> {
   const synced = syncMd !== null;
   const sourceRepo = catalogEntry?.source?.repo ?? extractSyncRepo(syncMd) ?? SITE_REPO;
   const sourceKind = catalogEntry?.source?.kind ?? (synced ? "upstream" : "self");
+  const lastModified = await readLastModified(skillMdPath);
 
   return {
     slug,
@@ -65,7 +69,22 @@ async function readSkill(slug: string): Promise<SkillRecord | null> {
     sourceRepo,
     sourceKind,
     synced,
+    lastModified,
   };
+}
+
+async function readLastModified(filePath: string): Promise<string> {
+  const relativePath = path.relative(repoRoot, filePath);
+  const { stdout } = await execFileAsync("git", ["log", "-1", "--format=%cs", "--", relativePath], {
+    cwd: repoRoot,
+  });
+  const committedDate = stdout.trim();
+  if (committedDate) {
+    return committedDate;
+  }
+
+  const stat = await fs.stat(filePath);
+  return stat.mtime.toISOString().split("T")[0];
 }
 
 async function readOptionalFile(filePath: string): Promise<string | null> {
