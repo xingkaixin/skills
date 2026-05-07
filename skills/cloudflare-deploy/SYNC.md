@@ -3,5 +3,5 @@
 - Managed-By: skills-sync
 - Source Repo: `https://github.com/openai/skills`
 - Source Path: `vendor/openai/skills/.curated/cloudflare-deploy`
-- Git SHA: `af9b54f235d0d56c6b4410be54d578b0fda4ddfc`
-- Synced At: 2026-05-04T16:21:22.150Z
+- Git SHA: `4c4058ebf44f6734e62c70ab4a81246d4d093fc8`
+- Synced At: 2026-05-07T17:20:45.433Z
