@@ -10,7 +10,18 @@ interface StaticPage {
   description: string;
   canonicalUrl: string;
   rootHtml: string;
+  structuredData: JsonLdNode[];
 }
+
+type JsonLdValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonLdValue[]
+  | { [key: string]: JsonLdValue };
+
+type JsonLdNode = { [key: string]: JsonLdValue };
 
 function staticPagesPlugin(): Plugin {
   return {
@@ -56,6 +67,7 @@ function createHomePage(): StaticPage {
     description,
     canonicalUrl: `${SITE_URL}/`,
     rootHtml: renderHomeRoot(),
+    structuredData: [siteEntity(), createHomeStructuredData(title, description)],
   };
 }
 
@@ -68,6 +80,11 @@ function createSkillPage(skill: (typeof skillsData)[number]): StaticPage {
     description,
     canonicalUrl: `${SITE_URL}/skills/${skill.slug}`,
     rootHtml: renderSkillRoot(skill),
+    structuredData: [
+      siteEntity(),
+      createSkillStructuredData(skill),
+      createSkillBreadcrumbStructuredData(skill),
+    ],
   };
 }
 
@@ -103,10 +120,103 @@ function renderHtml(template: string, page: StaticPage): string {
       `<meta name="twitter:description" content="${escapeAttr(page.description)}" />`,
     );
 
-  return html.replace(
-    /<div id="root"><\/div>/,
-    `<div id="root">${page.rootHtml}</div>`,
-  );
+  return html
+    .replace("</head>", `${renderStructuredData(page.structuredData)}\n  </head>`)
+    .replace(
+      /<div id="root"><\/div>/,
+      `<div id="root">${page.rootHtml}</div>`,
+    );
+}
+
+function createHomeStructuredData(title: string, description: string): JsonLdNode {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": `${SITE_URL}/#collection`,
+    url: `${SITE_URL}/`,
+    name: title,
+    description,
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: skillsData.length,
+      itemListElement: skillsData.map((skill, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: `${SITE_URL}/skills/${skill.slug}`,
+        name: skill.slug,
+        description: skill.description,
+      })),
+    },
+  };
+}
+
+function createSkillStructuredData(skill: (typeof skillsData)[number]): JsonLdNode {
+  return {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "@id": `${SITE_URL}/skills/${skill.slug}#article`,
+    url: `${SITE_URL}/skills/${skill.slug}`,
+    headline: `${skill.slug} skill`,
+    description: skill.description,
+    dateModified: skill.lastModified,
+    author: { "@id": `${SITE_URL}/#publisher` },
+    publisher: { "@id": `${SITE_URL}/#publisher` },
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+    about: ["AI agent skill", ...skill.tags],
+    keywords: [skill.slug, ...skill.tags].join(", "),
+    sameAs: skill.sourceRepo,
+  };
+}
+
+function createSkillBreadcrumbStructuredData(skill: (typeof skillsData)[number]): JsonLdNode {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Skills",
+        item: `${SITE_URL}/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: skill.slug,
+        item: `${SITE_URL}/skills/${skill.slug}`,
+      },
+    ],
+  };
+}
+
+function siteEntity(): JsonLdNode {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": `${SITE_URL}/#publisher`,
+        name: "XingKaiXin",
+        url: SITE_REPO,
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
+        name: "XingKaiXin's Skills",
+        url: `${SITE_URL}/`,
+        publisher: { "@id": `${SITE_URL}/#publisher` },
+      },
+    ],
+  };
+}
+
+function renderStructuredData(nodes: JsonLdNode[]): string {
+  return nodes.map((node) => `    ${jsonLdScript(node)}`).join("\n");
+}
+
+function jsonLdScript(node: JsonLdNode): string {
+  return `<script type="application/ld+json">${JSON.stringify(node).replace(/</g, "\\u003c")}</script>`;
 }
 
 function renderHomeRoot(): string {
@@ -198,13 +308,13 @@ function renderSkillRoot(skill: (typeof skillsData)[number]): string {
           <div class="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
             <div class="max-w-2xl">
               <h1 class="font-semibold text-2xl text-text">${escapeHtml(skill.slug)}</h1>
+              <p class="mt-6 text-sm leading-7 text-text-secondary">${escapeHtml(skill.description)}</p>
               <div class="mt-5 space-y-3">
                 <p class="text-xs uppercase tracking-[0.18em] text-text-muted">Install</p>
                 <div class="inline-flex items-center rounded-md border border-border bg-[#f6f8fa] px-4 py-2.5">
                   <code class="font-mono text-sm text-text">npx skills add xingkaixin/skills --skill ${escapeHtml(skill.slug)}</code>
                 </div>
               </div>
-              <p class="mt-6 text-sm leading-7 text-text-secondary">${escapeHtml(skill.description)}</p>
               <div class="mt-6 flex flex-wrap gap-2">${tagLinks}</div>
             </div>
             <aside class="lg:w-56 lg:shrink-0">

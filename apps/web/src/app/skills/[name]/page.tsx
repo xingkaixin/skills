@@ -57,6 +57,10 @@ export function SkillDetail() {
               {skill.slug}
             </h1>
 
+            <p className="mt-6 text-sm leading-7 text-text-secondary">
+              {skill.description}
+            </p>
+
             <div className="mt-5 space-y-3">
               <p className="text-xs uppercase tracking-[0.18em] text-text-muted">Install</p>
               <div className="inline-flex items-center rounded-md border border-border bg-[#f6f8fa] px-4 py-2.5">
@@ -66,9 +70,6 @@ export function SkillDetail() {
               </div>
             </div>
 
-            <p className="mt-6 text-sm leading-7 text-text-secondary">
-              {skill.description}
-            </p>
             <div className="mt-6 flex flex-wrap gap-2">
               {skill.tags.map((tag) => (
                 <Link
