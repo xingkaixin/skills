@@ -1,0 +1,101 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SiteBrand from "@/components/SiteBrand.astro";
+import { getSkills } from "@/data/skills";
+import { getSkillSeo } from "@/data/seo";
+import { formatRepoLabel, type SkillRecord } from "@/data/skill-record";
+
+export function getStaticPaths() {
+  return getSkills().map((skill) => ({
+    params: { slug: skill.slug },
+    props: { skill },
+  }));
+}
+
+const { skill } = Astro.props as { skill: SkillRecord };
+const seo = getSkillSeo(skill);
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  canonicalUrl={seo.canonicalUrl}
+  structuredData={seo.structuredData}
+>
+  <div class="min-h-screen">
+    <nav class="border-b border-border px-6 py-4">
+      <div class="mx-auto flex max-w-5xl items-center justify-between gap-6">
+        <SiteBrand subtle />
+        <a
+          href="/"
+          class="rounded-md border border-border px-3 py-1.5 text-xs text-text-secondary transition hover:border-text hover:text-text"
+        >
+          Catalog
+        </a>
+      </div>
+    </nav>
+
+    <div class="border-b border-border px-6 py-2">
+      <div class="mx-auto max-w-5xl">
+        <p class="text-xs text-text-muted">
+          <a href="/" class="transition hover:text-text-secondary">
+            xingkaixin&nbsp;/&nbsp;skills
+          </a>
+          <span class="mx-1.5">/</span>
+          <span class="text-text-secondary font-medium">{skill.slug}</span>
+        </p>
+      </div>
+    </div>
+
+    <main class="mx-auto max-w-5xl px-6 pb-20 pt-8">
+      <div class="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+        <div class="max-w-2xl">
+          <h1 class="font-semibold text-2xl text-text">
+            {skill.slug}
+          </h1>
+
+          <p class="mt-6 text-sm leading-7 text-text-secondary">
+            {skill.description}
+          </p>
+
+          <div class="mt-5 space-y-3">
+            <p class="text-xs uppercase tracking-[0.18em] text-text-muted">Install</p>
+            <div class="inline-flex items-center rounded-md border border-border bg-[#f6f8fa] px-4 py-2.5">
+              <code class="font-mono text-sm text-text">
+                npx skills add xingkaixin/skills --skill {skill.slug}
+              </code>
+            </div>
+          </div>
+
+          <div class="mt-6 flex flex-wrap gap-2">
+            {skill.tags.map((tag) => (
+              <a
+                href={`/?tag=${encodeURIComponent(tag)}`}
+                class="tag-pill hover:border-text hover:text-text"
+              >
+                {tag}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <aside class="lg:w-56 lg:shrink-0">
+          <div class="rounded-md border border-border p-4">
+            <p class="text-[11px] uppercase tracking-[0.28em] text-text-muted">Source Repo</p>
+            <div class="mt-3">
+              <a
+                href={skill.sourceRepo}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-sm text-text underline underline-offset-4 transition hover:text-text-secondary"
+              >
+                {formatRepoLabel(skill.sourceRepo)}
+              </a>
+            </div>
+          </div>
+        </aside>
+      </div>
+      <a href={seo.canonicalUrl} class="sr-only">{seo.canonicalUrl}</a>
+    </main>
+  </div>
+</BaseLayout>

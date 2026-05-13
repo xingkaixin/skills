@@ -1,14 +1,11 @@
 # skills-web
 
-Skills catalog frontend — a single-page app built with Vite, React, and React Router, deployed to Cloudflare Pages.
+Skills catalog frontend — a static site built with Astro and deployed to Cloudflare Pages.
 
 ## Tech Stack
 
-- [Vite](https://vitejs.dev/) — build tool
-- [React](https://react.dev/) — UI library
-- [React Router](https://reactrouter.com/) — client-side routing
+- [Astro](https://astro.build/) — static site generator
 - [Tailwind CSS v4](https://tailwindcss.com/) — styling
-- [Framer Motion](https://motion.dev/) — page transitions
 
 ## Getting Started
 
@@ -33,23 +30,25 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ```
 src/
-  app/
-    layout.tsx        # Root layout wrapper
-    page.tsx          # Home page (skill catalog)
-    skill-list.tsx    # Filterable skill list
-    brand.tsx         # Site brand component
-    nav-direction.tsx # Navigation direction context
-    scroll-restoration.tsx # Scroll position restoration
-    template.tsx      # Page transition wrapper
-    not-found.tsx     # 404 page
+  components/
+    SiteBrand.astro   # Site brand component
+    SkillFilter.astro # Filterable skill list
+  layouts/
+    BaseLayout.astro  # Shared HTML shell and SEO tags
+  pages/
+    index.astro       # Home page
+    404.astro         # 404 page
+    sitemap.xml.ts    # Sitemap endpoint
     skills/
-      [name]/
-        page.tsx      # Skill detail page
+      [slug].astro    # Skill detail pages
+  styles/
+    globals.css       # Tailwind and global styles
   data/
     skills.ts         # Skill data helpers
     skills.generated.ts # Generated skill data
     skill-record.ts   # Skill record types
     catalog.ts        # Catalog constants
+    seo.ts            # SEO and structured data helpers
 ```
 
 ## Deploy
@@ -61,7 +60,7 @@ pnpm build
 pnpm deploy:cf
 ```
 
-The app is configured as a static SPA with `_redirects` (all routes → `index.html`) for client-side routing support.
+Astro pre-renders the catalog, every skill detail page, the 404 page, and `sitemap.xml` into `dist/`.
 
 ## Generating Skill Data
 
