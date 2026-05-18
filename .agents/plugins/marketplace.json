@@ -1,0 +1,20 @@
+{
+  "name": "xingkaixin-skills",
+  "interface": {
+    "displayName": "XingKaiXin Skills"
+  },
+  "plugins": [
+    {
+      "name": "kk-frontend",
+      "source": {
+        "source": "local",
+        "path": "./plugins/kk-frontend"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

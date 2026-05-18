@@ -1,4 +1,6 @@
 .claude
-.agents
+.agents/*
+!.agents/plugins/
+!.agents/plugins/marketplace.json
 skills-lock.json
 .wrangler

@@ -1,0 +1,20 @@
+{
+  "name": "kk-frontend",
+  "version": "0.1.0",
+  "description": "Kevin's frontend design, React, testing, and UI workflow skills.",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "KK Frontend",
+    "shortDescription": "Frontend design, React, shadcn, testing, and UI review skills.",
+    "longDescription": "Bundle Kevin's frontend-oriented Codex skills for UI design, React architecture, shadcn workflows, browser testing, and visual review.",
+    "developerName": "Kevin",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "brandColor": "#B91C1C",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/icon.png"
+  }
+}
