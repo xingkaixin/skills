@@ -1,0 +1,29 @@
+{
+  "skill_name": "ds",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我想找股票里和分红相关的专题，但我不知道专题 ID。请告诉我应该先怎么用 ds 检索，再说明找到以后怎么继续看配置或者查数据。",
+      "expected_output": "应强调先发现后查询，先给出 ds subject Stk ls，必要时说明可用 --refresh；再说明找到目标 subjectId 后分别用 ds subject view <subjectId> 或 ds subject <subjectId>。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "我想查兴业证券的某个股票指标，但我既不知道指标 ID，也不确定证券代码。请按真实使用顺序告诉我怎么先找代码、再找指标、最后查数。",
+      "expected_output": "应给出完整发现链路：先 ds iid Stk search 兴业证券，再 ds index Stk ls 或逐级目录检索，必要时 ds index Stk view <indexIds> 看定义，最后再用 ds index <indexId> --entity Stk --iid <code> 查数。",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "我已经知道专题 ID 是 1000932，想看它的配置，最好导成 csv；如果不行你要告诉我正确替代方案。",
+      "expected_output": "应识别为已知 ID 的专题配置查看，给出 ds subject view 1000932，并明确指出该分支不支持 --output csv，替代方案是 table 或 json。",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "指标 ID 我已经有了，是 92024211。我要查股票 601377.SH 和 600999.SH 在 2025-03-04 这一天的数据，输出 json。",
+      "expected_output": "应识别为已知 ID 的 index 查数模式，给出 ds index 92024211 --entity Stk --iid 601377.SH,600999.SH --where \"TRD_DT == '[2025-03-04]'\" --output json，并指出 --entity 和 --iid 是硬要求。",
+      "files": []
+    }
+  ]
+}
