@@ -1,0 +1,20 @@
+{
+  "name": "kk-visual",
+  "version": "0.1.0",
+  "description": "Kevin's visual design, article illustration, and cover prompt skills.",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "KK Visual",
+    "shortDescription": "Visual design, article illustration, and cover prompt skills.",
+    "longDescription": "Bundle Kevin's visual-oriented Codex skills for static design, article illustration planning, and cover image prompt generation.",
+    "developerName": "Kevin",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "brandColor": "#B91C1C",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/icon.png"
+  }
+}

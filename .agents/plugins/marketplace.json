@@ -15,6 +15,66 @@
         "authentication": "ON_INSTALL"
       },
       "category": "Productivity"
+    },
+    {
+      "name": "kk-visual",
+      "source": {
+        "source": "local",
+        "path": "./plugins/kk-visual"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "kk-writing",
+      "source": {
+        "source": "local",
+        "path": "./plugins/kk-writing"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "kk-engineering",
+      "source": {
+        "source": "local",
+        "path": "./plugins/kk-engineering"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "kk-agent-ops",
+      "source": {
+        "source": "local",
+        "path": "./plugins/kk-agent-ops"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "kk-data",
+      "source": {
+        "source": "local",
+        "path": "./plugins/kk-data"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
     }
   ]
 }

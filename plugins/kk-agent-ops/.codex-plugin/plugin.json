@@ -1,0 +1,20 @@
+{
+  "name": "kk-agent-ops",
+  "version": "0.1.0",
+  "description": "Kevin's agent operations, browser automation, CI, deployment, and docs skills.",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "KK Agent Ops",
+    "shortDescription": "Agent operations, browser automation, CI, deployment, and docs skills.",
+    "longDescription": "Bundle Kevin's operations-oriented Codex skills for browser automation, session export, GitHub CI fixes, Cloudflare deployment, and Context7 documentation lookup.",
+    "developerName": "Kevin",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "brandColor": "#B91C1C",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/icon.png"
+  }
+}

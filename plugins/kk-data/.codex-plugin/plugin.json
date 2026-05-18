@@ -1,0 +1,20 @@
+{
+  "name": "kk-data",
+  "version": "0.1.0",
+  "description": "Kevin's data service, database migration, and stock report skills.",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "KK Data",
+    "shortDescription": "Data service, database migration, and stock report skills.",
+    "longDescription": "Bundle Kevin's data-oriented Codex skills for ds CLI work, db-ferry migrations, and stock report generation.",
+    "developerName": "Kevin",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "brandColor": "#B91C1C",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/icon.png"
+  }
+}
