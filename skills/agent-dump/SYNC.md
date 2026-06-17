@@ -3,5 +3,5 @@
 - Managed-By: skills-sync
 - Source Repo: `https://github.com/xingkaixin/agent-dump`
 - Source Path: `vendor/agent-dump/skills/agent-dump`
-- Git SHA: `82cec40d585b08cf171b294844a34eb6e253fdb9`
-- Synced At: 2026-05-07T17:20:45.569Z
+- Git SHA: `59c09fe8d4ba88af0635663c5a9ffb3084184c76`
+- Synced At: 2026-06-17T12:21:56.993Z

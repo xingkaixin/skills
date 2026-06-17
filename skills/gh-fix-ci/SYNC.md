@@ -3,5 +3,5 @@
 - Managed-By: skills-sync
 - Source Repo: `https://github.com/openai/skills`
 - Source Path: `vendor/openai/skills/.curated/gh-fix-ci`
-- Git SHA: `4c4058ebf44f6734e62c70ab4a81246d4d093fc8`
-- Synced At: 2026-05-07T17:20:45.445Z
+- Git SHA: `a8924c2a35cfa290458852c4fad17c9133054c2e`
+- Synced At: 2026-06-17T12:21:56.837Z

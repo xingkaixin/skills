@@ -3,5 +3,5 @@
 - Managed-By: skills-sync
 - Source Repo: `https://github.com/anthropics/skills`
 - Source Path: `vendor/anthropics/skills/frontend-design`
-- Git SHA: `d211d437443a7b2496a3dad9575e7dddd724c585`
-- Synced At: 2026-05-07T17:20:45.272Z
+- Git SHA: `57546260929473d4e0d1c1bb75297be2fdfa1949`
+- Synced At: 2026-06-17T12:21:56.659Z

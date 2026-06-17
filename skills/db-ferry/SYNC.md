@@ -4,4 +4,4 @@
 - Source Repo: `https://github.com/xingkaixin/db-ferry`
 - Source Path: `vendor/db-ferry/skills/db-ferry`
 - Git SHA: `a2d85b56e50352cc69d4cbc1e00d82ed445a3de5`
-- Synced At: 2026-05-07T17:20:45.579Z
+- Synced At: 2026-06-17T12:21:57.005Z

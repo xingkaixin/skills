@@ -3,5 +3,5 @@
 - Managed-By: skills-sync
 - Source Repo: `https://github.com/vercel-labs/agent-skills`
 - Source Path: `vendor/agent-skills/skills/composition-patterns`
-- Git SHA: `b9c8ee0643d87d3c5a953d1e22382ff2ead39229`
-- Synced At: 2026-05-07T17:20:45.664Z
+- Git SHA: `f8a72b9603728bb92a217a879b7e62e43ad76c81`
+- Synced At: 2026-06-17T12:21:57.105Z
