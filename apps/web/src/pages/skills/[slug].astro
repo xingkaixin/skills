@@ -3,6 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import SiteBrand from "@/components/SiteBrand.astro";
 import { getSkills } from "@/data/skills";
 import { getSkillSeo } from "@/data/seo";
+import { skillContent } from "@/data/skills.content.generated";
 import { formatRepoLabel, type SkillRecord } from "@/data/skill-record";
 
 export function getStaticPaths() {
@@ -14,12 +15,14 @@ export function getStaticPaths() {
 
 const { skill } = Astro.props as { skill: SkillRecord };
 const seo = getSkillSeo(skill);
+const body = skillContent[skill.slug];
 ---
 
 <BaseLayout
   title={seo.title}
   description={seo.description}
   canonicalUrl={seo.canonicalUrl}
+  ogType={seo.ogType}
   structuredData={seo.structuredData}
 >
   <div class="min-h-screen">
@@ -95,7 +98,10 @@ const seo = getSkillSeo(skill);
           </div>
         </aside>
       </div>
-      <a href={seo.canonicalUrl} class="sr-only">{seo.canonicalUrl}</a>
+
+      {body && (
+        <article class="skill-prose mt-12 border-t border-border pt-10" set:html={body} />
+      )}
     </main>
   </div>
 </BaseLayout>

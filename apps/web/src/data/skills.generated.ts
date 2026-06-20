@@ -12,7 +12,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/vercel-labs/agent-browser",
     "sourceKind": "upstream",
     "synced": true,
-    "lastModified": "2026-04-17"
+    "firstAdded": "2026-04-03",
+    "lastModified": "2026-05-08"
   },
   {
     "slug": "agent-dump",
@@ -24,7 +25,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/agent-dump",
     "sourceKind": "upstream",
     "synced": true,
-    "lastModified": "2026-04-25"
+    "firstAdded": "2026-04-03",
+    "lastModified": "2026-06-17"
   },
   {
     "slug": "ai-avoid",
@@ -36,6 +38,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/ninehills/skills",
     "sourceKind": "upstream",
     "synced": false,
+    "firstAdded": "2026-03-12",
     "lastModified": "2026-03-12"
   },
   {
@@ -48,6 +51,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/jimliu/baoyu-skills",
     "sourceKind": "adapted",
     "synced": false,
+    "firstAdded": "2026-03-28",
     "lastModified": "2026-03-28"
   },
   {
@@ -60,6 +64,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/anthropics/skills",
     "sourceKind": "upstream",
     "synced": true,
+    "firstAdded": "2026-04-03",
     "lastModified": "2026-04-03"
   },
   {
@@ -72,6 +77,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/claude-agent-sdk-typescript",
     "sourceKind": "self",
     "synced": false,
+    "firstAdded": "2026-03-08",
     "lastModified": "2026-03-08"
   },
   {
@@ -84,6 +90,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/openai/skills",
     "sourceKind": "upstream",
     "synced": true,
+    "firstAdded": "2026-04-03",
     "lastModified": "2026-04-03"
   },
   {
@@ -96,6 +103,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/vercel-labs/agent-skills",
     "sourceKind": "upstream",
     "synced": true,
+    "firstAdded": "2026-04-03",
     "lastModified": "2026-04-03"
   },
   {
@@ -108,6 +116,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/jimliu/baoyu-skills",
     "sourceKind": "adapted",
     "synced": false,
+    "firstAdded": "2026-03-28",
     "lastModified": "2026-03-28"
   },
   {
@@ -120,6 +129,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/db-ferry",
     "sourceKind": "upstream",
     "synced": true,
+    "firstAdded": "2026-04-03",
     "lastModified": "2026-04-25"
   },
   {
@@ -132,6 +142,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/data-service-cli",
     "sourceKind": "upstream",
     "synced": true,
+    "firstAdded": "2026-03-11",
     "lastModified": "2026-03-11"
   },
   {
@@ -144,6 +155,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/psiace/skills",
     "sourceKind": "upstream",
     "synced": true,
+    "firstAdded": "2026-04-03",
     "lastModified": "2026-04-03"
   },
   {
@@ -156,19 +168,21 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/psiace/skills",
     "sourceKind": "upstream",
     "synced": true,
+    "firstAdded": "2026-04-03",
     "lastModified": "2026-04-03"
   },
   {
     "slug": "frontend-design",
     "name": "frontend-design",
-    "description": "Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, artifacts, posters, or applications (examples include websites, landing pages, dashboards, React components, HTML/CSS layouts, or when styling/beautifying any web UI). Generates creative, polished code and UI design that avoids generic AI aesthetics.",
+    "description": "Guidance for distinctive, intentional visual design when building new UI or reshaping an existing one. Helps with aesthetic direction, typography, and making choices that don't read as templated defaults.",
     "tags": [
       "design"
     ],
     "sourceRepo": "https://github.com/anthropics/skills",
     "sourceKind": "upstream",
     "synced": true,
-    "lastModified": "2026-04-03"
+    "firstAdded": "2026-04-03",
+    "lastModified": "2026-06-17"
   },
   {
     "slug": "frontend-testing",
@@ -180,7 +194,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/langgenius/dify",
     "sourceKind": "upstream",
     "synced": true,
-    "lastModified": "2026-04-25"
+    "firstAdded": "2026-04-03",
+    "lastModified": "2026-06-17"
   },
   {
     "slug": "gh-fix-ci",
@@ -192,6 +207,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/openai/skills",
     "sourceKind": "upstream",
     "synced": true,
+    "firstAdded": "2026-04-03",
     "lastModified": "2026-04-03"
   },
   {
@@ -204,6 +220,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/yusukebe/hono-skill",
     "sourceKind": "upstream",
     "synced": true,
+    "firstAdded": "2026-04-03",
     "lastModified": "2026-04-03"
   },
   {
@@ -216,6 +233,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "synced": false,
+    "firstAdded": "2026-04-02",
     "lastModified": "2026-04-21"
   },
   {
@@ -228,6 +246,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/psiace/skills",
     "sourceKind": "upstream",
     "synced": true,
+    "firstAdded": "2026-04-03",
     "lastModified": "2026-04-03"
   },
   {
@@ -240,6 +259,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/psiace/skills",
     "sourceKind": "upstream",
     "synced": true,
+    "firstAdded": "2026-04-03",
     "lastModified": "2026-04-03"
   },
   {
@@ -252,7 +272,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/microsoft/playwright-cli",
     "sourceKind": "upstream",
     "synced": true,
-    "lastModified": "2026-05-05"
+    "firstAdded": "2026-04-03",
+    "lastModified": "2026-06-17"
   },
   {
     "slug": "react-best-practices",
@@ -264,6 +285,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/vercel-labs/agent-skills",
     "sourceKind": "upstream",
     "synced": true,
+    "firstAdded": "2026-04-03",
     "lastModified": "2026-04-17"
   },
   {
@@ -276,6 +298,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/vercel-labs/agent-skills",
     "sourceKind": "upstream",
     "synced": true,
+    "firstAdded": "2026-04-03",
     "lastModified": "2026-04-03"
   },
   {
@@ -288,6 +311,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "synced": false,
+    "firstAdded": "2026-04-24",
     "lastModified": "2026-04-24"
   },
   {
@@ -300,7 +324,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/shadcn-ui/ui",
     "sourceKind": "upstream",
     "synced": true,
-    "lastModified": "2026-05-05"
+    "firstAdded": "2026-04-03",
+    "lastModified": "2026-06-17"
   },
   {
     "slug": "slidev",
@@ -312,6 +337,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/antfu/skills",
     "sourceKind": "upstream",
     "synced": true,
+    "firstAdded": "2026-04-03",
     "lastModified": "2026-04-03"
   },
   {
@@ -324,6 +350,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "synced": false,
+    "firstAdded": "2026-03-11",
     "lastModified": "2026-03-11"
   },
   {
@@ -336,6 +363,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/vercel/streamdown",
     "sourceKind": "upstream",
     "synced": true,
+    "firstAdded": "2026-04-03",
     "lastModified": "2026-04-03"
   },
   {
@@ -348,6 +376,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "synced": false,
+    "firstAdded": "2026-03-12",
     "lastModified": "2026-03-12"
   },
   {
@@ -360,6 +389,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/antfu/skills",
     "sourceKind": "upstream",
     "synced": true,
+    "firstAdded": "2026-04-03",
     "lastModified": "2026-04-03"
   },
   {
@@ -372,6 +402,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/vercel-labs/agent-skills",
     "sourceKind": "upstream",
     "synced": true,
+    "firstAdded": "2026-04-03",
     "lastModified": "2026-04-03"
   }
 ];

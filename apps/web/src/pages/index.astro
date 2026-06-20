@@ -5,6 +5,7 @@ import SkillFilter from "@/components/SkillFilter.astro";
 import { SITE_REPO } from "@/data/catalog";
 import { getSkills, getSkillTags } from "@/data/skills";
 import { getHomeSeo } from "@/data/seo";
+import { faqItems } from "@/data/faq";
 
 const skills = getSkills();
 const tags = getSkillTags();
@@ -15,6 +16,7 @@ const seo = getHomeSeo();
   title={seo.title}
   description={seo.description}
   canonicalUrl={seo.canonicalUrl}
+  ogType={seo.ogType}
   structuredData={seo.structuredData}
 >
   <div class="min-h-screen">
@@ -65,6 +67,20 @@ const seo = getHomeSeo();
       <hr class="my-8 border-border" />
 
       <SkillFilter skills={skills} tags={tags} />
+
+      <hr class="my-12 border-border" />
+
+      <section aria-labelledby="faq-heading">
+        <h2 id="faq-heading" class="font-semibold text-lg text-text">FAQ</h2>
+        <dl class="mt-6 space-y-6">
+          {faqItems.map((item) => (
+            <div>
+              <dt class="text-sm font-medium text-text">{item.question}</dt>
+              <dd class="mt-1.5 text-sm leading-7 text-text-secondary">{item.answer}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
     </main>
   </div>
 </BaseLayout>

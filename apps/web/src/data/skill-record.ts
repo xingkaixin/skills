@@ -8,6 +8,7 @@ export interface SkillRecord {
   sourceRepo: string;
   sourceKind: SkillSourceKind;
   synced: boolean;
+  firstAdded: string;
   lastModified: string;
 }
 
