@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@10.33.0",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -12,15 +11,16 @@
     "lint": "eslint ."
   },
   "devDependencies": {
-    "@eslint/js": "^9",
-    "@tailwindcss/vite": "^4.1.0",
-    "astro": "^6.3.1",
-    "eslint": "^9",
-    "globals": "^16.0.0",
-    "tailwindcss": "^4",
-    "typescript": "^5",
-    "typescript-eslint": "^8.0.0",
-    "wrangler": "^4.0.0"
+    "@eslint/js": "^10.0.1",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^26.1.1",
+    "astro": "^7.1.1",
+    "eslint": "^10.7.0",
+    "globals": "^17.7.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.64.0",
+    "wrangler": "^4.112.0"
   },
   "dependencies": {
     "@fontsource/ibm-plex-mono": "^5.2.7",

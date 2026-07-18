@@ -9,6 +9,9 @@
 
 ```txt
 .
+├── apps/
+│   └── web/
+├── pnpm-workspace.yaml
 ├── scripts/
 │   └── generate-web-skills.ts
 ├── sources/
@@ -25,6 +28,10 @@
 ```bash
 pnpm install
 pnpm generate:web-data
+pnpm dev
+pnpm lint
+pnpm build
+pnpm preview
 ```
 
 ## 工作方式
@@ -34,7 +41,9 @@ pnpm generate:web-data
 1. 选择单一分类并创建 `skills/{category}/{skill-name}`
 2. 添加 `SKILL.md` 及必要的 `scripts/`、`references/` 或 `assets/`
 3. 运行 `pnpm generate:web-data`
-4. 校验 Web lint 和 build
+4. 运行 `pnpm lint` 和 `pnpm build`
+
+根目录是 pnpm workspace 入口，所有 Web 命令都从根目录执行。
 
 skill slug 必须全局唯一，不要在配置文件中重复维护分类。
 

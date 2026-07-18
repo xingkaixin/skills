@@ -32,6 +32,9 @@ skills/{category}/{skill-name}/SKILL.md
 ```txt
 .
 ├── AGENTS.md
+├── apps/
+│   └── web/
+├── pnpm-workspace.yaml
 ├── scripts/
 │   └── generate-web-skills.ts
 ├── sources/
@@ -69,4 +72,4 @@ source 流程是：
 
 1. 在 `skills/{category}/{skill-name}` 新增或修改内容
 2. 运行 `pnpm generate:web-data`
-3. 运行 Web lint 和 build
+3. 在根目录运行 `pnpm lint` 和 `pnpm build`

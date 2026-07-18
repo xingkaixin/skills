@@ -10,19 +10,20 @@ Skills catalog frontend — a static site built with Astro and deployed to Cloud
 ## Getting Started
 
 ```bash
+cd ../..
 pnpm install
 pnpm dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+Open [http://localhost:4321](http://localhost:4321) in your browser.
 
 ## Scripts
 
 | Command | Description |
 |---------|-------------|
-| `pnpm dev` | Start development server |
-| `pnpm build` | Build for production |
-| `pnpm preview` | Preview production build locally |
+| `pnpm dev` | Start development server from the repository root |
+| `pnpm build` | Generate skill data and build for production |
+| `pnpm preview` | Preview the production build locally |
 | `pnpm lint` | Run ESLint |
 | `pnpm deploy:cf` | Deploy to Cloudflare Pages |
 
@@ -67,7 +68,7 @@ Astro pre-renders the catalog, every skill detail page, the 404 page, and `sitem
 Skill data is auto-generated from the repository's skill definitions:
 
 ```bash
-pnpm --filter skills generate:web-data
+pnpm generate:web-data
 ```
 
 This scans `skills/{category}/{skill-name}` and updates the generated catalog. The category

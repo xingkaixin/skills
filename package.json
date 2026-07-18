@@ -3,10 +3,15 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm generate:web-data && pnpm --filter web build",
+    "preview": "pnpm --filter web preview",
+    "lint": "pnpm --filter web lint",
+    "deploy:cf": "pnpm --filter web deploy:cf",
     "generate:web-data": "node scripts/generate-web-skills.ts"
   },
-  "packageManager": "pnpm@10.33.0",
+  "packageManager": "pnpm@11.14.0",
   "devDependencies": {
-    "marked": "^18.0.5"
+    "marked": "^18.0.6"
   }
 }
