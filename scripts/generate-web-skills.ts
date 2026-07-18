@@ -125,12 +125,11 @@ function sanitizeHtml(html: string): string {
 }
 
 async function readGitDate(filePath: string, boundary: "first" | "last"): Promise<string> {
-  const slug = path.basename(path.dirname(filePath));
-  const skillPathspec = `:(glob)skills/**/${slug}/SKILL.md`;
+  const relativePath = path.relative(repoRoot, filePath);
   const args =
     boundary === "last"
-      ? ["log", "-1", "--format=%cs", "--", skillPathspec]
-      : ["log", "--diff-filter=A", "--format=%cs", "--", skillPathspec];
+      ? ["log", "--follow", "--diff-filter=AM", "--format=%cs", "--", relativePath]
+      : ["log", "--follow", "--diff-filter=A", "--format=%cs", "--", relativePath];
   const { stdout } = await execFileAsync("git", args, { cwd: repoRoot });
   const dates = stdout.trim().split("\n").filter(Boolean);
   const committedDate = boundary === "last" ? dates.at(0) : dates.at(-1);
