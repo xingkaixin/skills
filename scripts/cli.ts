@@ -1,15 +1,13 @@
 import { execFileSync } from 'node:child_process'
-import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readdirSync, rmSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 
-import { type RepoSourceSpec, type ScriptSourceSpec, sources, vendors } from '../meta.ts'
+import { type RepoSourceSpec, type ScriptSourceSpec, sources } from '../meta.ts'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const root = join(__dirname, '..')
-const managedSkillMarker = 'Managed-By: skills-sync'
-
 type Command = 'init' | 'sync' | 'check' | 'cleanup'
 
 function main() {
@@ -51,7 +49,6 @@ function init() {
   const repoSources = getRepoSources()
 
   ensureDirectory(join(root, 'sources'))
-  ensureDirectory(join(root, 'vendor'))
   ensureDirectory(join(root, 'skills'))
 
   for (const [name, config] of Object.entries(repoSources)) {
@@ -67,19 +64,6 @@ function init() {
     console.log(`added source submodule: ${submodulePath}`)
   }
 
-  for (const [name, config] of Object.entries(vendors)) {
-    const submodulePath = resolveVendorPath(name)
-    ensureParentDirectory(submodulePath)
-
-    if (hasSubmodule(submodulePath)) {
-      console.log(`skip vendor submodule: ${submodulePath}`)
-      continue
-    }
-
-    runGit(['submodule', 'add', config.source, submodulePath], root)
-    console.log(`added vendor submodule: ${submodulePath}`)
-  }
-
   for (const [name, config] of Object.entries(getScriptSources())) {
     const sourcePath = resolveSourcePath(name, config)
     ensureDirectory(join(root, sourcePath))
@@ -89,16 +73,10 @@ function init() {
 
 function sync() {
   ensureDirectory(join(root, 'sources'))
-  ensureDirectory(join(root, 'vendor'))
   ensureDirectory(join(root, 'skills'))
 
   if (hasGitmodules()) {
     runGit(['submodule', 'update', '--init', '--recursive', '--remote'], root)
-    // Reset nested submodules in vendor repos to their recorded commits to avoid dirty state
-    for (const vendorName of Object.keys(vendors)) {
-      const vendorPath = join(root, resolveVendorPath(vendorName))
-      runGit(['submodule', 'update', '--init', '--recursive'], vendorPath)
-    }
     console.log('updated submodules')
   }
 
@@ -108,38 +86,6 @@ function sync() {
 
     runCommand(config.fetchCommand, root)
     console.log(`refreshed script source: ${sourcePath}`)
-  }
-
-  for (const [vendorName, config] of Object.entries(vendors)) {
-    const vendorPath = join(root, resolveVendorPath(vendorName))
-    const skillsRoot = join(vendorPath, config.skillsRoot ?? 'skills')
-
-    if (!existsSync(skillsRoot)) {
-      console.warn(`skip vendor without configured skills root: ${resolveVendorPath(vendorName)}/${config.skillsRoot ?? 'skills'}`)
-      continue
-    }
-
-    for (const [sourceSkillName, outputSkillName] of Object.entries(config.skills)) {
-      const sourceSkillPath = join(skillsRoot, sourceSkillName)
-      const outputSkillPath = join(root, 'skills', outputSkillName)
-
-      if (!existsSync(sourceSkillPath)) {
-        console.warn(`skip missing vendor skill: ${vendorName}/${sourceSkillName}`)
-        continue
-      }
-
-      rmSync(outputSkillPath, { force: true, recursive: true })
-      cpSync(sourceSkillPath, outputSkillPath, { recursive: true })
-
-      writeSyncMetadata({
-        outputSkillPath,
-        sourceRepo: config.source,
-        sourcePath: `${resolveVendorPath(vendorName)}/${config.skillsRoot ?? 'skills'}/${sourceSkillName}`,
-        gitSha: getGitSha(vendorPath),
-      })
-
-      console.log(`synced skill: ${sourceSkillName} -> ${outputSkillName}`)
-    }
   }
 }
 
@@ -155,13 +101,8 @@ function check() {
     statusLines.push(`source:${name} manual-check`)
   }
 
-  for (const [name] of Object.entries(vendors)) {
-    const vendorPath = resolveVendorPath(name)
-    statusLines.push(formatRepoStatus(`vendor:${name}`, vendorPath))
-  }
-
   if (statusLines.length === 0) {
-    console.log('no configured sources or vendors')
+    console.log('no configured sources')
     return
   }
 
@@ -172,8 +113,6 @@ function check() {
 
 function cleanup() {
   cleanupSourceDirectories()
-  cleanupVendorDirectories()
-  cleanupManagedSkills()
 }
 
 function cleanupSourceDirectories() {
@@ -199,57 +138,6 @@ function cleanupSourceDirectories() {
 
     removeManagedPath(relativePath, absolutePath)
     console.log(`removed stale source: ${relativePath}`)
-  }
-}
-
-function cleanupVendorDirectories() {
-  const expected = new Set(Object.keys(vendors).map((name) => resolveVendorPath(name)))
-  const vendorRoot = join(root, 'vendor')
-
-  if (!existsSync(vendorRoot)) {
-    return
-  }
-
-  for (const entry of readdirSync(vendorRoot, { withFileTypes: true })) {
-    const relativePath = join('vendor', entry.name)
-    const absolutePath = join(vendorRoot, entry.name)
-
-    if (!entry.isDirectory() || expected.has(relativePath)) {
-      continue
-    }
-
-    removeManagedPath(relativePath, absolutePath)
-    console.log(`removed stale vendor: ${relativePath}`)
-  }
-}
-
-function cleanupManagedSkills() {
-  const expected = new Set<string>()
-
-  for (const config of Object.values(vendors)) {
-    for (const outputSkillName of Object.values(config.skills)) {
-      expected.add(outputSkillName)
-    }
-  }
-
-  const skillsRoot = join(root, 'skills')
-
-  if (!existsSync(skillsRoot)) {
-    return
-  }
-
-  for (const entry of readdirSync(skillsRoot, { withFileTypes: true })) {
-    if (!entry.isDirectory() || expected.has(entry.name)) {
-      continue
-    }
-
-    const skillPath = join(skillsRoot, entry.name)
-    if (!isManagedSkill(skillPath)) {
-      continue
-    }
-
-    rmSync(skillPath, { force: true, recursive: true })
-    console.log(`removed stale managed skill: skills/${entry.name}`)
   }
 }
 
@@ -290,35 +178,6 @@ function getRemoteHeadRef(cwd: string): string | null {
   }
 }
 
-function writeSyncMetadata(options: {
-  outputSkillPath: string
-  sourceRepo: string
-  sourcePath: string
-  gitSha: string | null
-}) {
-  const content = [
-    '# Sync Info',
-    '',
-    `- ${managedSkillMarker}`,
-    `- Source Repo: \`${options.sourceRepo}\``,
-    `- Source Path: \`${options.sourcePath}\``,
-    `- Git SHA: \`${options.gitSha ?? 'unknown'}\``,
-    `- Synced At: ${new Date().toISOString()}`,
-    '',
-  ].join('\n')
-
-  writeFileSync(join(options.outputSkillPath, 'SYNC.md'), content, 'utf8')
-}
-
-function isManagedSkill(skillPath: string): boolean {
-  const syncPath = join(skillPath, 'SYNC.md')
-  if (!existsSync(syncPath)) {
-    return false
-  }
-
-  return readFileSync(syncPath, 'utf8').includes(managedSkillMarker)
-}
-
 function removeManagedPath(relativePath: string, absolutePath: string) {
   if (hasSubmodule(relativePath)) {
     try {
@@ -336,21 +195,8 @@ function removeManagedPath(relativePath: string, absolutePath: string) {
   rmSync(absolutePath, { force: true, recursive: true })
 }
 
-function getGitSha(cwd: string): string | null {
-  try {
-    return runGit(['rev-parse', 'HEAD'], cwd)
-  }
-  catch {
-    return null
-  }
-}
-
 function resolveSourcePath(name: string, config: RepoSourceSpec | ScriptSourceSpec): string {
   return config.path ?? join('sources', name)
-}
-
-function resolveVendorPath(name: string): string {
-  return join('vendor', name)
 }
 
 function getRepoSources(): Record<string, RepoSourceSpec> {

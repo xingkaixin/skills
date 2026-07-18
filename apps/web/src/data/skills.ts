@@ -1,4 +1,4 @@
-import { skillsData, skillTags } from "@/data/skills.generated";
+import { skillCategories, skillsData } from "@/data/skills.generated";
 import type { SkillRecord } from "@/data/skill-record";
 
 export function getSkills(): SkillRecord[] {
@@ -9,6 +9,6 @@ export function getSkill(slug: string): SkillRecord | undefined {
   return skillsData.find((skill) => skill.slug === slug);
 }
 
-export function getSkillTags(): string[] {
-  return skillTags;
+export function getSkillCategories(): string[] {
+  return skillCategories;
 }

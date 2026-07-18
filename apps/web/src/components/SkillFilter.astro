@@ -3,10 +3,10 @@ import type { SkillRecord } from "@/data/skill-record";
 
 interface Props {
   skills: SkillRecord[];
-  tags: string[];
+  categories: string[];
 }
 
-const { skills, tags } = Astro.props;
+const { skills, categories } = Astro.props;
 const chipBase = "rounded-full border px-3 py-1 text-xs uppercase tracking-[0.16em] transition";
 const chipActive = "border-text bg-text text-white";
 const chipInactive = "border-border bg-transparent text-text-secondary hover:border-text hover:text-text";
@@ -17,19 +17,19 @@ const chipInactive = "border-border bg-transparent text-text-secondary hover:bor
     <button
       type="button"
       class={`${chipBase} ${chipActive}`}
-      data-tag="all"
+      data-category="all"
       aria-pressed="true"
     >
       All
     </button>
-    {tags.map((tag) => (
+    {categories.map((category) => (
       <button
         type="button"
         class={`${chipBase} ${chipInactive}`}
-        data-tag={tag}
+        data-category={category}
         aria-pressed="false"
       >
-        {tag}
+        {category}
       </button>
     ))}
     <span class="ml-auto text-xs text-text-muted" data-skill-count>{skills.length} skills</span>
@@ -41,7 +41,7 @@ const chipInactive = "border-border bg-transparent text-text-secondary hover:bor
         href={`/skills/${skill.slug}`}
         class="flex items-baseline gap-6 py-3 px-1 transition-colors hover:bg-accent-soft group"
         data-skill-item
-        data-tags={skill.tags.join(" ")}
+        data-category={skill.category}
       >
         <span class="w-44 shrink-0 font-medium text-sm text-text truncate">
           {skill.slug}
@@ -61,10 +61,12 @@ const chipInactive = "border-border bg-transparent text-text-secondary hover:bor
   const root = document.querySelector("[data-skill-filter]");
 
   if (root instanceof HTMLElement) {
-    const buttons = Array.from(root.querySelectorAll("[data-tag]"));
+    const buttons = Array.from(root.querySelectorAll("button[data-category]"));
     const items = Array.from(root.querySelectorAll("[data-skill-item]"));
     const count = root.querySelector("[data-skill-count]");
-    const knownTags = new Set(buttons.map((button) => button.getAttribute("data-tag")));
+    const knownCategories = new Set(
+      buttons.map((button) => button.getAttribute("data-category")),
+    );
     const activeClasses = ["border-text", "bg-text", "text-white"];
     const inactiveClasses = [
       "border-border",
@@ -80,18 +82,18 @@ const chipInactive = "border-border bg-transparent text-text-secondary hover:bor
       button.setAttribute("aria-pressed", isActive ? "true" : "false");
     }
 
-    function applyFilter(tag, updateUrl) {
+    function applyFilter(category, updateUrl) {
       let visibleCount = 0;
 
       for (const item of items) {
-        const tags = (item.getAttribute("data-tags") ?? "").split(" ");
-        const isVisible = tag === "all" || tags.includes(tag);
+        const isVisible =
+          category === "all" || item.getAttribute("data-category") === category;
         item.toggleAttribute("hidden", !isVisible);
         if (isVisible) visibleCount += 1;
       }
 
       for (const button of buttons) {
-        setButtonState(button, button.getAttribute("data-tag") === tag);
+        setButtonState(button, button.getAttribute("data-category") === category);
       }
 
       if (count) {
@@ -100,21 +102,24 @@ const chipInactive = "border-border bg-transparent text-text-secondary hover:bor
 
       if (updateUrl) {
         const url = new URL(window.location.href);
-        if (tag === "all") {
-          url.searchParams.delete("tag");
+        if (category === "all") {
+          url.searchParams.delete("category");
         } else {
-          url.searchParams.set("tag", tag);
+          url.searchParams.set("category", category);
         }
         window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
       }
     }
 
-    const initialTag = new URLSearchParams(window.location.search).get("tag");
-    applyFilter(initialTag && knownTags.has(initialTag) ? initialTag : "all", false);
+    const initialCategory = new URLSearchParams(window.location.search).get("category");
+    applyFilter(
+      initialCategory && knownCategories.has(initialCategory) ? initialCategory : "all",
+      false,
+    );
 
     for (const button of buttons) {
       button.addEventListener("click", () => {
-        applyFilter(button.getAttribute("data-tag") ?? "all", true);
+        applyFilter(button.getAttribute("data-category") ?? "all", true);
       });
     }
   }

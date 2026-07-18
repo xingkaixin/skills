@@ -117,8 +117,8 @@ function createSkillStructuredData(skill: SkillRecord): JsonLdNode {
     author: { "@id": `${SITE_URL}/#publisher` },
     publisher: { "@id": `${SITE_URL}/#publisher` },
     isPartOf: { "@id": `${SITE_URL}/#website` },
-    about: ["AI agent skill", ...skill.tags],
-    keywords: [skill.slug, ...skill.tags].join(", "),
+    about: ["AI agent skill", skill.category],
+    keywords: [skill.slug, skill.category].join(", "),
     sameAs: skill.sourceRepo,
   };
 }

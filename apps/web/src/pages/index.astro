@@ -3,12 +3,12 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import SiteBrand from "@/components/SiteBrand.astro";
 import SkillFilter from "@/components/SkillFilter.astro";
 import { SITE_REPO } from "@/data/catalog";
-import { getSkills, getSkillTags } from "@/data/skills";
+import { getSkillCategories, getSkills } from "@/data/skills";
 import { getHomeSeo } from "@/data/seo";
 import { faqItems } from "@/data/faq";
 
 const skills = getSkills();
-const tags = getSkillTags();
+const categories = getSkillCategories();
 const seo = getHomeSeo();
 ---
 
@@ -59,14 +59,14 @@ const seo = getHomeSeo();
         <div>
           <p class="mb-1.5 text-xs text-text-muted">Install a single skill</p>
           <div class="inline-flex items-center rounded-md border border-border bg-[#f6f8fa] px-4 py-2.5">
-            <code class="font-mono text-sm text-text">npx skills add xingkaixin/skills --skill agent-dump</code>
+            <code class="font-mono text-sm text-text">npx skills add xingkaixin/skills --skill react-state-management-decisions</code>
           </div>
         </div>
       </div>
 
       <hr class="my-8 border-border" />
 
-      <SkillFilter skills={skills} tags={tags} />
+      <SkillFilter skills={skills} categories={categories} />
 
       <hr class="my-12 border-border" />
 

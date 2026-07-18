@@ -4,10 +4,9 @@ export interface SkillRecord {
   slug: string;
   name: string;
   description: string;
-  tags: string[];
+  category: string;
   sourceRepo: string;
   sourceKind: SkillSourceKind;
-  synced: boolean;
   firstAdded: string;
   lastModified: string;
 }

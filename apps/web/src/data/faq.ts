@@ -18,7 +18,7 @@ export const faqItems: FaqItem[] = [
   {
     question: "How do I install a single skill?",
     answer:
-      "Run npx skills add xingkaixin/skills --skill agent-dump, swapping agent-dump for any skill slug. Only that skill is installed, which keeps your agent's context lean when you need just one capability.",
+      "Run npx skills add xingkaixin/skills --skill react-state-management-decisions, swapping react-state-management-decisions for any skill slug. Only that skill is installed, which keeps your agent's context lean when you need just one capability.",
   },
   {
     question: "Which AI tools are supported?",

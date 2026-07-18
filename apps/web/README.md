@@ -70,4 +70,5 @@ Skill data is auto-generated from the repository's skill definitions:
 pnpm --filter skills generate:web-data
 ```
 
-This updates `src/data/skills.generated.ts` with the latest catalog.
+This scans `skills/{category}/{skill-name}` and updates the generated catalog. The category
+directory is the source of truth for website filters and skill metadata.

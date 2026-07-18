@@ -45,6 +45,13 @@ const body = skillContent[skill.slug];
             xingkaixin&nbsp;/&nbsp;skills
           </a>
           <span class="mx-1.5">/</span>
+          <a
+            href={`/?category=${encodeURIComponent(skill.category)}`}
+            class="transition hover:text-text-secondary"
+          >
+            {skill.category}
+          </a>
+          <span class="mx-1.5">/</span>
           <span class="text-text-secondary font-medium">{skill.slug}</span>
         </p>
       </div>
@@ -71,14 +78,12 @@ const body = skillContent[skill.slug];
           </div>
 
           <div class="mt-6 flex flex-wrap gap-2">
-            {skill.tags.map((tag) => (
-              <a
-                href={`/?tag=${encodeURIComponent(tag)}`}
-                class="tag-pill hover:border-text hover:text-text"
-              >
-                {tag}
-              </a>
-            ))}
+            <a
+              href={`/?category=${encodeURIComponent(skill.category)}`}
+              class="tag-pill hover:border-text hover:text-text"
+            >
+              {skill.category}
+            </a>
           </div>
         </div>
 
