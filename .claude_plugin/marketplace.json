@@ -1,0 +1,125 @@
+{
+  "name": "xingkaixin-skills",
+  "owner": {
+    "name": "XingKaiXin",
+    "email": "xingkaixin@gmail.com"
+  },
+  "metadata": {
+    "description": "XingKaiXin skills organized by category",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "backend-skills",
+      "description": "Backend engineering, SDK, CLI, architecture, scaffolding, and Go skills",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/backend/agent-friendly-cli-design",
+        "./skills/backend/claude-agent-sdk-typescript",
+        "./skills/backend/coding-agent-session-formats",
+        "./skills/backend/monorepo-architecture-principles",
+        "./skills/backend/tech-stack-scaffolding",
+        "./skills/backend/use-modern-go"
+      ]
+    },
+    {
+      "name": "ci-skills",
+      "description": "Release changelog and Git commit workflow skills",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/ci/bilingual-release-changelog",
+        "./skills/ci/git-commit-message"
+      ]
+    },
+    {
+      "name": "deploy-skills",
+      "description": "Cloud deployment and platform migration skills",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/deploy/cloudflare-deploy-migration"
+      ]
+    },
+    {
+      "name": "design-skills",
+      "description": "Design system and interface writing skills",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/design/design-system-as-input-ui",
+        "./skills/design/error-message-writing"
+      ]
+    },
+    {
+      "name": "desktop-skills",
+      "description": "Electron and Tauri desktop application skills",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/desktop/electron-desktop-release",
+        "./skills/desktop/tauri-menubar-agent-app"
+      ]
+    },
+    {
+      "name": "finance-skills",
+      "description": "Financial research and reporting skills",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/finance/stock-report"
+      ]
+    },
+    {
+      "name": "frontend-skills",
+      "description": "Frontend performance and state management skills",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/frontend/frontend-large-data-performance",
+        "./skills/frontend/react-state-management-decisions"
+      ]
+    },
+    {
+      "name": "ios-skills",
+      "description": "iOS vision, recording, widget, and App Store delivery skills",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/ios/ios-on-device-vision-ml",
+        "./skills/ios/ios-recording-system-integration",
+        "./skills/ios/ios-widget-appstore-shipping"
+      ]
+    },
+    {
+      "name": "workflow-skills",
+      "description": "Code review, planning, issue tracking, and skill authoring workflows",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/workflow/code-review-checklist",
+        "./skills/workflow/codebase-review-loop",
+        "./skills/workflow/decision-complete-plan",
+        "./skills/workflow/issue-driven-dev-loop",
+        "./skills/workflow/issue-tracker",
+        "./skills/workflow/writing-agent-skills"
+      ]
+    },
+    {
+      "name": "writing-skills",
+      "description": "Writing, translation, illustration, and editorial skills",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/writing/ai-avoid",
+        "./skills/writing/article-illustrator",
+        "./skills/writing/cover-image",
+        "./skills/writing/en-zh-literary-translation",
+        "./skills/writing/klip-writing",
+        "./skills/writing/save-the-cat-writing",
+        "./skills/writing/triple-mind-deep-reading"
+      ]
+    }
+  ]
+}
