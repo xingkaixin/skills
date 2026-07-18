@@ -23,12 +23,6 @@ export const skillCatalog: Record<string, SkillCatalogEntry> = {
       repo: "https://github.com/jimliu/baoyu-skills"
     }
   },
-  "claude-agent-sdk-typescript": {
-    source: {
-      kind: "self",
-      repo: "https://github.com/xingkaixin/claude-agent-sdk-typescript",
-    },
-  },
   "cover-image": {
     source: {
       kind: "adapted",

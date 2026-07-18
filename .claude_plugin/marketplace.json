@@ -16,7 +16,6 @@
       "strict": false,
       "skills": [
         "./skills/backend/agent-friendly-cli-design",
-        "./skills/backend/claude-agent-sdk-typescript",
         "./skills/backend/coding-agent-session-formats",
         "./skills/backend/monorepo-architecture-principles",
         "./skills/backend/tech-stack-scaffolding",

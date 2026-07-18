@@ -43,16 +43,6 @@ export const skillsData: SkillRecord[] = [
     "lastModified": "2026-07-18"
   },
   {
-    "slug": "claude-agent-sdk-typescript",
-    "name": "claude-agent-sdk-typescript",
-    "description": "Build AI agents with the Claude Agent SDK TypeScript version. Covers query() function, message types, configuration options, subagents, hooks, MCP servers, custom tools, streaming, and structured outputs.",
-    "category": "backend",
-    "sourceRepo": "https://github.com/xingkaixin/claude-agent-sdk-typescript",
-    "sourceKind": "self",
-    "firstAdded": "2026-03-08",
-    "lastModified": "2026-03-08"
-  },
-  {
     "slug": "cloudflare-deploy-migration",
     "name": "cloudflare-deploy-migration",
     "description": "Use when deploying a site to Cloudflare or migrating one off Vercel — static sites to Pages, Next.js via vinext to Workers, full-stack apps to Workers with D1/KV/Durable Objects. Covers wrangler config split (dev/deploy/e2e), secret management, CI with artifact handoff and HOME-isolated wrangler E2E, analytics replacement, and a root-cause pitfall table (charset mojibake, assets-only worker 404, D1 migration naming, bundle guards).",
