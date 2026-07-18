@@ -213,6 +213,16 @@ export const skillsData: SkillRecord[] = [
     "lastModified": "2026-07-18"
   },
   {
+    "slug": "issue-tracker",
+    "name": "issue-tracker",
+    "description": "Local Markdown issue tracking system for managing feature requests, bugs, and version iterations within project repositories. Use when the user says \"创建 issue\", \"新建需求\", \"建 bug\", \"issue\", \"需求跟踪\", \"版本迭代\", \"milestone\", \"里程碑\", \"看板\", \"issue 状态\", \"关联 PR\", \"更新进度\", \"归档\", \"backlog\", or wants to create, update, query, move, or visualize issues stored in the local .issues/ directory. Also trigger when the user asks to generate an HTML view of an issue, check PR status, move issues between milestones or status lanes, initialize issue tracking for a project, or produce a summary of current iteration progress. Trigger even if the user just says \"开个 issue\" or references an issue ID like \"RD-400\".",
+    "category": "workflow",
+    "sourceRepo": "https://github.com/xingkaixin/skills",
+    "sourceKind": "self",
+    "firstAdded": "2026-07-18",
+    "lastModified": "2026-07-18"
+  },
+  {
     "slug": "klip-writing",
     "name": "klip-writing",
     "description": "Write KLIP (Kevin's Lightweight Improvement Proposal) documents for Fin-Agent and related projects. Use when user says \"写klip\", \"klip\", \"KLIP\",\"improvement proposal\", \"设计文档\", \"技术方案\", \"RFC\", \"proposal\",or wants to produce a structured technical design/evaluation/migration document for a software project. Also trigger when user asks to document a technical decision, evaluate a technology migration, design a new feature, or review codebase optimization opportunities.",
