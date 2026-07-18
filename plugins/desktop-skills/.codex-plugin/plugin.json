@@ -1,0 +1,20 @@
+{
+  "name": "desktop-skills",
+  "version": "1.0.0",
+  "description": "Electron and Tauri desktop application skills.",
+  "author": {
+    "name": "XingKaiXin",
+    "email": "xingkaixin@gmail.com"
+  },
+  "repository": "https://github.com/xingkaixin/skills",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Desktop Skills",
+    "shortDescription": "Electron and Tauri application skills.",
+    "longDescription": "Desktop application workflows for Electron releases and Tauri menubar agents.",
+    "developerName": "XingKaiXin",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": ["Help me build or release this desktop app."]
+  }
+}

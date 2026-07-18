@@ -1,0 +1,20 @@
+{
+  "name": "backend-skills",
+  "version": "1.0.0",
+  "description": "Backend engineering, SDK, CLI, architecture, scaffolding, and Go skills.",
+  "author": {
+    "name": "XingKaiXin",
+    "email": "xingkaixin@gmail.com"
+  },
+  "repository": "https://github.com/xingkaixin/skills",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Backend Skills",
+    "shortDescription": "Backend engineering and architecture skills.",
+    "longDescription": "Backend engineering workflows for SDKs, CLIs, architecture, project scaffolding, and modern Go.",
+    "developerName": "XingKaiXin",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": ["Help me solve this backend engineering task."]
+  }
+}

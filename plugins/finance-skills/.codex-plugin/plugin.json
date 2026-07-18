@@ -1,0 +1,20 @@
+{
+  "name": "finance-skills",
+  "version": "1.0.0",
+  "description": "Financial research and reporting skills.",
+  "author": {
+    "name": "XingKaiXin",
+    "email": "xingkaixin@gmail.com"
+  },
+  "repository": "https://github.com/xingkaixin/skills",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Finance Skills",
+    "shortDescription": "Financial research and reporting skills.",
+    "longDescription": "Financial analysis workflows for researching companies and producing stock reports.",
+    "developerName": "XingKaiXin",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": ["Research this company and prepare a stock report."]
+  }
+}

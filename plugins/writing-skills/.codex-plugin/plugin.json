@@ -1,0 +1,20 @@
+{
+  "name": "writing-skills",
+  "version": "1.0.0",
+  "description": "Writing, translation, illustration, and editorial skills.",
+  "author": {
+    "name": "XingKaiXin",
+    "email": "xingkaixin@gmail.com"
+  },
+  "repository": "https://github.com/xingkaixin/skills",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Writing Skills",
+    "shortDescription": "Writing and editorial workflow skills.",
+    "longDescription": "Writing workflows for natural prose, translation, illustration, cover images, structured proposals, and storytelling.",
+    "developerName": "XingKaiXin",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": ["Help me write or edit this content."]
+  }
+}
