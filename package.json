@@ -3,9 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node scripts/cli.ts",
-    "generate:web-data": "node scripts/generate-web-skills.ts",
-    "prepare": "git submodule update --init --recursive"
+    "generate:web-data": "node scripts/generate-web-skills.ts"
   },
   "packageManager": "pnpm@10.33.0",
   "devDependencies": {
