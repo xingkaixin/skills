@@ -9,6 +9,7 @@ interface Props {
   ogType?: string;
   noindex?: boolean;
   structuredData?: JsonLdNode[];
+  lang?: "en" | "zh-CN";
 }
 
 const {
@@ -18,19 +19,22 @@ const {
   ogType = "website",
   noindex = false,
   structuredData = [],
+  lang = "en",
 } = Astro.props;
 const jsonLdSources = structuredData.map((node) =>
   JSON.stringify(node).replace(/</g, "\\u003c"),
 );
 const ogImageUrl = new URL("/og-image.png", Astro.site).href;
+const skipLabel = lang === "zh-CN" ? "跳到主要内容" : "Skip to main content";
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" />
     <title>{title}</title>
     <meta name="description" content={description} />
     {noindex ? (
@@ -41,7 +45,7 @@ const ogImageUrl = new URL("/og-image.png", Astro.site).href;
     <link rel="canonical" href={canonicalUrl} />
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content="XingKaiXin's Skills" />
-    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale" content={lang === "zh-CN" ? "zh_CN" : "en_US"} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
@@ -54,15 +58,17 @@ const ogImageUrl = new URL("/og-image.png", Astro.site).href;
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
     {jsonLdSources.map((source) => (
-      <script type="application/ld+json" set:html={source} />
+      <script is:inline type="application/ld+json" set:html={source} />
     ))}
     <script
       defer
+      is:inline
       src="https://static.cloudflareinsights.com/beacon.min.js"
       data-cf-beacon='{"token":"c3176e48d15945b890292c7f23f0359e"}'
     ></script>
   </head>
   <body>
+    <a href="#main-content" class="skip-link">{skipLabel}</a>
     <div class="font-sans min-h-screen">
       <slot />
     </div>

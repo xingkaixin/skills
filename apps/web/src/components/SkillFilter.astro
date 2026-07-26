@@ -7,13 +7,16 @@ interface Props {
 }
 
 const { skills, categories } = Astro.props;
-const chipBase = "rounded-full border px-3 py-1 text-xs uppercase tracking-[0.16em] transition";
+const chipBase = "pressable inline-flex min-h-11 shrink-0 items-center rounded-full border px-3 py-1 text-xs uppercase tracking-[0.16em] transition";
 const chipActive = "border-text bg-text text-white";
 const chipInactive = "border-border bg-transparent text-text-secondary hover:border-text hover:text-text";
 ---
 
 <div data-skill-filter>
-  <div class="sticky top-0 z-10 -mx-6 px-6 py-3 bg-bg border-b border-border flex flex-wrap items-center gap-2 mb-6">
+  <div
+    class="-mx-6 mb-6 flex flex-nowrap items-center gap-2 overflow-x-auto border-b border-border bg-bg px-6 py-3 sm:sticky sm:top-0 sm:z-10 sm:flex-wrap"
+    aria-label="Skill categories"
+  >
     <button
       type="button"
       class={`${chipBase} ${chipActive}`}
@@ -32,25 +35,35 @@ const chipInactive = "border-border bg-transparent text-text-secondary hover:bor
         {category}
       </button>
     ))}
-    <span class="ml-auto text-xs text-text-muted" data-skill-count>{skills.length} skills</span>
+    <span
+      class="ml-auto shrink-0 text-xs text-text-muted"
+      data-skill-count
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      {skills.length} skills
+    </span>
   </div>
 
   <div class="divide-y divide-border">
     {skills.map((skill) => (
       <a
         href={`/skills/${skill.slug}`}
-        class="flex items-baseline gap-6 py-3 px-1 transition-colors hover:bg-accent-soft group"
+        class="group flex min-h-11 flex-col items-start gap-1 px-1 py-4 transition-colors hover:bg-accent-soft sm:flex-row sm:items-baseline sm:gap-6 sm:py-3"
         data-skill-item
         data-category={skill.category}
       >
-        <span class="w-44 shrink-0 font-medium text-sm text-text truncate">
+        <span class="max-w-full shrink-0 truncate text-sm font-medium text-text sm:w-44">
           {skill.slug}
         </span>
-        <span class="flex-1 min-w-0 text-sm text-text-secondary truncate">
+        <span class="line-clamp-2 min-w-0 flex-1 text-sm leading-6 text-text-secondary sm:line-clamp-1">
           {skill.description}
         </span>
-        <span class="text-xs text-text-muted shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-          -&gt;
+        <span
+          aria-hidden="true"
+          class="hidden shrink-0 text-xs text-text-muted opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 sm:block"
+        >
+          →
         </span>
       </a>
     ))}
@@ -101,7 +114,7 @@ const chipInactive = "border-border bg-transparent text-text-secondary hover:bor
       }
 
       if (count) {
-        count.textContent = `${visibleCount} skills`;
+        count.textContent = `${visibleCount} ${visibleCount === 1 ? "skill" : "skills"}`;
       }
 
       if (updateUrl) {

@@ -16,6 +16,7 @@ const seo = getHomeSeo();
   canonicalUrl={seo.canonicalUrl}
   ogType={seo.ogType}
   structuredData={seo.structuredData}
+  lang="en"
 >
   <div class="min-h-screen">
     <nav class="border-b border-border px-6 py-4">
@@ -23,9 +24,7 @@ const seo = getHomeSeo();
         <SiteBrand />
         <a
           href={SITE_REPO}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="rounded-md border border-border px-3 py-1.5 text-xs text-text-secondary transition hover:border-text hover:text-text"
+          class="pressable inline-flex min-h-11 items-center rounded-md border border-border px-3 py-1.5 text-xs text-text-secondary transition hover:border-text hover:text-text"
         >
           GitHub
         </a>
@@ -40,7 +39,7 @@ const seo = getHomeSeo();
       </div>
     </div>
 
-    <main class="mx-auto max-w-5xl px-6 pb-20 pt-8">
+    <main id="main-content" class="mx-auto max-w-5xl px-6 pb-20 pt-8">
       <h1 class="font-semibold text-xl text-text">xingkaixin/skills</h1>
       <p class="mt-1.5 text-sm text-text-secondary">Agent skills for AI Agents</p>
 
