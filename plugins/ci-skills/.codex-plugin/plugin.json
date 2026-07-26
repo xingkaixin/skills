@@ -14,7 +14,12 @@
     "longDescription": "Continuous integration workflows for bilingual release changelogs and consistent Git commits.",
     "developerName": "XingKaiXin",
     "category": "Developer Tools",
-    "capabilities": ["Read", "Write"],
-    "defaultPrompt": ["Help me prepare this release or Git commit."]
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Help me prepare this release or Git commit."
+    ]
   }
 }

@@ -1,13 +1,13 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SiteBrand from "@/components/SiteBrand.astro";
-import { getSkills } from "@/data/skills";
 import { getSkillSeo } from "@/data/seo";
 import { skillContent } from "@/data/skills.content.generated";
+import { skillsData } from "@/data/skills.generated";
 import { formatRepoLabel, type SkillRecord } from "@/data/skill-record";
 
 export function getStaticPaths() {
-  return getSkills().map((skill) => ({
+  return skillsData.map((skill) => ({
     params: { slug: skill.slug },
     props: { skill },
   }));

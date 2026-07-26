@@ -14,7 +14,12 @@
     "longDescription": "Product design workflows for input-driven design systems and effective error messages.",
     "developerName": "XingKaiXin",
     "category": "Productivity",
-    "capabilities": ["Read", "Write"],
-    "defaultPrompt": ["Help me improve this product design."]
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Help me improve this product design."
+    ]
   }
 }

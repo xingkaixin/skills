@@ -14,7 +14,12 @@
     "longDescription": "Desktop application workflows for Electron releases and Tauri menubar agents.",
     "developerName": "XingKaiXin",
     "category": "Developer Tools",
-    "capabilities": ["Read", "Write"],
-    "defaultPrompt": ["Help me build or release this desktop app."]
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Help me build or release this desktop app."
+    ]
   }
 }

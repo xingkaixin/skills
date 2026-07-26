@@ -10,7 +10,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "zh-CN"
   },
   {
     "slug": "ai-avoid",
@@ -20,7 +21,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/ninehills/skills",
     "sourceKind": "upstream",
     "firstAdded": "2026-03-12",
-    "lastModified": "2026-03-12"
+    "lastModified": "2026-03-12",
+    "language": "en"
   },
   {
     "slug": "article-illustrator",
@@ -30,7 +32,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/jimliu/baoyu-skills",
     "sourceKind": "adapted",
     "firstAdded": "2026-03-28",
-    "lastModified": "2026-03-28"
+    "lastModified": "2026-03-28",
+    "language": "en"
   },
   {
     "slug": "bilingual-release-changelog",
@@ -40,7 +43,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "zh-CN"
   },
   {
     "slug": "cloudflare-deploy-migration",
@@ -50,7 +54,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "zh-CN"
   },
   {
     "slug": "code-review-checklist",
@@ -60,7 +65,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "zh-CN"
   },
   {
     "slug": "codebase-review-loop",
@@ -70,7 +76,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "zh-CN"
   },
   {
     "slug": "coding-agent-session-formats",
@@ -80,7 +87,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "en"
   },
   {
     "slug": "cover-image",
@@ -90,7 +98,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/jimliu/baoyu-skills",
     "sourceKind": "adapted",
     "firstAdded": "2026-03-28",
-    "lastModified": "2026-03-28"
+    "lastModified": "2026-03-28",
+    "language": "en"
   },
   {
     "slug": "decision-complete-plan",
@@ -100,7 +109,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "zh-CN"
   },
   {
     "slug": "design-system-as-input-ui",
@@ -110,7 +120,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "zh-CN"
   },
   {
     "slug": "electron-desktop-release",
@@ -120,7 +131,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "zh-CN"
   },
   {
     "slug": "en-zh-literary-translation",
@@ -130,7 +142,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "zh-CN"
   },
   {
     "slug": "error-message-writing",
@@ -140,7 +153,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "zh-CN"
   },
   {
     "slug": "frontend-large-data-performance",
@@ -150,7 +164,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "zh-CN"
   },
   {
     "slug": "git-commit-message",
@@ -160,7 +175,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "zh-CN"
   },
   {
     "slug": "ios-on-device-vision-ml",
@@ -170,7 +186,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "zh-CN"
   },
   {
     "slug": "ios-recording-system-integration",
@@ -180,7 +197,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "zh-CN"
   },
   {
     "slug": "ios-widget-appstore-shipping",
@@ -190,7 +208,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "zh-CN"
   },
   {
     "slug": "issue-driven-dev-loop",
@@ -200,7 +219,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "zh-CN"
   },
   {
     "slug": "issue-tracker",
@@ -210,7 +230,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "en"
   },
   {
     "slug": "klip-writing",
@@ -220,7 +241,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-04-02",
-    "lastModified": "2026-04-21"
+    "lastModified": "2026-04-21",
+    "language": "en"
   },
   {
     "slug": "monorepo-architecture-principles",
@@ -230,7 +252,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "zh-CN"
   },
   {
     "slug": "react-state-management-decisions",
@@ -240,7 +263,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "zh-CN"
   },
   {
     "slug": "save-the-cat-writing",
@@ -250,7 +274,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-04-24",
-    "lastModified": "2026-04-24"
+    "lastModified": "2026-04-24",
+    "language": "zh-CN"
   },
   {
     "slug": "stock-report",
@@ -260,7 +285,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-03-11",
-    "lastModified": "2026-03-11"
+    "lastModified": "2026-03-11",
+    "language": "zh-CN"
   },
   {
     "slug": "tauri-menubar-agent-app",
@@ -270,7 +296,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "zh-CN"
   },
   {
     "slug": "tech-stack-scaffolding",
@@ -280,7 +307,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "en"
   },
   {
     "slug": "triple-mind-deep-reading",
@@ -290,7 +318,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "zh-CN"
   },
   {
     "slug": "use-modern-go",
@@ -300,7 +329,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-03-12",
-    "lastModified": "2026-03-12"
+    "lastModified": "2026-03-12",
+    "language": "en"
   },
   {
     "slug": "writing-agent-skills",
@@ -310,7 +340,8 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
-    "lastModified": "2026-07-18"
+    "lastModified": "2026-07-18",
+    "language": "zh-CN"
   }
 ];
 

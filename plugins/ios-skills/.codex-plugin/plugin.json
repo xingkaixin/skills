@@ -14,7 +14,12 @@
     "longDescription": "iOS engineering workflows for on-device ML, recording integrations, widgets, and App Store delivery.",
     "developerName": "XingKaiXin",
     "category": "Developer Tools",
-    "capabilities": ["Read", "Write"],
-    "defaultPrompt": ["Help me implement or ship this iOS feature."]
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Help me implement or ship this iOS feature."
+    ]
   }
 }

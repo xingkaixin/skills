@@ -61,8 +61,12 @@ const chipInactive = "border-border bg-transparent text-text-secondary hover:bor
   const root = document.querySelector("[data-skill-filter]");
 
   if (root instanceof HTMLElement) {
-    const buttons = Array.from(root.querySelectorAll("button[data-category]"));
-    const items = Array.from(root.querySelectorAll("[data-skill-item]"));
+    const buttons = Array.from(
+      root.querySelectorAll<HTMLButtonElement>("button[data-category]"),
+    );
+    const items = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-skill-item]"),
+    );
     const count = root.querySelector("[data-skill-count]");
     const knownCategories = new Set(
       buttons.map((button) => button.getAttribute("data-category")),
@@ -76,13 +80,13 @@ const chipInactive = "border-border bg-transparent text-text-secondary hover:bor
       "hover:text-text",
     ];
 
-    function setButtonState(button, isActive) {
+    function setButtonState(button: HTMLButtonElement, isActive: boolean) {
       button.classList.remove(...activeClasses, ...inactiveClasses);
       button.classList.add(...(isActive ? activeClasses : inactiveClasses));
       button.setAttribute("aria-pressed", isActive ? "true" : "false");
     }
 
-    function applyFilter(category, updateUrl) {
+    function applyFilter(category: string, updateUrl: boolean) {
       let visibleCount = 0;
 
       for (const item of items) {

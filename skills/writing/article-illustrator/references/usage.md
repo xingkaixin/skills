@@ -29,7 +29,7 @@
 |--------|-------------|
 | `--type <name>` | Illustration type (see Type Gallery in SKILL.md) |
 | `--style <name>` | Visual style (see references/styles.md) |
-| `--preset <name>` | Shorthand for type + style combo (see [references/style-presets.md](references/style-presets.md)) |
+| `--preset <name>` | Shorthand for type + style combo (see [style-presets.md](style-presets.md)) |
 | `--density <level>` | Image count: minimal / balanced / rich |
 
 ## Input Modes

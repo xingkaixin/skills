@@ -8,9 +8,11 @@
     "build": "astro build",
     "preview": "astro preview",
     "deploy:cf": "wrangler pages deploy dist --project-name=skills",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "typecheck": "astro check"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.9",
     "@eslint/js": "^10.0.1",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^26.1.1",

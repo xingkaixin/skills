@@ -11,7 +11,7 @@
   "plugins": [
     {
       "name": "backend-skills",
-      "description": "Backend engineering, SDK, CLI, architecture, scaffolding, and Go skills",
+      "description": "Backend engineering, CLI, architecture, scaffolding, and Go skills",
       "source": "./",
       "strict": false,
       "skills": [

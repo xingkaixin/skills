@@ -3,12 +3,10 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import SiteBrand from "@/components/SiteBrand.astro";
 import SkillFilter from "@/components/SkillFilter.astro";
 import { SITE_REPO } from "@/data/catalog";
-import { getSkillCategories, getSkills } from "@/data/skills";
+import { skillCategories, skillsData } from "@/data/skills.generated";
 import { getHomeSeo } from "@/data/seo";
 import { faqItems } from "@/data/faq";
 
-const skills = getSkills();
-const categories = getSkillCategories();
 const seo = getHomeSeo();
 ---
 
@@ -66,7 +64,7 @@ const seo = getHomeSeo();
 
       <hr class="my-8 border-border" />
 
-      <SkillFilter skills={skills} categories={categories} />
+      <SkillFilter skills={skillsData} categories={skillCategories} />
 
       <hr class="my-12 border-border" />
 

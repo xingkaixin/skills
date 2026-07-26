@@ -14,7 +14,12 @@
     "longDescription": "Writing workflows for natural prose, translation, illustration, cover images, structured proposals, and storytelling.",
     "developerName": "XingKaiXin",
     "category": "Productivity",
-    "capabilities": ["Read", "Write"],
-    "defaultPrompt": ["Help me write or edit this content."]
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Help me write or edit this content."
+    ]
   }
 }

@@ -14,7 +14,12 @@
     "longDescription": "Structured workflows for code review, planning, issue tracking, implementation loops, and skill authoring.",
     "developerName": "XingKaiXin",
     "category": "Productivity",
-    "capabilities": ["Read", "Write"],
-    "defaultPrompt": ["Help me plan and execute this engineering workflow."]
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Help me plan and execute this engineering workflow."
+    ]
   }
 }

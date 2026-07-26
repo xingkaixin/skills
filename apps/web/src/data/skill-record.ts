@@ -1,15 +1,7 @@
-import type { SkillSourceKind } from "@/data/catalog";
-
-export interface SkillRecord {
-  slug: string;
-  name: string;
-  description: string;
-  category: string;
-  sourceRepo: string;
-  sourceKind: SkillSourceKind;
-  firstAdded: string;
-  lastModified: string;
-}
+export type {
+  SkillRecord,
+  SkillSourceKind,
+} from "../../../../scripts/catalog/types.ts";
 
 export function formatRepoLabel(repoUrl: string): string {
   try {

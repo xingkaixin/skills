@@ -14,7 +14,12 @@
     "longDescription": "Financial analysis workflows for researching companies and producing stock reports.",
     "developerName": "XingKaiXin",
     "category": "Productivity",
-    "capabilities": ["Read", "Write"],
-    "defaultPrompt": ["Research this company and prepare a stock report."]
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Research this company and prepare a stock report."
+    ]
   }
 }

@@ -14,7 +14,12 @@
     "longDescription": "Frontend engineering workflows for large data performance and React state management decisions.",
     "developerName": "XingKaiXin",
     "category": "Developer Tools",
-    "capabilities": ["Read", "Write"],
-    "defaultPrompt": ["Help me solve this frontend engineering task."]
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Help me solve this frontend engineering task."
+    ]
   }
 }

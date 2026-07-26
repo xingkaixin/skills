@@ -14,7 +14,12 @@
     "longDescription": "Deployment workflows for Cloudflare platforms and migrations from Vercel.",
     "developerName": "XingKaiXin",
     "category": "Developer Tools",
-    "capabilities": ["Read", "Write"],
-    "defaultPrompt": ["Help me deploy or migrate this application."]
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Help me deploy or migrate this application."
+    ]
   }
 }
