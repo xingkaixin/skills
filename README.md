@@ -1,55 +1,69 @@
 # Skills
 
-这是一个分类维护 AI agent skills 的仓库。
+这是一个按分类维护并发布 AI agent skills 的仓库。
 
-- `sources/` 保存人工整理的原始资料，不参与自动生成
-- `skills/` 保存最终对外提供的 skill
+`skills/{category}` 是分类成员关系的唯一事实来源。Web catalog、Claude
+marketplace 和 Codex marketplace 都由同一套 publication 模块生成。
 
 ## 目录结构
 
 ```txt
 .
-├── apps/
-│   └── web/
-├── pnpm-workspace.yaml
+├── .agents/plugins/
+├── .claude-plugin/
+├── apps/web/
+├── plugins/{category}-skills/
 ├── scripts/
+│   ├── catalog/
 │   └── generate-web-skills.ts
-├── sources/
-└── skills/
-    └── {category}/
-        └── {skill-name}/
-            └── SKILL.md
+└── skills/{category}/{skill-name}/
+    └── SKILL.md
 ```
 
-`skills/{category}` 是分类的唯一事实来源，Web 目录会直接从路径生成分类和筛选条件。
-
 ## 常用命令
+
+所有命令都从仓库根目录执行：
 
 ```bash
 pnpm install
 pnpm generate:web-data
+pnpm check:generated
 pnpm dev
 pnpm lint
+pnpm typecheck
+pnpm test
 pnpm build
+pnpm check
 pnpm preview
 ```
 
-## 工作方式
+`pnpm check` 会执行生成物一致性、ESLint、TypeScript、Astro、测试和生产构建。
 
-### 新增 skill
+## 新增 skill
 
 1. 选择单一分类并创建 `skills/{category}/{skill-name}`
-2. 添加 `SKILL.md` 及必要的 `scripts/`、`references/` 或 `assets/`
-3. 运行 `pnpm generate:web-data`
-4. 运行 `pnpm lint` 和 `pnpm build`
+2. 添加包含 `name` 和 `description` frontmatter 的 `SKILL.md`
+3. 按需添加 `scripts/`、`references/` 或 `assets/`
+4. 运行 `pnpm generate:web-data`
+5. 运行 `pnpm check`
 
-根目录是 pnpm workspace 入口，所有 Web 命令都从根目录执行。
+slug 必须全局唯一。本地 Markdown 引用必须指向 skill 包内真实存在的文件。
+不要手工维护 marketplace 的 skill 列表。
 
-skill slug 必须全局唯一，不要在配置文件中重复维护分类。
+## 发布模型
+
+`scripts/catalog/` 从 `skills/` 生成：
+
+- Web 元数据和安全处理后的正文
+- Claude plugin marketplace
+- Codex plugin marketplace 和分类 manifest
+
+平台无法从路径推导的描述、展示名和来源信息集中维护在
+`scripts/catalog/config.ts`。
 
 ## 致谢
 
-- source 管理流程参考了 [antfu/skills](https://github.com/antfu/skills)
+- Skill 管理思路参考了 [antfu/skills](https://github.com/antfu/skills)
 - `apps/web` 参考了 [himself65/finance-skills](https://github.com/himself65/finance-skills)
 
 更详细的仓库治理规则见 [AGENTS.md](AGENTS.md)。

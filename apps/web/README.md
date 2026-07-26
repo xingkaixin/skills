@@ -25,6 +25,9 @@ Open [http://localhost:4321](http://localhost:4321) in your browser.
 | `pnpm build` | Generate skill data and build for production |
 | `pnpm preview` | Preview the production build locally |
 | `pnpm lint` | Run ESLint |
+| `pnpm typecheck` | Check root TypeScript and Astro templates |
+| `pnpm test` | Run catalog and stock-report tests |
+| `pnpm check` | Run every required verification |
 | `pnpm deploy:cf` | Deploy to Cloudflare Pages |
 
 ## Project Structure
@@ -45,7 +48,6 @@ src/
   styles/
     globals.css       # Tailwind and global styles
   data/
-    skills.ts         # Skill data helpers
     skills.generated.ts # Generated skill data
     skill-record.ts   # Skill record types
     catalog.ts        # Catalog constants
@@ -71,5 +73,7 @@ Skill data is auto-generated from the repository's skill definitions:
 pnpm generate:web-data
 ```
 
-This scans `skills/{category}/{skill-name}` and updates the generated catalog. The category
-directory is the source of truth for website filters and skill metadata.
+This scans `skills/{category}/{skill-name}` and updates Web data, Claude marketplace,
+Codex marketplace, and category plugin manifests. The category directory is the source
+of truth for catalog membership; platform-specific display metadata lives in
+`scripts/catalog/config.ts`.
