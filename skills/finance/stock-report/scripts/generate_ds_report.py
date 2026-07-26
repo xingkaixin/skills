@@ -4,20 +4,23 @@ from __future__ import annotations
 import json
 import re
 import sys
+from dataclasses import dataclass
 from datetime import date
 from html import escape
 from pathlib import Path
+from typing import Any
 
 
 def resolve_repo_root() -> Path:
     current = Path(__file__).resolve()
     for candidate in current.parents:
-        if (candidate / ".git").exists() and (candidate / "data").exists():
+        if (candidate / ".git").exists():
             return candidate
     raise RuntimeError("未识别到仓库根目录")
 
 
 ROOT = resolve_repo_root()
+REPORT_CSS_PATH = Path(__file__).resolve().parent / "templates" / "report.css"
 GENERIC_UNAVAILABLE_TEXT = "数据暂不可得"
 CONTROLLER_EMPTY_TEXT = "该标的暂无实控人数据"
 LOCKUP_EMPTY_TEXT = "该标的当前暂无解禁数据"
@@ -29,6 +32,10 @@ def read_json(path: Path) -> dict:
     if not path.exists() or path.stat().st_size == 0:
         return {"success": False, "data": []}
     return json.loads(path.read_text(encoding="utf-8"), strict=False)
+
+
+def read_report_css() -> str:
+    return REPORT_CSS_PATH.read_text(encoding="utf-8")
 
 
 def write_json(path: Path, data: object) -> None:
@@ -226,12 +233,434 @@ def build_financial_table_rows(rows: list[dict], kind: str, unit: str, divisor: 
     return built
 
 
+
+@dataclass(frozen=True)
+class ReportView:
+    annual_fin_cf_series: Any
+    annual_insm_cf_series: Any
+    annual_op_cf_series: Any
+    asset_series: Any
+    balance_table: Any
+    balance_unit: Any
+    basic_info: Any
+    business_income_divisor: Any
+    business_income_unit: Any
+    business_rows: Any
+    business_table: Any
+    capital_metrics: Any
+    cash_annual_table: Any
+    cash_annual_unit: Any
+    cash_quarter_table: Any
+    cash_quarter_unit: Any
+    controller_message: Any
+    controller_rows: Any
+    dividend_block: Any
+    dividend_series: Any
+    equity_series: Any
+    exec_rows: Any
+    exec_total_reward: Any
+    executive_table: Any
+    holder_ratio_latest: Any
+    income_annual_table: Any
+    income_annual_unit: Any
+    income_quarter_table: Any
+    income_quarter_unit: Any
+    latest_market_cap: Any
+    latest_price: Any
+    latest_quote_date: Any
+    latest_shareholders: Any
+    liability_series: Any
+    lockup_block: Any
+    pb: Any
+    pe: Any
+    profit_series: Any
+    quarter_fin_cf_series: Any
+    quarter_insm_cf_series: Any
+    quarter_op_cf_series: Any
+    quarter_profit_series: Any
+    quarter_revenue_series: Any
+    rating_html: Any
+    report_css: Any
+    revenue_series: Any
+    shareholder_monitor_latest: Any
+    stock_code: Any
+    top10_float_notice_date: Any
+    top10_float_table: Any
+    top10_notice_date: Any
+    top10_table: Any
+
+
+def render_report_html(view: ReportView) -> str:
+    return f"""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{escape(view.basic_info["证券简称"])}（{escape(view.stock_code)}）投资分析报告 | XYC Research</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&family=Crimson+Pro:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>{view.report_css}</style>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到主内容</a>
+    <div class="nav-bar">
+        <div class="nav-content">
+            <div class="nav-brand">XYC Research</div>
+            <div class="nav-links">
+                <a href="#intro" class="nav-link">公司简介</a>
+                <a href="#capital" class="nav-link">股本和股东</a>
+                <a href="#finance" class="nav-link">财务数据</a>
+                <a href="#business" class="nav-link">主营业务行业数据</a>
+                <a href="#rating" class="nav-link">一致评级</a>
+            </div>
+        </div>
+    </div>
+
+    <main class="main-container" id="main-content">
+        <header class="report-header">
+            <div class="report-meta">
+                <span>{escape(view.stock_code)}</span>
+                <span>{escape(view.basic_info["申万行业"])}</span>
+                <span>{date.today().isoformat()}</span>
+            </div>
+            <h1 class="report-title">{escape(view.basic_info["证券简称"])}（{escape(view.stock_code)}）数据报告</h1>
+            <p class="report-subtitle">本报告聚焦 DS CLI 已抓取到的公司、股东、财务和主营业务数据，按固定 5 章结构展示，便于后续复用到更多标的。</p>
+            <div class="ornament"></div>
+        </header>
+
+        {render_metric_cards([
+            ("参考股价", f"{format_num(view.latest_price)} 元"),
+            ("参考总市值", format_yi(view.latest_market_cap)),
+            ("股东户数", format_num(view.latest_shareholders, 0)),
+            ("PE", f"{format_num(view.pe)}x"),
+            ("PB", f"{format_num(view.pb)}x"),
+            ("口径日期", view.latest_quote_date),
+        ])}
+
+        <section class="card" id="intro">
+            <div class="card-header">
+                <h2 class="card-title">公司简介</h2>
+                <span class="card-number">01</span>
+            </div>
+            {render_section_title("基本信息")}
+            <div class="info-grid">
+                {''.join(render_info_item(label, value) for label, value in [
+                    ("证券代码", view.basic_info["证券代码"]),
+                    ("证券简称", view.basic_info["证券简称"]),
+                    ("公司名称", view.basic_info["公司名称"]),
+                    ("法人代表", view.basic_info["法人代表"]),
+                    ("证监会行业", view.basic_info["证监会行业"]),
+                    ("申万行业", view.basic_info["申万行业"]),
+                    ("注册资本", view.basic_info["注册资本"]),
+                    ("注册地址", view.basic_info["注册地址"]),
+                    ("上市日期", view.basic_info["上市日期"]),
+                    ("成立日期", view.basic_info["成立日期"]),
+                    ("公司网址", view.basic_info["公司网址"]),
+                ])}
+            </div>
+            {render_section_title("实控人")}
+            {render_empty_state(view.controller_message) if not view.controller_rows else f'''
+            <div class="evidence-card neutral">
+                <div class="evidence-header"><span>◎</span><span>控制人信息</span></div>
+                <div class="evidence-data">
+                    <div class="evidence-data-item"><span class="label">实控人</span><span class="value">{escape(view.basic_info["实控人"])}</span></div>
+                    <div class="evidence-data-item"><span class="label">控制人类型</span><span class="value">{escape(view.basic_info["实控人类型"])}</span></div>
+                    <div class="evidence-data-item"><span class="label">开始日期</span><span class="value">{escape(view.basic_info["实控开始日"])}</span></div>
+                </div>
+            </div>
+            '''}
+            {render_section_title("高管薪酬", f"合计高管薪酬 {format_wan(view.exec_total_reward)}" if view.exec_rows else None)}
+            {view.executive_table}
+        </section>
+
+        <section class="card" id="capital">
+            <div class="card-header">
+                <h2 class="card-title">股本和股东</h2>
+                <span class="card-number">02</span>
+            </div>
+            {render_section_title("股本数据")}
+            {view.capital_metrics}
+            {render_section_title("解禁数据")}
+            {view.lockup_block}
+            {render_section_title("股东数据")}
+            <div class="evidence-card positive">
+                <div class="evidence-header"><span>◎</span><span>最新股东监测</span></div>
+                <div class="evidence-data">
+                    <div class="evidence-data-item"><span class="label">日期</span><span class="value">{escape(view.latest_quote_date)}</span></div>
+                    <div class="evidence-data-item"><span class="label">股东户数</span><span class="value">{escape(format_num(view.latest_shareholders, 0))}</span></div>
+                    <div class="evidence-data-item"><span class="label">户均持股</span><span class="value">{escape(format_num(view.shareholder_monitor_latest.get("AVG_HLD_SHR")))} 股</span></div>
+                    <div class="evidence-data-item"><span class="label">大股东持股比例</span><span class="value">{escape(format_pct(view.holder_ratio_latest.get("TTL_SHR_RATI_SUM")))}</span></div>
+                </div>
+            </div>
+            {render_section_title("前十大股东", f"公告日 {view.top10_notice_date}" if view.top10_notice_date else None)}
+            {view.top10_table}
+            {render_section_title("前十大流通股东", f"公告日 {view.top10_float_notice_date}" if view.top10_float_notice_date else None)}
+            {view.top10_float_table}
+            {render_section_title("分红数据")}
+            {view.dividend_block}
+        </section>
+
+        <section class="card" id="finance">
+            <div class="card-header">
+                <h2 class="card-title">财务数据</h2>
+                <span class="card-number">03</span>
+            </div>
+            {render_section_title("资产负债表")}
+            <div class="chart-container"><canvas id="balanceChart" aria-hidden="true"></canvas></div>
+            {view.balance_table}
+            {render_section_title("利润表")}
+            <div class="tab-group" data-tab-group="income">
+                <div class="tab-buttons" role="tablist" aria-label="利润表报告期">
+                    <button class="tab-button active" id="income-annual-tab" type="button" role="tab" aria-selected="true" aria-controls="income-annual" data-tab-target="income-annual">年度</button>
+                    <button class="tab-button" id="income-quarter-tab" type="button" role="tab" aria-selected="false" aria-controls="income-quarter" tabindex="-1" data-tab-target="income-quarter">季度</button>
+                </div>
+                <div class="tab-panel active" id="income-annual" role="tabpanel" aria-labelledby="income-annual-tab">
+                    <div class="chart-container"><canvas id="incomeAnnualChart" aria-hidden="true"></canvas></div>
+                    {view.income_annual_table}
+                </div>
+                <div class="tab-panel" id="income-quarter" role="tabpanel" aria-labelledby="income-quarter-tab" hidden>
+                    <div class="chart-container"><canvas id="incomeQuarterChart" aria-hidden="true"></canvas></div>
+                    {view.income_quarter_table}
+                </div>
+            </div>
+            {render_section_title("现金流量表")}
+            <div class="tab-group" data-tab-group="cashflow">
+                <div class="tab-buttons" role="tablist" aria-label="现金流量表报告期">
+                    <button class="tab-button active" id="cashflow-annual-tab" type="button" role="tab" aria-selected="true" aria-controls="cashflow-annual" data-tab-target="cashflow-annual">年度</button>
+                    <button class="tab-button" id="cashflow-quarter-tab" type="button" role="tab" aria-selected="false" aria-controls="cashflow-quarter" tabindex="-1" data-tab-target="cashflow-quarter">季度</button>
+                </div>
+                <div class="tab-panel active" id="cashflow-annual" role="tabpanel" aria-labelledby="cashflow-annual-tab">
+                    <div class="chart-container"><canvas id="cashflowAnnualChart" aria-hidden="true"></canvas></div>
+                    {view.cash_annual_table}
+                </div>
+                <div class="tab-panel" id="cashflow-quarter" role="tabpanel" aria-labelledby="cashflow-quarter-tab" hidden>
+                    <div class="chart-container"><canvas id="cashflowQuarterChart" aria-hidden="true"></canvas></div>
+                    {view.cash_quarter_table}
+                </div>
+            </div>
+        </section>
+
+        <section class="card" id="business">
+            <div class="card-header">
+                <h2 class="card-title">主营业务行业数据</h2>
+                <span class="card-number">04</span>
+            </div>
+            {render_section_title("主营构成")}
+            <div class="chart-container"><canvas id="businessChart" aria-hidden="true"></canvas></div>
+            {view.business_table}
+            {render_section_title("业务观察")}
+            <div class="evidence-card neutral">
+                <div class="evidence-header"><span>◎</span><span>简要判断</span></div>
+                <div class="evidence-content">
+                    <ul class="list-driver">
+                        <li><strong>收入主线：</strong>{escape((view.business_rows[0].get("MAINB_NAME") if view.business_rows else "数据暂不可得"))}、{escape((view.business_rows[1].get("MAINB_NAME") if len(view.business_rows) > 1 else "数据暂不可得"))}是当前主要收入来源。</li>
+                        <li><strong>盈利质量：</strong>可优先关注毛利率更高且收入占比更高的业务条线，观察其在不同市场环境下的稳定性。</li>
+                        <li><strong>行业定位：</strong>公司属于{escape(view.basic_info["证监会行业"])}，当前页面以主营构成数据为主，不扩展长篇行业评论。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="card" id="rating">
+            <div class="card-header">
+                <h2 class="card-title">一致评级</h2>
+                <span class="card-number">05</span>
+            </div>
+            {view.rating_html}
+        </section>
+    </main>
+
+    <script>
+        const balanceChartData = {json.dumps({
+            "labels": [item["label"] for item in view.asset_series],
+            "assets": [item["value"] for item in view.asset_series],
+            "liabilities": [item["value"] for item in view.liability_series],
+            "equity": [item["value"] for item in view.equity_series],
+            "unit": view.balance_unit,
+        }, ensure_ascii=False)};
+        const incomeAnnualData = {json.dumps({
+            "labels": [item["label"] for item in view.revenue_series],
+            "revenue": [item["value"] for item in view.revenue_series],
+            "profit": [item["value"] for item in view.profit_series],
+            "unit": view.income_annual_unit,
+        }, ensure_ascii=False)};
+        const incomeQuarterData = {json.dumps({
+            "labels": [item["label"] for item in view.quarter_revenue_series],
+            "revenue": [item["value"] for item in view.quarter_revenue_series],
+            "profit": [item["value"] for item in view.quarter_profit_series],
+            "unit": view.income_quarter_unit,
+        }, ensure_ascii=False)};
+        const cashflowAnnualData = {json.dumps({
+            "labels": [item["label"] for item in view.annual_op_cf_series],
+            "operate": [item["value"] for item in view.annual_op_cf_series],
+            "invest": [item["value"] for item in view.annual_insm_cf_series],
+            "finance": [item["value"] for item in view.annual_fin_cf_series],
+            "unit": view.cash_annual_unit,
+        }, ensure_ascii=False)};
+        const cashflowQuarterData = {json.dumps({
+            "labels": [item["label"] for item in view.quarter_op_cf_series],
+            "operate": [item["value"] for item in view.quarter_op_cf_series],
+            "invest": [item["value"] for item in view.quarter_insm_cf_series],
+            "finance": [item["value"] for item in view.quarter_fin_cf_series],
+            "unit": view.cash_quarter_unit,
+        }, ensure_ascii=False)};
+        const businessChartData = {json.dumps({
+            "labels": [row.get("MAINB_NAME") for row in view.business_rows[:6]],
+            "revenue": [scaled_amount(row.get("OP_INC"), view.business_income_divisor) for row in view.business_rows[:6]],
+            "unit": view.business_income_unit,
+        }, ensure_ascii=False)};
+        const dividendChartData = {json.dumps({
+            "labels": [row["label"] for row in view.dividend_series],
+            "values": [row["value"] for row in view.dividend_series],
+        }, ensure_ascii=False)};
+
+        function buildBarLineChart(canvasId, labels, bars, line, barLabel, lineLabel) {{
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            new Chart(canvas, {{
+                data: {{
+                    labels,
+                    datasets: [
+                        {{
+                            type: 'bar',
+                            label: barLabel,
+                            data: bars,
+                            backgroundColor: 'rgba(26, 54, 93, 0.75)',
+                            borderRadius: 4
+                        }},
+                        {{
+                            type: 'line',
+                            label: lineLabel,
+                            data: line,
+                            borderColor: '#c9a227',
+                            backgroundColor: 'rgba(201, 162, 39, 0.18)',
+                            fill: false,
+                            tension: 0.35,
+                            pointBackgroundColor: '#fff',
+                            pointBorderColor: '#c9a227',
+                            pointBorderWidth: 2
+                        }}
+                    ]
+                }},
+                options: {{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {{ mode: 'index', intersect: false }},
+                    scales: {{ y: {{ beginAtZero: true }} }}
+                }}
+            }});
+        }}
+
+        function buildMultiBarChart(canvasId, labels, datasets) {{
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            new Chart(canvas, {{
+                type: 'bar',
+                data: {{ labels, datasets }},
+                options: {{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {{ mode: 'index', intersect: false }},
+                    scales: {{ y: {{ beginAtZero: true }} }}
+                }}
+            }});
+        }}
+
+        buildMultiBarChart('balanceChart', balanceChartData.labels, [
+            {{ label: '总资产(' + balanceChartData.unit + ')', data: balanceChartData.assets, backgroundColor: 'rgba(26, 54, 93, 0.75)' }},
+            {{ label: '总负债(' + balanceChartData.unit + ')', data: balanceChartData.liabilities, backgroundColor: 'rgba(196, 30, 58, 0.7)' }},
+            {{ label: '股东权益(' + balanceChartData.unit + ')', data: balanceChartData.equity, backgroundColor: 'rgba(201, 162, 39, 0.75)' }}
+        ]);
+        buildBarLineChart('incomeAnnualChart', incomeAnnualData.labels, incomeAnnualData.revenue, incomeAnnualData.profit, '营业收入(' + incomeAnnualData.unit + ')', '净利润(' + incomeAnnualData.unit + ')');
+        buildBarLineChart('incomeQuarterChart', incomeQuarterData.labels, incomeQuarterData.revenue, incomeQuarterData.profit, '营业收入(' + incomeQuarterData.unit + ')', '净利润(' + incomeQuarterData.unit + ')');
+        buildMultiBarChart('cashflowAnnualChart', cashflowAnnualData.labels, [
+            {{ label: '经营现金流(' + cashflowAnnualData.unit + ')', data: cashflowAnnualData.operate, backgroundColor: 'rgba(26, 54, 93, 0.75)' }},
+            {{ label: '投资现金流(' + cashflowAnnualData.unit + ')', data: cashflowAnnualData.invest, backgroundColor: 'rgba(3, 105, 161, 0.7)' }},
+            {{ label: '筹资现金流(' + cashflowAnnualData.unit + ')', data: cashflowAnnualData.finance, backgroundColor: 'rgba(201, 162, 39, 0.75)' }}
+        ]);
+        buildMultiBarChart('cashflowQuarterChart', cashflowQuarterData.labels, [
+            {{ label: '经营现金流(' + cashflowQuarterData.unit + ')', data: cashflowQuarterData.operate, backgroundColor: 'rgba(26, 54, 93, 0.75)' }},
+            {{ label: '投资现金流(' + cashflowQuarterData.unit + ')', data: cashflowQuarterData.invest, backgroundColor: 'rgba(3, 105, 161, 0.7)' }},
+            {{ label: '筹资现金流(' + cashflowQuarterData.unit + ')', data: cashflowQuarterData.finance, backgroundColor: 'rgba(201, 162, 39, 0.75)' }}
+        ]);
+        buildMultiBarChart('businessChart', businessChartData.labels, [
+            {{ label: '收入(' + businessChartData.unit + ')', data: businessChartData.revenue, backgroundColor: 'rgba(26, 54, 93, 0.75)' }}
+        ]);
+        if (document.getElementById('dividendChart')) {{
+            buildMultiBarChart('dividendChart', dividendChartData.labels, [
+                {{ label: '每10股派现(元)', data: dividendChartData.values, backgroundColor: 'rgba(201, 162, 39, 0.75)' }}
+            ]);
+        }}
+
+        document.querySelectorAll('.tab-group').forEach((group) => {{
+            const buttons = [...group.querySelectorAll('[role="tab"]')];
+            const panels = [...group.querySelectorAll('[role="tabpanel"]')];
+
+            function activateTab(button) {{
+                buttons.forEach((item) => {{
+                    const active = item === button;
+                    item.classList.toggle('active', active);
+                    item.setAttribute('aria-selected', String(active));
+                    item.tabIndex = active ? 0 : -1;
+                }});
+                panels.forEach((panel) => {{
+                    const active = panel.id === button.dataset.tabTarget;
+                    panel.classList.toggle('active', active);
+                    panel.hidden = !active;
+                }});
+            }}
+
+            buttons.forEach((button, index) => {{
+                button.addEventListener('click', () => activateTab(button));
+                button.addEventListener('keydown', (event) => {{
+                    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+                    event.preventDefault();
+                    const nextIndex =
+                        event.key === 'Home' ? 0 :
+                        event.key === 'End' ? buttons.length - 1 :
+                        event.key === 'ArrowRight' ? (index + 1) % buttons.length :
+                        (index - 1 + buttons.length) % buttons.length;
+                    buttons[nextIndex].focus();
+                    activateTab(buttons[nextIndex]);
+                }});
+            }});
+        }});
+
+        const sections = document.querySelectorAll('.card[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+        function setActiveLink() {{
+            let current = '';
+            sections.forEach((section) => {{
+                const top = section.offsetTop - 100;
+                if (window.scrollY >= top) current = section.id;
+            }});
+            navLinks.forEach((link) => {{
+                link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+            }});
+        }}
+        let scrollFrame;
+        window.addEventListener('scroll', () => {{
+            if (scrollFrame) return;
+            scrollFrame = requestAnimationFrame(() => {{
+                scrollFrame = null;
+                setActiveLink();
+            }});
+        }}, {{ passive: true }});
+        setActiveLink();
+    </script>
+</body>
+</html>
+"""
+
 def main() -> int:
     stock_code = sys.argv[1] if len(sys.argv) > 1 else "000728.SZ"
     stock_dir = ROOT / "data" / stock_code
     raw_dir = stock_dir / "raw"
     report_dir = stock_dir / "report"
     report_dir.mkdir(parents=True, exist_ok=True)
+    report_css = read_report_css()
 
     basic_raw = read_json(raw_dir / "basic_info_subject_1000933.json")
     controller_raw = read_json(raw_dir / "controller_subject_1000998.json")
@@ -674,7 +1103,7 @@ def main() -> int:
         render_empty_state(dividend_message)
         if not dividend_series
         else (
-            '<div class="chart-container"><canvas id="dividendChart"></canvas></div>'
+            '<div class="chart-container"><canvas id="dividendChart" aria-hidden="true"></canvas></div>'
             + render_table(
                 ["年度", "分红方案", "实施日", "每10股派现"],
                 [
@@ -803,958 +1232,62 @@ def main() -> int:
             blocks.append(render_section_title(title) + table_html)
         rating_html = "".join(blocks) if blocks else rating_html
 
-    report_html = f"""<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{escape(basic_info["证券简称"])}（{escape(stock_code)}）投资分析报告 | XYC Research</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&family=Crimson+Pro:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <style>
-        :root {{
-            --color-primary: #1a365d;
-            --color-primary-light: #2c5282;
-            --color-accent: #c9a227;
-            --color-accent-light: #d4a843;
-            --color-positive: #1b5e20;
-            --color-negative: #c41e3a;
-            --color-info: #0369a1;
-            --bg-primary: #ffffff;
-            --bg-secondary: #fafafa;
-            --bg-tertiary: #f5f5f5;
-            --bg-card: #ffffff;
-            --bg-elevated: #fafafa;
-            --text-primary: #1a1a1a;
-            --text-secondary: #4a4a4a;
-            --text-tertiary: #737373;
-            --text-muted: #a3a3a3;
-            --border-light: #e5e5e5;
-            --border-medium: #d4d4d4;
-            --border-dark: #a3a3a3;
-            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
-            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.12);
-            --space-xs: 0.25rem;
-            --space-sm: 0.5rem;
-            --space-md: 1rem;
-            --space-lg: 1.5rem;
-            --space-xl: 2rem;
-            --space-2xl: 3rem;
-            --space-3xl: 4rem;
-            --font-display: 'Playfair Display', 'Noto Serif SC', serif;
-            --font-serif: 'Crimson Pro', 'Noto Serif SC', serif;
-            --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
-            --font-body: 'Noto Sans SC', 'Source Sans Pro', -apple-system, sans-serif;
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }}
-
-        * {{
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }}
-
-        html {{
-            scroll-behavior: smooth;
-            font-size: 16px;
-        }}
-
-        body {{
-            font-family: var(--font-body);
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            line-height: 1.75;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }}
-
-        body::before {{
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.4;
-            pointer-events: none;
-            z-index: 0;
-            background-image:
-                repeating-linear-gradient(
-                    0deg,
-                    transparent,
-                    transparent 2px,
-                    rgba(0, 0, 0, 0.01) 2px,
-                    rgba(0, 0, 0, 0.01) 4px
-                );
-        }}
-
-        .nav-bar {{
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-light);
-            box-shadow: var(--shadow-sm);
-        }}
-
-        .nav-content {{
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 var(--space-xl);
-            height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }}
-
-        .nav-brand {{
-            font-family: var(--font-display);
-            font-size: 1.1rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            color: var(--color-primary);
-        }}
-
-        .nav-links {{
-            display: flex;
-            gap: var(--space-sm);
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }}
-
-        .nav-links::-webkit-scrollbar {{
-            display: none;
-        }}
-
-        .nav-link {{
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: var(--text-secondary);
-            text-decoration: none;
-            padding: var(--space-xs) var(--space-md);
-            border-radius: 3px;
-            white-space: nowrap;
-            transition: var(--transition);
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }}
-
-        .nav-link:hover,
-        .nav-link.active {{
-            color: var(--color-primary);
-            background: rgba(26, 54, 93, 0.08);
-        }}
-
-        .main-container {{
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 72px var(--space-xl) var(--space-3xl);
-            position: relative;
-            z-index: 1;
-        }}
-
-        .report-header {{
-            text-align: center;
-            padding: var(--space-3xl) 0 var(--space-2xl);
-            border-bottom: 3px double var(--border-light);
-            margin-bottom: var(--space-2xl);
-            animation: fadeIn 0.8s ease-out;
-        }}
-
-        .report-meta {{
-            display: flex;
-            justify-content: center;
-            gap: var(--space-lg);
-            margin-bottom: var(--space-md);
-            font-family: var(--font-mono);
-            font-size: 0.65rem;
-            color: var(--text-tertiary);
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            flex-wrap: wrap;
-        }}
-
-        .report-title {{
-            font-family: var(--font-display);
-            font-size: clamp(1.75rem, 4vw, 2.75rem);
-            font-weight: 700;
-            line-height: 1.3;
-            margin-bottom: var(--space-sm);
-            color: var(--text-primary);
-        }}
-
-        .report-subtitle {{
-            font-family: var(--font-serif);
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            font-weight: 400;
-            font-style: italic;
-        }}
-
-        .ornament {{
-            width: 60px;
-            height: 3px;
-            background: var(--color-accent);
-            margin: var(--space-lg) auto 0;
-        }}
-
-        .quote-ticker {{
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: var(--space-md);
-            margin-bottom: var(--space-2xl);
-            animation: fadeIn 0.8s ease-out 0.1s both;
-        }}
-
-        .ticker-item {{
-            background: var(--bg-card);
-            border: 1px solid var(--border-light);
-            border-radius: 8px;
-            padding: var(--space-md) var(--space-sm);
-            text-align: center;
-            transition: var(--transition);
-            position: relative;
-            box-shadow: var(--shadow-sm);
-        }}
-
-        .ticker-item:hover {{
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-            border-color: var(--border-medium);
-        }}
-
-        .ticker-label {{
-            font-family: var(--font-mono);
-            font-size: 0.6rem;
-            color: var(--text-tertiary);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            margin-bottom: var(--space-xs);
-        }}
-
-        .ticker-value {{
-            font-family: var(--font-mono);
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }}
-
-        .card {{
-            background: var(--bg-card);
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            padding: var(--space-2xl);
-            margin-bottom: var(--space-xl);
-            box-shadow: var(--shadow-sm);
-            animation: fadeIn 0.8s ease-out both;
-        }}
-
-        .card:hover {{
-            box-shadow: var(--shadow-lg);
-        }}
-
-        .card-header {{
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: var(--space-xl);
-            padding-bottom: var(--space-md);
-            border-bottom: 1px solid var(--border-light);
-        }}
-
-        .card-title {{
-            font-family: var(--font-display);
-            font-size: 1.75rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }}
-
-        .card-number {{
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: var(--bg-card);
-            background: var(--color-primary);
-            padding: var(--space-sm) var(--space-md);
-            border-radius: 3px;
-            letter-spacing: 0.1em;
-        }}
-
-        .info-grid {{
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: var(--space-md);
-        }}
-
-        .info-item {{
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: var(--space-md);
-            background: var(--bg-elevated);
-            border-radius: 6px;
-            border: 1px solid var(--border-light);
-            transition: var(--transition);
-            gap: var(--space-md);
-        }}
-
-        .info-item:hover {{
-            border-color: var(--color-primary);
-        }}
-
-        .info-label {{
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }}
-
-        .info-value {{
-            font-family: var(--font-mono);
-            font-size: 0.875rem;
-            color: var(--text-primary);
-            font-weight: 600;
-            text-align: right;
-        }}
-
-        .section-subtitle {{
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin: 0;
-            padding-left: var(--space-md);
-            border-left: 3px solid var(--color-accent);
-            position: relative;
-        }}
-
-        .section-subtitle::before {{
-            content: '';
-            position: absolute;
-            left: 0;
-            width: 3px;
-            height: 100%;
-            background: var(--color-accent);
-        }}
-
-        .section-heading {{
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            gap: var(--space-md);
-            margin: var(--space-xl) 0 var(--space-md);
-        }}
-
-        .section-meta {{
-            font-family: var(--font-mono);
-            font-size: 0.72rem;
-            color: var(--text-tertiary);
-            letter-spacing: 0.04em;
-            white-space: nowrap;
-        }}
-
-        .section-paragraph {{
-            font-size: 0.95rem;
-            line-height: 1.8;
-            color: var(--text-secondary);
-            margin: var(--space-md) 0;
-        }}
-
-        .evidence-card {{
-            background: var(--bg-elevated);
-            border-left: 3px solid var(--color-primary);
-            padding: var(--space-md) var(--space-lg);
-            margin: var(--space-md) 0;
-            border-radius: 0 6px 6px 0;
-        }}
-
-        .evidence-card.positive {{
-            border-left-color: var(--color-positive);
-            background: rgba(27, 94, 32, 0.05);
-        }}
-
-        .evidence-card.negative {{
-            border-left-color: var(--color-negative);
-            background: rgba(196, 30, 58, 0.05);
-        }}
-
-        .evidence-card.neutral {{
-            border-left-color: var(--color-primary);
-            background: rgba(26, 54, 93, 0.05);
-        }}
-
-        .evidence-header {{
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            font-family: var(--font-display);
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: var(--space-sm);
-        }}
-
-        .evidence-content {{
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }}
-
-        .evidence-data {{
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: var(--space-sm);
-            margin: var(--space-sm) 0;
-        }}
-
-        .evidence-data-item {{
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }}
-
-        .evidence-data-item .label {{
-            font-size: 0.7rem;
-            color: var(--text-tertiary);
-        }}
-
-        .evidence-data-item .value {{
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }}
-
-        .data-table-container {{
-            overflow-x: auto;
-            margin: var(--space-md) 0;
-            border: 1px solid var(--border-light);
-            border-radius: 8px;
-            box-shadow: var(--shadow-sm);
-        }}
-
-        .data-table {{
-            width: 100%;
-            border-collapse: collapse;
-            background: var(--bg-card);
-        }}
-
-        .data-table th,
-        .data-table td {{
-            padding: 0.875rem 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border-light);
-            white-space: nowrap;
-        }}
-
-        .data-table th {{
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            background: var(--bg-elevated);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }}
-
-        .data-table td {{
-            font-size: 0.875rem;
-            color: var(--text-primary);
-        }}
-
-        .data-table tbody tr:hover {{
-            background: rgba(26, 54, 93, 0.02);
-        }}
-
-        .data-table tbody tr:last-child td {{
-            border-bottom: none;
-        }}
-
-        .chart-container {{
-            position: relative;
-            height: 320px;
-            margin: var(--space-lg) 0;
-            padding: var(--space-md);
-            background: var(--bg-elevated);
-            border-radius: 8px;
-            border: 1px solid var(--border-light);
-        }}
-
-        .tab-group {{
-            margin-top: var(--space-md);
-        }}
-
-        .tab-buttons {{
-            display: inline-flex;
-            gap: var(--space-xs);
-            padding: 4px;
-            background: var(--bg-tertiary);
-            border-radius: 999px;
-            margin-bottom: var(--space-md);
-        }}
-
-        .tab-button {{
-            border: 0;
-            background: transparent;
-            color: var(--text-secondary);
-            padding: 0.45rem 0.9rem;
-            border-radius: 999px;
-            cursor: pointer;
-            font-family: var(--font-body);
-            font-size: 0.85rem;
-            transition: var(--transition);
-        }}
-
-        .tab-button.active {{
-            background: var(--color-primary);
-            color: white;
-            box-shadow: var(--shadow-sm);
-        }}
-
-        .tab-panel {{
-            display: none;
-        }}
-
-        .tab-panel.active {{
-            display: block;
-        }}
-
-        .empty-state {{
-            padding: var(--space-xl);
-            border: 1px dashed var(--border-medium);
-            border-radius: 8px;
-            background: var(--bg-elevated);
-            color: var(--text-secondary);
-            text-align: center;
-        }}
-
-        .list-styled {{
-            list-style: none;
-            padding-left: var(--space-md);
-        }}
-
-        .list-styled li {{
-            position: relative;
-            padding-left: var(--space-lg);
-            margin-bottom: var(--space-sm);
-        }}
-
-        .list-styled li::before {{
-            content: '●';
-            position: absolute;
-            left: 0;
-            color: var(--color-accent);
-        }}
-
-        .list-driver {{
-            list-style: none;
-            padding: 0;
-        }}
-
-        .list-driver li {{
-            padding: var(--space-md);
-            background: var(--bg-elevated);
-            border-left: 3px solid var(--color-accent);
-            margin-bottom: var(--space-sm);
-            border-radius: 0 6px 6px 0;
-        }}
-
-        .badge {{
-            display: inline-block;
-            padding: var(--space-xs) var(--space-sm);
-            background: var(--bg-tertiary);
-            border-radius: 4px;
-            font-family: var(--font-mono);
-            font-size: 0.65rem;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            color: var(--text-secondary);
-            margin-right: var(--space-xs);
-        }}
-
-        .badge.badge-good {{
-            background: rgba(27, 94, 32, 0.15);
-            color: var(--color-positive);
-        }}
-
-        .badge.badge-warning {{
-            background: rgba(201, 162, 39, 0.15);
-            color: #b8860b;
-        }}
-
-        .badge.negative {{
-            background: rgba(196, 30, 58, 0.1);
-            color: var(--color-negative);
-        }}
-
-        @keyframes fadeIn {{
-            from {{
-                opacity: 0;
-                transform: translateY(10px);
-            }}
-            to {{
-                opacity: 1;
-                transform: translateY(0);
-            }}
-        }}
-
-        @media (max-width: 768px) {{
-            .main-container {{
-                padding-left: var(--space-md);
-                padding-right: var(--space-md);
-            }}
-
-            .nav-content {{
-                padding: 0 var(--space-md);
-            }}
-
-            .card {{
-                padding: var(--space-lg);
-            }}
-
-            .card-header {{
-                align-items: flex-start;
-                gap: var(--space-sm);
-            }}
-
-            .chart-container {{
-                height: 280px;
-            }}
-
-            .section-heading {{
-                align-items: flex-start;
-                flex-direction: column;
-            }}
-        }}
-    </style>
-</head>
-<body>
-    <div class="nav-bar">
-        <div class="nav-content">
-            <div class="nav-brand">XYC Research</div>
-            <div class="nav-links">
-                <a href="#intro" class="nav-link">公司简介</a>
-                <a href="#capital" class="nav-link">股本和股东</a>
-                <a href="#finance" class="nav-link">财务数据</a>
-                <a href="#business" class="nav-link">主营业务行业数据</a>
-                <a href="#rating" class="nav-link">一致评级</a>
-            </div>
-        </div>
-    </div>
-
-    <main class="main-container">
-        <header class="report-header">
-            <div class="report-meta">
-                <span>{escape(stock_code)}</span>
-                <span>{escape(basic_info["申万行业"])}</span>
-                <span>{date.today().isoformat()}</span>
-            </div>
-            <h1 class="report-title">{escape(basic_info["证券简称"])}（{escape(stock_code)}）数据报告</h1>
-            <p class="report-subtitle">本报告聚焦 DS CLI 已抓取到的公司、股东、财务和主营业务数据，按固定 5 章结构展示，便于后续复用到更多标的。</p>
-            <div class="ornament"></div>
-        </header>
-
-        {render_metric_cards([
-            ("参考股价", f"{format_num(latest_price)} 元"),
-            ("参考总市值", format_yi(latest_market_cap)),
-            ("股东户数", format_num(latest_shareholders, 0)),
-            ("PE", f"{format_num(pe)}x"),
-            ("PB", f"{format_num(pb)}x"),
-            ("口径日期", latest_quote_date),
-        ])}
-
-        <section class="card" id="intro">
-            <div class="card-header">
-                <h2 class="card-title">公司简介</h2>
-                <span class="card-number">01</span>
-            </div>
-            {render_section_title("基本信息")}
-            <div class="info-grid">
-                {''.join(render_info_item(label, value) for label, value in [
-                    ("证券代码", basic_info["证券代码"]),
-                    ("证券简称", basic_info["证券简称"]),
-                    ("公司名称", basic_info["公司名称"]),
-                    ("法人代表", basic_info["法人代表"]),
-                    ("证监会行业", basic_info["证监会行业"]),
-                    ("申万行业", basic_info["申万行业"]),
-                    ("注册资本", basic_info["注册资本"]),
-                    ("注册地址", basic_info["注册地址"]),
-                    ("上市日期", basic_info["上市日期"]),
-                    ("成立日期", basic_info["成立日期"]),
-                    ("公司网址", basic_info["公司网址"]),
-                ])}
-            </div>
-            {render_section_title("实控人")}
-            {render_empty_state(controller_message) if not controller_rows else f'''
-            <div class="evidence-card neutral">
-                <div class="evidence-header"><span>◎</span><span>控制人信息</span></div>
-                <div class="evidence-data">
-                    <div class="evidence-data-item"><span class="label">实控人</span><span class="value">{escape(basic_info["实控人"])}</span></div>
-                    <div class="evidence-data-item"><span class="label">控制人类型</span><span class="value">{escape(basic_info["实控人类型"])}</span></div>
-                    <div class="evidence-data-item"><span class="label">开始日期</span><span class="value">{escape(basic_info["实控开始日"])}</span></div>
-                </div>
-            </div>
-            '''}
-            {render_section_title("高管薪酬", f"合计高管薪酬 {format_wan(exec_total_reward)}" if exec_rows else None)}
-            {executive_table}
-        </section>
-
-        <section class="card" id="capital">
-            <div class="card-header">
-                <h2 class="card-title">股本和股东</h2>
-                <span class="card-number">02</span>
-            </div>
-            {render_section_title("股本数据")}
-            {capital_metrics}
-            {render_section_title("解禁数据")}
-            {lockup_block}
-            {render_section_title("股东数据")}
-            <div class="evidence-card positive">
-                <div class="evidence-header"><span>◎</span><span>最新股东监测</span></div>
-                <div class="evidence-data">
-                    <div class="evidence-data-item"><span class="label">日期</span><span class="value">{escape(latest_quote_date)}</span></div>
-                    <div class="evidence-data-item"><span class="label">股东户数</span><span class="value">{escape(format_num(latest_shareholders, 0))}</span></div>
-                    <div class="evidence-data-item"><span class="label">户均持股</span><span class="value">{escape(format_num(shareholder_monitor_latest.get("AVG_HLD_SHR")))} 股</span></div>
-                    <div class="evidence-data-item"><span class="label">大股东持股比例</span><span class="value">{escape(format_pct(holder_ratio_latest.get("TTL_SHR_RATI_SUM")))}</span></div>
-                </div>
-            </div>
-            {render_section_title("前十大股东", f"公告日 {top10_notice_date}" if top10_notice_date else None)}
-            {top10_table}
-            {render_section_title("前十大流通股东", f"公告日 {top10_float_notice_date}" if top10_float_notice_date else None)}
-            {top10_float_table}
-            {render_section_title("分红数据")}
-            {dividend_block}
-        </section>
-
-        <section class="card" id="finance">
-            <div class="card-header">
-                <h2 class="card-title">财务数据</h2>
-                <span class="card-number">03</span>
-            </div>
-            {render_section_title("资产负债表")}
-            <div class="chart-container"><canvas id="balanceChart"></canvas></div>
-            {balance_table}
-            {render_section_title("利润表")}
-            <div class="tab-group" data-tab-group="income">
-                <div class="tab-buttons">
-                    <button class="tab-button active" data-tab-target="income-annual">年度</button>
-                    <button class="tab-button" data-tab-target="income-quarter">季度</button>
-                </div>
-                <div class="tab-panel active" id="income-annual">
-                    <div class="chart-container"><canvas id="incomeAnnualChart"></canvas></div>
-                    {income_annual_table}
-                </div>
-                <div class="tab-panel" id="income-quarter">
-                    <div class="chart-container"><canvas id="incomeQuarterChart"></canvas></div>
-                    {income_quarter_table}
-                </div>
-            </div>
-            {render_section_title("现金流量表")}
-            <div class="tab-group" data-tab-group="cashflow">
-                <div class="tab-buttons">
-                    <button class="tab-button active" data-tab-target="cashflow-annual">年度</button>
-                    <button class="tab-button" data-tab-target="cashflow-quarter">季度</button>
-                </div>
-                <div class="tab-panel active" id="cashflow-annual">
-                    <div class="chart-container"><canvas id="cashflowAnnualChart"></canvas></div>
-                    {cash_annual_table}
-                </div>
-                <div class="tab-panel" id="cashflow-quarter">
-                    <div class="chart-container"><canvas id="cashflowQuarterChart"></canvas></div>
-                    {cash_quarter_table}
-                </div>
-            </div>
-        </section>
-
-        <section class="card" id="business">
-            <div class="card-header">
-                <h2 class="card-title">主营业务行业数据</h2>
-                <span class="card-number">04</span>
-            </div>
-            {render_section_title("主营构成")}
-            <div class="chart-container"><canvas id="businessChart"></canvas></div>
-            {business_table}
-            {render_section_title("业务观察")}
-            <div class="evidence-card neutral">
-                <div class="evidence-header"><span>◎</span><span>简要判断</span></div>
-                <div class="evidence-content">
-                    <ul class="list-driver">
-                        <li><strong>收入主线：</strong>{escape((business_rows[0].get("MAINB_NAME") if business_rows else "数据暂不可得"))}、{escape((business_rows[1].get("MAINB_NAME") if len(business_rows) > 1 else "数据暂不可得"))}是当前主要收入来源。</li>
-                        <li><strong>盈利质量：</strong>可优先关注毛利率更高且收入占比更高的业务条线，观察其在不同市场环境下的稳定性。</li>
-                        <li><strong>行业定位：</strong>公司属于{escape(basic_info["证监会行业"])}，当前页面以主营构成数据为主，不扩展长篇行业评论。</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <section class="card" id="rating">
-            <div class="card-header">
-                <h2 class="card-title">一致评级</h2>
-                <span class="card-number">05</span>
-            </div>
-            {rating_html}
-        </section>
-    </main>
-
-    <script>
-        const balanceChartData = {json.dumps({
-            "labels": [item["label"] for item in asset_series],
-            "assets": [item["value"] for item in asset_series],
-            "liabilities": [item["value"] for item in liability_series],
-            "equity": [item["value"] for item in equity_series],
-            "unit": balance_unit,
-        }, ensure_ascii=False)};
-        const incomeAnnualData = {json.dumps({
-            "labels": [item["label"] for item in revenue_series],
-            "revenue": [item["value"] for item in revenue_series],
-            "profit": [item["value"] for item in profit_series],
-            "unit": income_annual_unit,
-        }, ensure_ascii=False)};
-        const incomeQuarterData = {json.dumps({
-            "labels": [item["label"] for item in quarter_revenue_series],
-            "revenue": [item["value"] for item in quarter_revenue_series],
-            "profit": [item["value"] for item in quarter_profit_series],
-            "unit": income_quarter_unit,
-        }, ensure_ascii=False)};
-        const cashflowAnnualData = {json.dumps({
-            "labels": [item["label"] for item in annual_op_cf_series],
-            "operate": [item["value"] for item in annual_op_cf_series],
-            "invest": [item["value"] for item in annual_insm_cf_series],
-            "finance": [item["value"] for item in annual_fin_cf_series],
-            "unit": cash_annual_unit,
-        }, ensure_ascii=False)};
-        const cashflowQuarterData = {json.dumps({
-            "labels": [item["label"] for item in quarter_op_cf_series],
-            "operate": [item["value"] for item in quarter_op_cf_series],
-            "invest": [item["value"] for item in quarter_insm_cf_series],
-            "finance": [item["value"] for item in quarter_fin_cf_series],
-            "unit": cash_quarter_unit,
-        }, ensure_ascii=False)};
-        const businessChartData = {json.dumps({
-            "labels": [row.get("MAINB_NAME") for row in business_rows[:6]],
-            "revenue": [scaled_amount(row.get("OP_INC"), business_income_divisor) for row in business_rows[:6]],
-            "unit": business_income_unit,
-        }, ensure_ascii=False)};
-        const dividendChartData = {json.dumps({
-            "labels": [row["label"] for row in dividend_series],
-            "values": [row["value"] for row in dividend_series],
-        }, ensure_ascii=False)};
-
-        function buildBarLineChart(canvasId, labels, bars, line, barLabel, lineLabel) {{
-            const canvas = document.getElementById(canvasId);
-            if (!canvas) return;
-            new Chart(canvas, {{
-                data: {{
-                    labels,
-                    datasets: [
-                        {{
-                            type: 'bar',
-                            label: barLabel,
-                            data: bars,
-                            backgroundColor: 'rgba(26, 54, 93, 0.75)',
-                            borderRadius: 4
-                        }},
-                        {{
-                            type: 'line',
-                            label: lineLabel,
-                            data: line,
-                            borderColor: '#c9a227',
-                            backgroundColor: 'rgba(201, 162, 39, 0.18)',
-                            fill: false,
-                            tension: 0.35,
-                            pointBackgroundColor: '#fff',
-                            pointBorderColor: '#c9a227',
-                            pointBorderWidth: 2
-                        }}
-                    ]
-                }},
-                options: {{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {{ mode: 'index', intersect: false }},
-                    scales: {{ y: {{ beginAtZero: true }} }}
-                }}
-            }});
-        }}
-
-        function buildMultiBarChart(canvasId, labels, datasets) {{
-            const canvas = document.getElementById(canvasId);
-            if (!canvas) return;
-            new Chart(canvas, {{
-                type: 'bar',
-                data: {{ labels, datasets }},
-                options: {{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {{ mode: 'index', intersect: false }},
-                    scales: {{ y: {{ beginAtZero: true }} }}
-                }}
-            }});
-        }}
-
-        buildMultiBarChart('balanceChart', balanceChartData.labels, [
-            {{ label: '总资产(' + balanceChartData.unit + ')', data: balanceChartData.assets, backgroundColor: 'rgba(26, 54, 93, 0.75)' }},
-            {{ label: '总负债(' + balanceChartData.unit + ')', data: balanceChartData.liabilities, backgroundColor: 'rgba(196, 30, 58, 0.7)' }},
-            {{ label: '股东权益(' + balanceChartData.unit + ')', data: balanceChartData.equity, backgroundColor: 'rgba(201, 162, 39, 0.75)' }}
-        ]);
-        buildBarLineChart('incomeAnnualChart', incomeAnnualData.labels, incomeAnnualData.revenue, incomeAnnualData.profit, '营业收入(' + incomeAnnualData.unit + ')', '净利润(' + incomeAnnualData.unit + ')');
-        buildBarLineChart('incomeQuarterChart', incomeQuarterData.labels, incomeQuarterData.revenue, incomeQuarterData.profit, '营业收入(' + incomeQuarterData.unit + ')', '净利润(' + incomeQuarterData.unit + ')');
-        buildMultiBarChart('cashflowAnnualChart', cashflowAnnualData.labels, [
-            {{ label: '经营现金流(' + cashflowAnnualData.unit + ')', data: cashflowAnnualData.operate, backgroundColor: 'rgba(26, 54, 93, 0.75)' }},
-            {{ label: '投资现金流(' + cashflowAnnualData.unit + ')', data: cashflowAnnualData.invest, backgroundColor: 'rgba(3, 105, 161, 0.7)' }},
-            {{ label: '筹资现金流(' + cashflowAnnualData.unit + ')', data: cashflowAnnualData.finance, backgroundColor: 'rgba(201, 162, 39, 0.75)' }}
-        ]);
-        buildMultiBarChart('cashflowQuarterChart', cashflowQuarterData.labels, [
-            {{ label: '经营现金流(' + cashflowQuarterData.unit + ')', data: cashflowQuarterData.operate, backgroundColor: 'rgba(26, 54, 93, 0.75)' }},
-            {{ label: '投资现金流(' + cashflowQuarterData.unit + ')', data: cashflowQuarterData.invest, backgroundColor: 'rgba(3, 105, 161, 0.7)' }},
-            {{ label: '筹资现金流(' + cashflowQuarterData.unit + ')', data: cashflowQuarterData.finance, backgroundColor: 'rgba(201, 162, 39, 0.75)' }}
-        ]);
-        buildMultiBarChart('businessChart', businessChartData.labels, [
-            {{ label: '收入(' + businessChartData.unit + ')', data: businessChartData.revenue, backgroundColor: 'rgba(26, 54, 93, 0.75)' }}
-        ]);
-        if (document.getElementById('dividendChart')) {{
-            buildMultiBarChart('dividendChart', dividendChartData.labels, [
-                {{ label: '每10股派现(元)', data: dividendChartData.values, backgroundColor: 'rgba(201, 162, 39, 0.75)' }}
-            ]);
-        }}
-
-        document.querySelectorAll('.tab-group').forEach((group) => {{
-            const buttons = group.querySelectorAll('.tab-button');
-            const panels = group.querySelectorAll('.tab-panel');
-            buttons.forEach((button) => {{
-                button.addEventListener('click', () => {{
-                    buttons.forEach((item) => item.classList.remove('active'));
-                    panels.forEach((panel) => panel.classList.remove('active'));
-                    button.classList.add('active');
-                    const panel = group.querySelector('#' + button.dataset.tabTarget);
-                    if (panel) panel.classList.add('active');
-                }});
-            }});
-        }});
-
-        const sections = document.querySelectorAll('.card[id]');
-        const navLinks = document.querySelectorAll('.nav-link');
-        function setActiveLink() {{
-            let current = '';
-            sections.forEach((section) => {{
-                const top = section.offsetTop - 100;
-                if (window.scrollY >= top) current = section.id;
-            }});
-            navLinks.forEach((link) => {{
-                link.classList.toggle('active', link.getAttribute('href') === '#' + current);
-            }});
-        }}
-        window.addEventListener('scroll', setActiveLink);
-        setActiveLink();
-    </script>
-</body>
-</html>
-"""
+    report_html = render_report_html(
+        ReportView(
+            annual_fin_cf_series=annual_fin_cf_series,
+            annual_insm_cf_series=annual_insm_cf_series,
+            annual_op_cf_series=annual_op_cf_series,
+            asset_series=asset_series,
+            balance_table=balance_table,
+            balance_unit=balance_unit,
+            basic_info=basic_info,
+            business_income_divisor=business_income_divisor,
+            business_income_unit=business_income_unit,
+            business_rows=business_rows,
+            business_table=business_table,
+            capital_metrics=capital_metrics,
+            cash_annual_table=cash_annual_table,
+            cash_annual_unit=cash_annual_unit,
+            cash_quarter_table=cash_quarter_table,
+            cash_quarter_unit=cash_quarter_unit,
+            controller_message=controller_message,
+            controller_rows=controller_rows,
+            dividend_block=dividend_block,
+            dividend_series=dividend_series,
+            equity_series=equity_series,
+            exec_rows=exec_rows,
+            exec_total_reward=exec_total_reward,
+            executive_table=executive_table,
+            holder_ratio_latest=holder_ratio_latest,
+            income_annual_table=income_annual_table,
+            income_annual_unit=income_annual_unit,
+            income_quarter_table=income_quarter_table,
+            income_quarter_unit=income_quarter_unit,
+            latest_market_cap=latest_market_cap,
+            latest_price=latest_price,
+            latest_quote_date=latest_quote_date,
+            latest_shareholders=latest_shareholders,
+            liability_series=liability_series,
+            lockup_block=lockup_block,
+            pb=pb,
+            pe=pe,
+            profit_series=profit_series,
+            quarter_fin_cf_series=quarter_fin_cf_series,
+            quarter_insm_cf_series=quarter_insm_cf_series,
+            quarter_op_cf_series=quarter_op_cf_series,
+            quarter_profit_series=quarter_profit_series,
+            quarter_revenue_series=quarter_revenue_series,
+            rating_html=rating_html,
+            report_css=report_css,
+            revenue_series=revenue_series,
+            shareholder_monitor_latest=shareholder_monitor_latest,
+            stock_code=stock_code,
+            top10_float_notice_date=top10_float_notice_date,
+            top10_float_table=top10_float_table,
+            top10_notice_date=top10_notice_date,
+            top10_table=top10_table,
+        )
+    )
 
     (report_dir / "report.html").write_text(report_html, encoding="utf-8")
     return 0

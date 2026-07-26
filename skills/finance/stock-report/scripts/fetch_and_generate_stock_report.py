@@ -5,6 +5,7 @@ import json
 import re
 import subprocess
 import sys
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
@@ -13,7 +14,7 @@ from pathlib import Path
 def resolve_repo_root() -> Path:
     current = Path(__file__).resolve()
     for candidate in current.parents:
-        if (candidate / ".git").exists() and (candidate / "data").exists():
+        if (candidate / ".git").exists():
             return candidate
     raise RuntimeError("未识别到仓库根目录")
 
@@ -43,6 +44,7 @@ RAW_DIR_NAMES = [
     "rating_down_subject_1001351.json",
     "rating_cont_down_subject_1001353.json",
 ]
+MAX_QUERY_WORKERS = 4
 
 
 @dataclass
@@ -235,7 +237,9 @@ def main() -> int:
 
     (raw_dir / "iid_search.json").write_text(json.dumps(iid_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-    query_results = [write_query_output(raw_dir, spec) for spec in build_queries(stock_code)]
+    queries = build_queries(stock_code)
+    with ThreadPoolExecutor(max_workers=min(MAX_QUERY_WORKERS, len(queries))) as executor:
+        query_results = list(executor.map(lambda spec: write_query_output(raw_dir, spec), queries))
 
     generator = run_cmd([sys.executable, str(SCRIPT_DIR / "generate_ds_report.py"), stock_code])
     ensure_ok(generator, "报告生成失败")
