@@ -7,6 +7,6 @@ allowBuilds:
   workerd: true
 
 minimumReleaseAgeExclude:
-  - astro@7.1.1
-  - miniflare@4.20260714.0
-  - wrangler@4.112.0
+  - astro@7.1.3
+  - miniflare@4.20260722.0
+  - wrangler@4.114.0
