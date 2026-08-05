@@ -1,9 +1,13 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import SiteBrand from "@/components/SiteBrand.astro";
+import CopyCommand from "@/components/CopyCommand.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
+import SkillProse from "@/components/SkillProse.astro";
+import SkillToc from "@/components/SkillToc.astro";
 import { getSkillSeo } from "@/data/seo";
 import { skillContent } from "@/data/skills.content.generated";
 import { skillsData } from "@/data/skills.generated";
+import { extractToc } from "@/data/skill-toc";
 import { formatRepoLabel, type SkillRecord } from "@/data/skill-record";
 
 export function getStaticPaths() {
@@ -16,6 +20,16 @@ export function getStaticPaths() {
 const { skill } = Astro.props as { skill: SkillRecord };
 const seo = getSkillSeo(skill);
 const body = skillContent[skill.slug];
+const toc = extractToc(body);
+const categoryHref = `/?category=${encodeURIComponent(skill.category)}`;
+const related = skillsData
+  .filter((item) => item.category === skill.category && item.slug !== skill.slug)
+  .slice(0, 3);
+const meta = [
+  { label: "Added", value: skill.firstAdded },
+  { label: "Updated", value: skill.lastModified },
+  { label: "Source", value: skill.sourceKind },
+];
 ---
 
 <BaseLayout
@@ -26,86 +40,81 @@ const body = skillContent[skill.slug];
   structuredData={seo.structuredData}
   lang={skill.language}
 >
-  <div class="min-h-screen">
-    <nav class="border-b border-border px-6 py-4">
-      <div class="mx-auto flex max-w-5xl items-center justify-between gap-6">
-        <SiteBrand subtle />
-        <a
-          href="/"
-          class="pressable inline-flex min-h-11 items-center rounded-md border border-border px-3 py-1.5 text-xs text-text-secondary transition hover:border-text hover:text-text"
-        >
-          Catalog
-        </a>
-      </div>
+  <SiteHeader variant="detail" />
+
+  <div class="border-b border-divider px-6 py-2.5 sm:px-10">
+    <nav aria-label="Breadcrumb" class="mx-auto max-w-6xl font-mono text-[11.5px] text-text-muted">
+      <a href="/" class="transition hover:text-text">skills</a>
+      <span class="mx-1.5">/</span>
+      <a href={categoryHref} class="transition hover:text-text">{skill.category}</a>
+      <span class="mx-1.5">/</span>
+      <span class="text-text">{skill.slug}</span>
     </nav>
+  </div>
 
-    <div class="border-b border-border px-6 py-2">
-      <div class="mx-auto max-w-5xl">
-        <p class="text-xs text-text-muted">
-          <a href="/" class="transition hover:text-text-secondary">
-            xingkaixin&nbsp;/&nbsp;skills
-          </a>
-          <span class="mx-1.5">/</span>
-          <a
-            href={`/?category=${encodeURIComponent(skill.category)}`}
-            class="transition hover:text-text-secondary"
-          >
-            {skill.category}
-          </a>
-          <span class="mx-1.5">/</span>
-          <span class="text-text-secondary font-medium">{skill.slug}</span>
+  <main id="main-content" class="px-6 sm:px-10">
+    <div class="mx-auto grid max-w-6xl items-start gap-12 pt-11 pb-14 lg:grid-cols-[minmax(0,1fr)_240px] lg:gap-14">
+      <div class="min-w-0">
+        <a href={categoryHref} class="category-pill pressable">{skill.category}</a>
+        <h1 class="mt-4 font-mono text-[1.75rem] leading-tight font-medium break-words text-text sm:text-[2rem]">
+          {skill.slug}
+        </h1>
+        <p class="mt-4.5 max-w-[64ch] text-[15px] leading-7 text-text-secondary text-pretty">
+          {skill.description}
         </p>
-      </div>
-    </div>
 
-    <main id="main-content" class="mx-auto max-w-5xl px-6 pb-20 pt-8">
-      <div class="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
-        <div class="max-w-2xl">
-          <h1 class="font-semibold text-2xl text-text">
-            {skill.slug}
-          </h1>
+        <CopyCommand
+          command={`npx skills add xingkaixin/skills --skill ${skill.slug}`}
+          tone="solid"
+          class="mt-6.5 max-w-[42.5rem]"
+        />
 
-          <p class="mt-6 text-sm leading-7 text-text-secondary">
-            {skill.description}
-          </p>
-
-          <div class="mt-5 space-y-3">
-            <p class="text-xs uppercase tracking-[0.18em] text-text-muted">Install</p>
-            <div class="inline-flex items-center rounded-md border border-border bg-[#f6f8fa] px-4 py-2.5">
-              <code class="font-mono text-sm text-text">
-                npx skills add xingkaixin/skills --skill {skill.slug}
-              </code>
+        <dl class="meta-grid mt-5.5 max-w-[42.5rem]">
+          {meta.map((item) => (
+            <div>
+              <dt class="eyebrow text-[9.5px] text-text-muted">{item.label}</dt>
+              <dd class="mt-1.5 font-mono text-[13px] text-text">{item.value}</dd>
             </div>
-          </div>
-
-          <div class="mt-6 flex flex-wrap gap-2">
-            <a
-              href={`/?category=${encodeURIComponent(skill.category)}`}
-              class="tag-pill pressable hover:border-text hover:text-text"
-            >
-              {skill.category}
-            </a>
-          </div>
-        </div>
-
-        <aside class="lg:w-56 lg:shrink-0">
-          <div class="rounded-md border border-border p-4">
-            <p class="text-[11px] uppercase tracking-[0.28em] text-text-muted">Source Repo</p>
-            <div class="mt-3">
-              <a
-                href={skill.sourceRepo}
-                class="inline-flex min-h-11 items-center text-sm text-text underline underline-offset-4 transition hover:text-text-secondary"
-              >
+          ))}
+          <div>
+            <dt class="eyebrow text-[9.5px] text-text-muted">Repo</dt>
+            <dd class="mt-1.5">
+              <a href={skill.sourceRepo} class="font-mono text-[13px] text-accent hover:underline">
                 {formatRepoLabel(skill.sourceRepo)}
               </a>
-            </div>
+            </dd>
           </div>
-        </aside>
+        </dl>
+
+        {body && (
+          <div class="mt-11 border-t border-divider pt-9">
+            <SkillProse html={body} />
+          </div>
+        )}
       </div>
 
-      {body && (
-        <article class="skill-prose mt-12 border-t border-border pt-10" set:html={body} />
-      )}
-    </main>
-  </div>
+      <aside class="flex flex-col gap-5.5 lg:sticky lg:top-6">
+        <SkillToc entries={toc} />
+
+        {related.length > 0 && (
+          <div class="border-t border-divider pt-5">
+            <p class="eyebrow mb-3 tracking-[0.18em] text-text-muted">More in {skill.category}</p>
+            <div class="flex flex-col gap-2">
+              {related.map((item) => (
+                <a
+                  href={`/skills/${item.slug}`}
+                  class="flex flex-col gap-1.5 rounded-lg border border-border p-3 transition hover:border-text hover:bg-surface"
+                >
+                  <span class="font-mono text-[11.5px] break-words text-text">{item.slug}</span>
+                  <span class="line-clamp-2 text-[11.5px] leading-5 text-text-muted">
+                    {item.description}
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </aside>
+    </div>
+  </main>
 </BaseLayout>

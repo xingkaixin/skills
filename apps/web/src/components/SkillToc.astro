@@ -1,0 +1,67 @@
+---
+import type { TocEntry } from "@/data/skill-toc";
+
+interface Props {
+  entries: TocEntry[];
+}
+
+const { entries } = Astro.props;
+---
+
+{entries.length > 0 && (
+  <nav aria-labelledby="toc-heading" data-toc>
+    <p id="toc-heading" class="eyebrow mb-2.5 ml-3.5 tracking-[0.18em] text-text-muted">On this page</p>
+    <div class="flex max-h-[60vh] flex-col overflow-y-auto">
+      {entries.map((entry) => (
+        <a
+          href={`#${entry.id}`}
+          class:list={["toc-link", entry.depth > 0 && "toc-link-nested"]}
+          data-toc-link={entry.id}
+        >
+          {entry.label}
+        </a>
+      ))}
+    </div>
+  </nav>
+)}
+
+<script>
+  const links = new Map(
+    Array.from(document.querySelectorAll<HTMLElement>("[data-toc-link]")).map((link) => [
+      link.dataset.tocLink!,
+      link,
+    ]),
+  );
+
+  if (links.size > 0) {
+    const headings = Array.from(links.keys())
+      .map((id) => document.getElementById(id))
+      .filter((heading): heading is HTMLElement => heading !== null);
+    const onScreen = new Set<string>();
+
+    function highlight() {
+      // The topmost heading currently in view wins; keep the last active one
+      // while scrolling through a long section with no heading on screen.
+      const active = headings.find((heading) => onScreen.has(heading.id));
+      if (!active) return;
+
+      for (const [id, link] of links) {
+        if (id === active.id) link.setAttribute("aria-current", "true");
+        else link.removeAttribute("aria-current");
+      }
+    }
+
+    const observer = new IntersectionObserver(
+      (records) => {
+        for (const record of records) {
+          if (record.isIntersecting) onScreen.add(record.target.id);
+          else onScreen.delete(record.target.id);
+        }
+        highlight();
+      },
+      { rootMargin: "-80px 0px -70% 0px" },
+    );
+
+    for (const heading of headings) observer.observe(heading);
+  }
+</script>

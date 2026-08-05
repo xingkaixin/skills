@@ -181,6 +181,68 @@ button {
   box-shadow: 0 6px 20px rgba(17, 17, 17, 0.07);
 }
 
+.toc-link {
+  border-left: 2px solid var(--color-border);
+  padding: 0.375rem 0 0.375rem 0.875rem;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: #8a909c;
+  transition:
+    border-color 140ms ease,
+    color 140ms ease;
+}
+
+.toc-link-nested {
+  padding-left: 1.625rem;
+}
+
+.toc-link:hover {
+  color: var(--color-text);
+}
+
+.toc-link[aria-current="true"] {
+  border-left-color: var(--color-text);
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border: 1px solid var(--color-border);
+  border-radius: 0.625rem;
+  overflow: hidden;
+}
+
+.meta-grid > * {
+  border-top: 1px solid var(--color-border);
+  border-left: 1px solid var(--color-border);
+  padding: 0.875rem 1rem;
+}
+
+.meta-grid > :nth-child(-n + 2) {
+  border-top: 0;
+}
+
+.meta-grid > :nth-child(odd) {
+  border-left: 0;
+}
+
+@media (min-width: 640px) {
+  .meta-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .meta-grid > * {
+    border-top: 0;
+    border-left: 1px solid var(--color-border);
+  }
+
+  .meta-grid > :first-child {
+    border-left: 0;
+  }
+}
+
 .command-box {
   display: flex;
   align-items: center;

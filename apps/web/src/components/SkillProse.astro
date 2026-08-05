@@ -1,0 +1,37 @@
+---
+interface Props {
+  html: string;
+}
+
+const { html } = Astro.props;
+---
+
+<article class="skill-prose" set:html={html} />
+
+<script>
+  // Code blocks arrive as bare <pre><code>. Wrap each one at runtime with a bar
+  // carrying its language and a copy button, so the generator stays untouched.
+  for (const pre of document.querySelectorAll<HTMLElement>(".skill-prose pre")) {
+    const code = pre.querySelector("code");
+    if (!code) continue;
+
+    const language = code.className.match(/language-([\w-]+)/)?.[1] ?? "code";
+    const block = document.createElement("div");
+    block.className = "code-block";
+
+    const bar = document.createElement("div");
+    bar.className = "code-block-bar";
+    bar.innerHTML = `<span class="eyebrow text-text-muted">${language}</span>`;
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "copy-button pressable";
+    button.textContent = "Copy";
+    button.dataset.copy = code.textContent ?? "";
+    button.dataset.copyLabel = "Copy";
+    bar.append(button);
+
+    pre.replaceWith(block);
+    block.append(bar, pre);
+  }
+</script>
