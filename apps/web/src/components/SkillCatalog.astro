@@ -1,0 +1,219 @@
+---
+import SearchIcon from "@/components/SearchIcon.astro";
+import type { SkillRecord } from "@/data/skill-record";
+
+interface Props {
+  skills: SkillRecord[];
+  categories: string[];
+}
+
+const { skills, categories } = Astro.props;
+
+// Server render matches the default "recent" sort so the no-JS view is already ordered.
+const ordered = [...skills].sort(
+  (a, b) => b.lastModified.localeCompare(a.lastModified) || a.slug.localeCompare(b.slug),
+);
+const counts = new Map(
+  categories.map((category) => [
+    category,
+    skills.filter((skill) => skill.category === category).length,
+  ]),
+);
+const sortOptions = [
+  { key: "recent", label: "Recent" },
+  { key: "az", label: "A–Z" },
+];
+---
+
+<div data-catalog>
+  <div class="border-b border-divider px-6 sm:px-10">
+    <div class="mx-auto flex max-w-6xl flex-col gap-3 py-3 sm:flex-row sm:items-center sm:gap-4">
+      <form
+        action="/"
+        method="get"
+        role="search"
+        class="flex flex-1 items-center gap-2.5 rounded-lg border border-border px-3.5 py-2.5 transition focus-within:border-text"
+        data-catalog-search
+      >
+        <SearchIcon />
+        <label class="sr-only" for="catalog-search">Search skills</label>
+        <input
+          id="catalog-search"
+          type="search"
+          name="q"
+          placeholder="Search skills, e.g. release, iOS, commit"
+          data-search-focus
+          class="w-full min-w-0 bg-transparent text-[13px] text-text outline-none placeholder:text-text-muted"
+        />
+        <kbd class="hidden rounded border border-border px-1.5 py-0.5 font-mono text-[10px] text-text-muted sm:block">⌘K</kbd>
+      </form>
+      <div
+        class="flex shrink-0 items-center gap-1 rounded-lg border border-border p-[3px]"
+        role="group"
+        aria-label="Sort skills"
+      >
+        {sortOptions.map((option, index) => (
+          <button
+            type="button"
+            class="seg-button pressable"
+            data-sort={option.key}
+            aria-pressed={index === 0 ? "true" : "false"}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <div id="categories" class="border-b border-divider px-6 sm:px-10">
+    <div
+      class="mx-auto flex max-w-6xl flex-wrap items-center gap-2 py-3"
+      role="group"
+      aria-label="Filter by category"
+    >
+      <button type="button" class="chip pressable" data-category="all" aria-pressed="true">
+        All<span class="chip-count">{skills.length}</span>
+      </button>
+      {categories.map((category) => (
+        <button type="button" class="chip pressable" data-category={category} aria-pressed="false">
+          {category}<span class="chip-count">{counts.get(category)}</span>
+        </button>
+      ))}
+      <span
+        class="ml-auto font-mono text-xs text-text-muted"
+        data-catalog-count
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {skills.length} skills
+      </span>
+    </div>
+  </div>
+
+  <div class="px-6 pt-7 sm:px-10">
+    <div class="mx-auto grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-3" data-catalog-grid>
+    {ordered.map((skill) => (
+      <a
+        href={`/skills/${skill.slug}`}
+        class="skill-card"
+        data-skill
+        data-category={skill.category}
+        data-slug={skill.slug}
+        data-modified={skill.lastModified}
+        data-haystack={`${skill.slug} ${skill.description}`.toLowerCase()}
+      >
+        <span class="flex items-center justify-between gap-2">
+          <span class="eyebrow text-accent">{skill.category}</span>
+          <span class="font-mono text-[10px] text-text-muted">{skill.sourceKind}</span>
+        </span>
+        <h3 class="font-mono text-sm font-medium break-words text-text">{skill.slug}</h3>
+        <p class="line-clamp-3 text-[13px] leading-6 text-text-secondary">{skill.description}</p>
+        <span class="mt-auto flex items-center justify-between pt-1.5 font-mono text-[10.5px] text-text-muted">
+          <span>updated {skill.lastModified}</span>
+          <span aria-hidden="true">→</span>
+        </span>
+      </a>
+    ))}
+    </div>
+  </div>
+
+  <p class="px-6 pt-10 text-center text-sm text-text-secondary sm:px-10" data-catalog-empty hidden>
+    No skill matches this filter.
+  </p>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-catalog]");
+
+  if (root) {
+    const grid = root.querySelector<HTMLElement>("[data-catalog-grid]")!;
+    const cards = Array.from(root.querySelectorAll<HTMLElement>("[data-skill]"));
+    const chips = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-category]"));
+    const sorts = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-sort]"));
+    const search = root.querySelector<HTMLInputElement>("#catalog-search")!;
+    const form = root.querySelector<HTMLFormElement>("[data-catalog-search]")!;
+    const countLabel = root.querySelector<HTMLElement>("[data-catalog-count]")!;
+    const empty = root.querySelector<HTMLElement>("[data-catalog-empty]")!;
+    const knownCategories = new Set(chips.map((chip) => chip.dataset.category));
+
+    const params = new URLSearchParams(window.location.search);
+    const initialCategory = params.get("category");
+    const state = {
+      category: initialCategory && knownCategories.has(initialCategory) ? initialCategory : "all",
+      query: params.get("q") ?? "",
+      sort: "recent",
+    };
+
+    function setPressed(buttons: HTMLButtonElement[], key: string, value: string) {
+      for (const button of buttons) {
+        button.setAttribute("aria-pressed", button.dataset[key] === value ? "true" : "false");
+      }
+    }
+
+    function reorder() {
+      const byRecent = state.sort === "recent";
+      const sorted = [...cards].sort((a, b) =>
+        byRecent
+          ? b.dataset.modified!.localeCompare(a.dataset.modified!) ||
+            a.dataset.slug!.localeCompare(b.dataset.slug!)
+          : a.dataset.slug!.localeCompare(b.dataset.slug!),
+      );
+      grid.append(...sorted);
+    }
+
+    function render(syncUrl: boolean) {
+      const needle = state.query.trim().toLowerCase();
+      let visible = 0;
+
+      for (const card of cards) {
+        const matches =
+          (state.category === "all" || card.dataset.category === state.category) &&
+          (!needle || card.dataset.haystack!.includes(needle));
+        card.toggleAttribute("hidden", !matches);
+        if (matches) visible += 1;
+      }
+
+      setPressed(chips, "category", state.category);
+      setPressed(sorts, "sort", state.sort);
+      countLabel.textContent = `${visible} ${visible === 1 ? "skill" : "skills"}`;
+      empty.toggleAttribute("hidden", visible > 0);
+
+      if (!syncUrl) return;
+
+      const url = new URL(window.location.href);
+      for (const [key, value] of [
+        ["category", state.category === "all" ? "" : state.category],
+        ["q", state.query],
+      ] as const) {
+        if (value) url.searchParams.set(key, value);
+        else url.searchParams.delete(key);
+      }
+      window.history.replaceState({}, "", `${url.pathname}${url.search}`);
+    }
+
+    search.value = state.query;
+    render(false);
+
+    form.addEventListener("submit", (event) => event.preventDefault());
+    search.addEventListener("input", () => {
+      state.query = search.value;
+      render(true);
+    });
+
+    for (const chip of chips) {
+      chip.addEventListener("click", () => {
+        state.category = chip.dataset.category!;
+        render(true);
+      });
+    }
+
+    for (const button of sorts) {
+      button.addEventListener("click", () => {
+        state.sort = button.dataset.sort!;
+        reorder();
+        render(true);
+      });
+    }
+  }
+</script>

@@ -1,0 +1,64 @@
+---
+import SiteBrand from "@/components/SiteBrand.astro";
+import SearchIcon from "@/components/SearchIcon.astro";
+import { SITE_REPO } from "@/data/catalog";
+
+interface Props {
+  /** "home" links to the in-page sections; "detail" offers a search box back to the catalog. */
+  variant?: "home" | "detail";
+}
+
+const { variant = "home" } = Astro.props;
+const linkClass =
+  "pressable inline-flex min-h-11 items-center rounded-lg px-3 text-[13px] text-text-secondary transition hover:text-text";
+const buttonClass =
+  "pressable inline-flex min-h-11 items-center rounded-lg border border-border px-3 text-[13px] text-text transition hover:border-text";
+---
+
+<header class="border-b border-divider px-6 sm:px-10">
+  <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 py-3">
+    <SiteBrand />
+    <div class="flex items-center gap-2">
+      {variant === "home" ? (
+        <>
+          <a href="#categories" class={linkClass}>Categories</a>
+          <a href="#faq" class={linkClass}>FAQ</a>
+        </>
+      ) : (
+        <form
+          action="/"
+          method="get"
+          role="search"
+          class="flex w-44 items-center gap-2 rounded-lg border border-border px-3 py-2 transition focus-within:border-text sm:w-60"
+        >
+          <SearchIcon />
+          <label class="sr-only" for="header-search">Search skills</label>
+          <input
+            id="header-search"
+            type="search"
+            name="q"
+            placeholder="Search"
+            data-search-focus
+            class="w-full min-w-0 bg-transparent text-[13px] text-text outline-none placeholder:text-text-muted"
+          />
+          <kbd class="hidden rounded border border-border px-1.5 py-0.5 font-mono text-[10px] text-text-muted sm:block">⌘K</kbd>
+        </form>
+      )}
+      <a href={SITE_REPO} class={buttonClass}>GitHub</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  // ⌘K / Ctrl-K focuses whichever search field the current page renders.
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "k" || !(event.metaKey || event.ctrlKey)) return;
+
+    const input = document.querySelector<HTMLInputElement>("[data-search-focus]");
+    if (!input) return;
+
+    event.preventDefault();
+    input.focus();
+    input.select();
+  });
+</script>

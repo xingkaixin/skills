@@ -82,13 +82,13 @@ button {
   height: 1.75rem;
 }
 
-/* Mono micro-label used for section kickers, meta keys and card eyebrows. */
+/* Mono micro-label used for section kickers, meta keys and card eyebrows.
+   Colour stays at the call site — these labels are muted or accent by context. */
 .eyebrow {
   font-family: var(--font-mono);
   font-size: 0.625rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--color-text-muted);
 }
 
 .category-pill {
@@ -159,6 +159,26 @@ button {
 .seg-button[aria-pressed="true"] {
   background: var(--color-text);
   color: #ffffff;
+}
+
+.skill-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  background: #ffffff;
+  padding: 1.25rem;
+  transition:
+    border-color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.skill-card:hover {
+  border-color: var(--color-text);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(17, 17, 17, 0.07);
 }
 
 .command-box {
