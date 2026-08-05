@@ -4,3 +4,4 @@
 !.agents/plugins/marketplace.json
 skills-lock.json
 .wrangler
+.design/
