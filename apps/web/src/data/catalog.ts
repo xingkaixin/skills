@@ -1,4 +1,5 @@
 export {
+  SITE_NAME,
   SITE_REPO,
   SITE_URL,
   skillCatalog,

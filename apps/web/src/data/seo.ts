@@ -1,4 +1,4 @@
-import { SITE_REPO, SITE_URL } from "@/data/catalog";
+import { SITE_NAME, SITE_REPO, SITE_URL } from "@/data/catalog";
 import { skillsData } from "@/data/skills.generated";
 import type { SkillRecord } from "@/data/skill-record";
 import { faqItems } from "@/data/faq";
@@ -21,7 +21,7 @@ export interface PageSeo {
   structuredData: JsonLdNode[];
 }
 
-export const HOME_TITLE = "XingKaiXin's Skills - AI Agent Skill Catalog";
+export const HOME_TITLE = `${SITE_NAME} - AI Agent Skill Catalog`;
 export const HOME_DESCRIPTION =
   "Browse and install AI agent skills for Claude Code and other AI coding tools. A curated catalog covering frontend, backend, writing, design, and more.";
 
@@ -39,7 +39,7 @@ export function getSkillSeo(skill: SkillRecord): PageSeo {
   const description = toMetaDescription(skill.description);
 
   return {
-    title: `${skill.slug} - XingKaiXin's Skills`,
+    title: `${skill.slug} - ${SITE_NAME}`,
     description,
     canonicalUrl: `${SITE_URL}/skills/${skill.slug}`,
     ogType: "article",
@@ -157,7 +157,7 @@ function siteEntity(): JsonLdNode {
       {
         "@type": "WebSite",
         "@id": `${SITE_URL}/#website`,
-        name: "XingKaiXin's Skills",
+        name: SITE_NAME,
         url: `${SITE_URL}/`,
         publisher: { "@id": `${SITE_URL}/#publisher` },
       },
