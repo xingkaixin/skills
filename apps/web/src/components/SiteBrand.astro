@@ -1,15 +1,9 @@
 ---
-interface Props {
-  subtle?: boolean;
-}
-
-const { subtle = false } = Astro.props;
-const labelClass = `font-semibold text-sm ${subtle ? "text-text-muted" : "text-text"}`;
 ---
 
 <a
   href="/"
-  class="inline-flex items-center gap-3 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+  class="inline-flex items-center gap-2.5 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
 >
   <span class="brand-mark" aria-hidden="true">
     <svg
@@ -19,7 +13,7 @@ const labelClass = `font-semibold text-sm ${subtle ? "text-text-muted" : "text-t
       stroke-width="2"
       stroke-linecap="round"
       stroke-linejoin="round"
-      class="h-5 w-5"
+      class="h-[15px] w-[15px]"
     >
       <path d="M15 12h-5"></path>
       <path d="M15 8h-5"></path>
@@ -27,5 +21,5 @@ const labelClass = `font-semibold text-sm ${subtle ? "text-text-muted" : "text-t
       <path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 0 0-2 2z"></path>
     </svg>
   </span>
-  <span class={labelClass}>XingKaiXin's Skills</span>
+  <span class="text-sm font-semibold text-text">xingkaixin/skills</span>
 </a>
