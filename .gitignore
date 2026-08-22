@@ -1,4 +1,5 @@
-.claude
+.claude/*
+!.claude/commands/
 .agents/*
 !.agents/plugins/
 !.agents/plugins/marketplace.json

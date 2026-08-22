@@ -8,6 +8,13 @@ import {
   SITE_REPO,
   skillCatalog,
 } from "./config.ts";
+import {
+  describeOutdated,
+  findOutdatedDescriptions,
+  hashSkillSource,
+  loadSkillDescriptions,
+  type SkillDescription,
+} from "./descriptions.ts";
 import { parseSkillMarkdown, renderSkillBody } from "./markdown.ts";
 import type { SkillLocation, SkillRecord } from "./types.ts";
 
@@ -16,6 +23,7 @@ const execFileAsync = promisify(execFile);
 interface SkillEntry {
   record: SkillRecord;
   content: string;
+  sourceHash: string;
 }
 
 interface Artifact {
@@ -54,12 +62,16 @@ export async function buildArtifacts(repoRoot: string): Promise<Artifact[]> {
   assertKnownCategories(locations);
   await validateLocalMarkdownLinks(repoRoot, locations);
   const datesByPath = await readGitDates(repoRoot);
+  const descriptions = await loadSkillDescriptions(repoRoot);
   const entries = await Promise.all(
-    locations.map((location) => readSkill(repoRoot, location, datesByPath)),
+    locations.map((location) =>
+      readSkill(repoRoot, location, datesByPath, descriptions),
+    ),
   );
   entries.sort((left, right) =>
     left.record.slug.localeCompare(right.record.slug),
   );
+  assertDescriptionsCurrent(entries, descriptions);
 
   return [
     ...buildWebArtifacts(entries),
@@ -91,6 +103,7 @@ async function readSkill(
   repoRoot: string,
   location: SkillLocation,
   datesByPath: Map<string, GitDates>,
+  descriptions: Record<string, SkillDescription>,
 ): Promise<SkillEntry> {
   const relativePath = path.posix.join(
     "skills",
@@ -106,18 +119,25 @@ async function readSkill(
     repo: SITE_REPO,
   };
   const dates = datesByPath.get(relativePath) ?? (await datesFromMtime(skillPath));
+  const display = descriptions[location.slug];
 
   return {
+    sourceHash: hashSkillSource(parsed.description, parsed.body),
     record: {
       slug: location.slug,
       name: parsed.name,
       description: parsed.description,
+      displayDescription: {
+        en: display?.en ?? "",
+        zh: display?.zh ?? "",
+        ja: display?.ja ?? "",
+      },
       category: location.category,
       sourceRepo: source.repo,
       sourceKind: source.kind,
       firstAdded: dates.firstAdded,
       lastModified: dates.lastModified,
-      language: parsed.language,
+      contentLanguage: parsed.contentLanguage,
     },
     content: renderSkillBody(parsed.body, location.category, location.slug),
   };
@@ -273,6 +293,22 @@ async function assertArtifactsCurrent(
     throw new Error(
       `Generated catalog artifacts are stale:\n${stale.map((item) => `- ${item}`).join("\n")}`,
     );
+  }
+}
+
+function assertDescriptionsCurrent(
+  entries: SkillEntry[],
+  descriptions: Record<string, SkillDescription>,
+): void {
+  const outdated = findOutdatedDescriptions(
+    entries.map((entry) => ({
+      slug: entry.record.slug,
+      sourceHash: entry.sourceHash,
+    })),
+    descriptions,
+  );
+  if (outdated.length > 0) {
+    throw new Error(describeOutdated(outdated));
   }
 }
 

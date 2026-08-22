@@ -9,7 +9,7 @@ export interface ParsedSkill {
   name: string;
   description: string;
   body: string;
-  language: "en" | "zh-CN";
+  contentLanguage: "en" | "zh-CN";
 }
 
 export function parseSkillMarkdown(markdown: string, slug: string): ParsedSkill {
@@ -25,7 +25,7 @@ export function parseSkillMarkdown(markdown: string, slug: string): ParsedSkill 
     name,
     description,
     body: parsed.content.trim(),
-    language: detectLanguage(`${description}\n${parsed.content}`),
+    contentLanguage: detectLanguage(parsed.content),
   };
 }
 

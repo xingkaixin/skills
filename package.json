@@ -3,16 +3,18 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "pnpm generate:web-data && pnpm --filter web dev",
     "build": "pnpm generate:web-data && pnpm --filter web build",
-    "preview": "pnpm --filter web preview",
-    "lint": "pnpm check:generated && pnpm --filter web lint",
-    "test": "node --test tests/*.test.ts && python3 -m unittest discover -s tests -p 'test_*.py'",
-    "typecheck": "pnpm exec tsc -p tsconfig.json && pnpm --filter web typecheck",
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "check:generated": "node scripts/generate-web-skills.ts --check",
     "deploy:cf": "pnpm --filter web deploy:cf",
-    "generate:web-data": "node scripts/generate-web-skills.ts"
+    "descriptions:status": "node scripts/skill-descriptions.ts",
+    "descriptions:touch": "node scripts/skill-descriptions.ts --touch",
+    "dev": "pnpm generate:web-data && pnpm --filter web dev",
+    "generate:web-data": "node scripts/generate-web-skills.ts",
+    "lint": "pnpm check:generated && pnpm --filter web lint",
+    "preview": "pnpm --filter web preview",
+    "test": "node --test tests/*.test.ts && python3 -m unittest discover -s tests -p 'test_*.py'",
+    "typecheck": "pnpm exec tsc -p tsconfig.json && pnpm --filter web typecheck"
   },
   "packageManager": "pnpm@11.14.0",
   "devDependencies": {

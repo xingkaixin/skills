@@ -1,3 +1,5 @@
+import type { LocalizedText } from "./descriptions.ts";
+
 export type SkillSourceKind = "self" | "upstream" | "adapted";
 
 export interface SkillCatalogEntry {
@@ -10,13 +12,17 @@ export interface SkillCatalogEntry {
 export interface SkillRecord {
   slug: string;
   name: string;
+  /** Frontmatter description: an agent trigger, not written for human readers. */
   description: string;
+  /** Human-facing summary authored per locale; see content/skill-descriptions.json. */
+  displayDescription: LocalizedText;
   category: string;
   sourceRepo: string;
   sourceKind: SkillSourceKind;
   firstAdded: string;
   lastModified: string;
-  language: "en" | "zh-CN";
+  /** Language the SKILL.md itself is written in, independent of the UI locale. */
+  contentLanguage: "en" | "zh-CN";
 }
 
 export interface SkillLocation {
