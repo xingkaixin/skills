@@ -1,36 +1,53 @@
 ---
 import "@/styles/globals.css";
-import { SITE_NAME } from "@/data/catalog";
+import { SITE_NAME, SITE_URL } from "@/data/catalog";
 import type { JsonLdNode } from "@/data/seo";
+import { ui } from "@/i18n/ui";
+import {
+  DEFAULT_LOCALE,
+  LOCALES,
+  localeHref,
+  localeTags,
+  ogLocales,
+  type Locale,
+} from "@/i18n/config";
 
 interface Props {
+  locale: Locale;
+  /** Locale-free path, e.g. "/" or "/skills/use-modern-go". */
+  path: string;
   title: string;
   description: string;
-  canonicalUrl: string;
   ogType?: string;
   noindex?: boolean;
   structuredData?: JsonLdNode[];
-  lang?: "en" | "zh-CN";
 }
 
 const {
+  locale,
+  path,
   title,
   description,
-  canonicalUrl,
   ogType = "website",
   noindex = false,
   structuredData = [],
-  lang = "en",
 } = Astro.props;
+const strings = ui[locale];
+const canonicalUrl = new URL(localeHref(locale, path), SITE_URL).href;
+const alternates = noindex
+  ? []
+  : LOCALES.map((alternate) => ({
+      hreflang: localeTags[alternate],
+      href: new URL(localeHref(alternate, path), SITE_URL).href,
+    }));
 const jsonLdSources = structuredData.map((node) =>
   JSON.stringify(node).replace(/</g, "\\u003c"),
 );
 const ogImageUrl = new URL("/og-image.png", Astro.site).href;
-const skipLabel = lang === "zh-CN" ? "跳到主要内容" : "Skip to main content";
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={localeTags[locale]}>
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -44,16 +61,26 @@ const skipLabel = lang === "zh-CN" ? "跳到主要内容" : "Skip to main conten
       <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
     )}
     <link rel="canonical" href={canonicalUrl} />
+    {alternates.map((alternate) => (
+      <link rel="alternate" hreflang={alternate.hreflang} href={alternate.href} />
+    ))}
+    {alternates.length > 0 && (
+      <link
+        rel="alternate"
+        hreflang="x-default"
+        href={new URL(localeHref(DEFAULT_LOCALE, path), SITE_URL).href}
+      />
+    )}
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={SITE_NAME} />
-    <meta property="og:locale" content={lang === "zh-CN" ? "zh_CN" : "en_US"} />
+    <meta property="og:locale" content={ogLocales[locale]} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={`${SITE_NAME} — AI agent skill catalog`} />
+    <meta property="og:image:alt" content={`${SITE_NAME} — ${strings.siteTagline}`} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
@@ -69,7 +96,7 @@ const skipLabel = lang === "zh-CN" ? "跳到主要内容" : "Skip to main conten
     ></script>
   </head>
   <body>
-    <a href="#main-content" class="skip-link">{skipLabel}</a>
+    <a href="#main-content" class="skip-link">{strings.skipToContent}</a>
     <div class="font-sans min-h-screen">
       <slot />
     </div>

@@ -1,16 +1,21 @@
 ---
 import type { TocEntry } from "@/data/skill-toc";
+import type { Locale } from "@/i18n/config";
+import { ui } from "@/i18n/ui";
 
 interface Props {
   entries: TocEntry[];
+  locale: Locale;
 }
 
-const { entries } = Astro.props;
+const { entries, locale } = Astro.props;
 ---
 
 {entries.length > 0 && (
   <nav aria-labelledby="toc-heading" data-toc>
-    <p id="toc-heading" class="eyebrow mb-2.5 ml-3.5 tracking-[0.18em] text-text-muted">On this page</p>
+    <p id="toc-heading" class="eyebrow mb-2.5 ml-3.5 tracking-[0.18em] text-text-muted">
+      {ui[locale].skill.onThisPage}
+    </p>
     <div class="flex max-h-[60vh] flex-col overflow-y-auto">
       {entries.map((entry) => (
         <a

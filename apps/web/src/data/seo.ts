@@ -1,7 +1,8 @@
 import { SITE_NAME, SITE_REPO, SITE_URL } from "@/data/catalog";
 import { skillsData } from "@/data/skills.generated";
 import type { SkillRecord } from "@/data/skill-record";
-import { faqItems } from "@/data/faq";
+import { localeHref, type Locale } from "@/i18n/config";
+import { ui } from "@/i18n/ui";
 
 export type JsonLdValue =
   | string
@@ -16,62 +17,53 @@ export type JsonLdNode = { [key: string]: JsonLdValue };
 export interface PageSeo {
   title: string;
   description: string;
-  canonicalUrl: string;
   ogType: string;
   structuredData: JsonLdNode[];
 }
 
-export const HOME_TITLE = `${SITE_NAME} - AI Agent Skill Catalog`;
-export const HOME_DESCRIPTION =
-  "Browse and install AI agent skills for Claude Code and other AI coding tools. A curated catalog covering frontend, backend, writing, design, and more.";
-
-export function getHomeSeo(): PageSeo {
-  return {
-    title: HOME_TITLE,
-    description: HOME_DESCRIPTION,
-    canonicalUrl: `${SITE_URL}/`,
-    ogType: "website",
-    structuredData: [siteEntity(), createHomeStructuredData(), createFaqStructuredData()],
-  };
+export function homeTitle(locale: Locale): string {
+  return `${SITE_NAME} - ${ui[locale].siteTagline}`;
 }
 
-export function getSkillSeo(skill: SkillRecord): PageSeo {
-  const description = toMetaDescription(skill.description);
-
+export function getHomeSeo(locale: Locale): PageSeo {
   return {
-    title: `${skill.slug} - ${SITE_NAME}`,
-    description,
-    canonicalUrl: `${SITE_URL}/skills/${skill.slug}`,
-    ogType: "article",
+    title: homeTitle(locale),
+    description: ui[locale].siteDescription,
+    ogType: "website",
     structuredData: [
-      siteEntity(),
-      createSkillStructuredData(skill),
-      createSkillBreadcrumbStructuredData(skill),
+      siteEntity(locale),
+      createHomeStructuredData(locale),
+      createFaqStructuredData(locale),
     ],
   };
 }
 
-// Skill descriptions lead with what the skill does, then list agent trigger
-// phrases. Keep the leading summary for the meta description and drop the triggers.
-function toMetaDescription(description: string): string {
-  const trigger = description.match(
-    /(you should use|use this skill|use it when|use when|use whenever|use this when|triggers? include|use for)/i,
-  );
-  let summary = (trigger ? description.slice(0, trigger.index) : description).trim();
-  if (summary.length < 30) {
-    summary = description.trim();
-  }
-  return summary.length > 160 ? `${summary.slice(0, 157).trimEnd()}...` : summary;
+export function getSkillSeo(skill: SkillRecord, locale: Locale): PageSeo {
+  return {
+    title: `${skill.slug} - ${SITE_NAME}`,
+    description: skill.displayDescription[locale],
+    ogType: "article",
+    structuredData: [
+      siteEntity(locale),
+      createSkillStructuredData(skill, locale),
+      createSkillBreadcrumbStructuredData(skill, locale),
+    ],
+  };
 }
 
-function createHomeStructuredData(): JsonLdNode {
+function absolute(locale: Locale, path = "/"): string {
+  return new URL(localeHref(locale, path), SITE_URL).href;
+}
+
+function createHomeStructuredData(locale: Locale): JsonLdNode {
   return {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    "@id": `${SITE_URL}/#collection`,
-    url: `${SITE_URL}/`,
-    name: HOME_TITLE,
-    description: HOME_DESCRIPTION,
+    "@id": `${absolute(locale)}#collection`,
+    url: absolute(locale),
+    name: homeTitle(locale),
+    description: ui[locale].siteDescription,
+    inLanguage: locale,
     isPartOf: { "@id": `${SITE_URL}/#website` },
     mainEntity: {
       "@type": "ItemList",
@@ -79,21 +71,22 @@ function createHomeStructuredData(): JsonLdNode {
       itemListElement: skillsData.map((skill, index) => ({
         "@type": "ListItem",
         position: index + 1,
-        url: `${SITE_URL}/skills/${skill.slug}`,
+        url: absolute(locale, `/skills/${skill.slug}`),
         name: skill.slug,
-        description: skill.description,
+        description: skill.displayDescription[locale],
       })),
     },
   };
 }
 
-function createFaqStructuredData(): JsonLdNode {
+function createFaqStructuredData(locale: Locale): JsonLdNode {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "@id": `${SITE_URL}/#faq`,
+    "@id": `${absolute(locale)}#faq`,
+    inLanguage: locale,
     isPartOf: { "@id": `${SITE_URL}/#website` },
-    mainEntity: faqItems.map((item) => ({
+    mainEntity: ui[locale].faq.map((item) => ({
       "@type": "Question",
       name: item.question,
       acceptedAnswer: {
@@ -104,14 +97,16 @@ function createFaqStructuredData(): JsonLdNode {
   };
 }
 
-function createSkillStructuredData(skill: SkillRecord): JsonLdNode {
+function createSkillStructuredData(skill: SkillRecord, locale: Locale): JsonLdNode {
+  const url = absolute(locale, `/skills/${skill.slug}`);
   return {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    "@id": `${SITE_URL}/skills/${skill.slug}#article`,
-    url: `${SITE_URL}/skills/${skill.slug}`,
+    "@id": `${url}#article`,
+    url,
     headline: `${skill.slug} skill`,
-    description: skill.description,
+    description: skill.displayDescription[locale],
+    inLanguage: locale,
     datePublished: skill.firstAdded,
     dateModified: skill.lastModified,
     author: { "@id": `${SITE_URL}/#publisher` },
@@ -123,7 +118,10 @@ function createSkillStructuredData(skill: SkillRecord): JsonLdNode {
   };
 }
 
-function createSkillBreadcrumbStructuredData(skill: SkillRecord): JsonLdNode {
+function createSkillBreadcrumbStructuredData(
+  skill: SkillRecord,
+  locale: Locale,
+): JsonLdNode {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -132,19 +130,19 @@ function createSkillBreadcrumbStructuredData(skill: SkillRecord): JsonLdNode {
         "@type": "ListItem",
         position: 1,
         name: "Skills",
-        item: `${SITE_URL}/`,
+        item: absolute(locale),
       },
       {
         "@type": "ListItem",
         position: 2,
         name: skill.slug,
-        item: `${SITE_URL}/skills/${skill.slug}`,
+        item: absolute(locale, `/skills/${skill.slug}`),
       },
     ],
   };
 }
 
-function siteEntity(): JsonLdNode {
+function siteEntity(locale: Locale): JsonLdNode {
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -159,6 +157,7 @@ function siteEntity(): JsonLdNode {
         "@id": `${SITE_URL}/#website`,
         name: SITE_NAME,
         url: `${SITE_URL}/`,
+        inLanguage: locale,
         publisher: { "@id": `${SITE_URL}/#publisher` },
       },
     ],

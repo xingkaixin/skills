@@ -1,25 +1,37 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { SITE_NAME, SITE_URL } from "@/data/catalog";
+import { SITE_NAME } from "@/data/catalog";
+import { DEFAULT_LOCALE, LOCALES, localeHref, localeTags } from "@/i18n/config";
+import { ui } from "@/i18n/ui";
 
-const title = `404 - ${SITE_NAME}`;
-const description = "Page not found.";
+// A static host serves one 404 for every locale, so it offers a way back in
+// each language rather than guessing which one the reader wanted.
+const strings = ui[DEFAULT_LOCALE];
 ---
 
 <BaseLayout
-  title={title}
-  description={description}
-  canonicalUrl={`${SITE_URL}/404`}
+  locale={DEFAULT_LOCALE}
+  path="/404"
+  title={`404 - ${SITE_NAME}`}
+  description={strings.notFound.heading}
   noindex
-  lang="en"
 >
-  <main id="main-content" class="min-h-screen flex items-center justify-center">
+  <main id="main-content" class="min-h-screen flex items-center justify-center px-6">
     <div class="text-center">
       <h1 class="text-2xl font-semibold">404</h1>
-      <p class="mt-2 text-text-secondary">Page not found</p>
-      <a href="/" class="mt-4 inline-block text-sm text-text-secondary hover:text-text underline">
-        Back to catalog
-      </a>
+      <p class="mt-2 text-text-secondary">{strings.notFound.heading}</p>
+      <div class="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+        {LOCALES.map((locale) => (
+          <a
+            href={localeHref(locale)}
+            hreflang={localeTags[locale]}
+            lang={localeTags[locale]}
+            class="text-sm text-text-secondary underline hover:text-text"
+          >
+            {ui[locale].notFound.back}
+          </a>
+        ))}
+      </div>
     </div>
   </main>
 </BaseLayout>

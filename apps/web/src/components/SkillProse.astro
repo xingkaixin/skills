@@ -1,37 +1,55 @@
 ---
+import type { Locale } from "@/i18n/config";
+import { ui } from "@/i18n/ui";
+
 interface Props {
   html: string;
+  locale: Locale;
 }
 
-const { html } = Astro.props;
+const { html, locale } = Astro.props;
+const strings = ui[locale].copy;
 ---
 
-<article class="skill-prose" set:html={html} />
+<article
+  class="skill-prose"
+  data-copy-label={strings.action}
+  data-copy-done={strings.done}
+  set:html={html}
+/>
 
 <script>
   // Code blocks arrive as bare <pre><code>. Wrap each one at runtime with a bar
   // carrying its language and a copy button, so the generator stays untouched.
-  for (const pre of document.querySelectorAll<HTMLElement>(".skill-prose pre")) {
-    const code = pre.querySelector("code");
-    if (!code) continue;
+  const prose = document.querySelector<HTMLElement>(".skill-prose");
 
-    const language = code.className.match(/language-([\w-]+)/)?.[1] ?? "code";
-    const block = document.createElement("div");
-    block.className = "code-block";
+  if (prose) {
+    const copyLabel = prose.dataset.copyLabel ?? "Copy";
+    const copyDone = prose.dataset.copyDone ?? "Copied";
 
-    const bar = document.createElement("div");
-    bar.className = "code-block-bar";
-    bar.innerHTML = `<span class="eyebrow text-text-muted">${language}</span>`;
+    for (const pre of prose.querySelectorAll<HTMLElement>("pre")) {
+      const code = pre.querySelector("code");
+      if (!code) continue;
 
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "copy-button pressable";
-    button.textContent = "Copy";
-    button.dataset.copy = code.textContent ?? "";
-    button.dataset.copyLabel = "Copy";
-    bar.append(button);
+      const language = code.className.match(/language-([\w-]+)/)?.[1] ?? "code";
+      const block = document.createElement("div");
+      block.className = "code-block";
 
-    pre.replaceWith(block);
-    block.append(bar, pre);
+      const bar = document.createElement("div");
+      bar.className = "code-block-bar";
+      bar.innerHTML = `<span class="eyebrow text-text-muted">${language}</span>`;
+
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "copy-button pressable";
+      button.textContent = copyLabel;
+      button.dataset.copy = code.textContent ?? "";
+      button.dataset.copyLabel = copyLabel;
+      button.dataset.copyDone = copyDone;
+      bar.append(button);
+
+      pre.replaceWith(block);
+      block.append(bar, pre);
+    }
   }
 </script>

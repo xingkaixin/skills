@@ -35,23 +35,29 @@ Open [http://localhost:4321](http://localhost:4321) in your browser.
 ```
 src/
   components/
-    SiteBrand.astro   # Site brand component
-    SkillFilter.astro # Filterable skill list
+    SiteBrand.astro       # Site brand component
+    SiteHeader.astro      # Header, search, language switcher
+    SkillCatalog.astro    # Filterable, sortable skill list
+    LanguageSwitcher.astro
   layouts/
-    BaseLayout.astro  # Shared HTML shell and SEO tags
+    BaseLayout.astro      # Shared HTML shell, SEO tags, hreflang
   pages/
-    index.astro       # Home page
-    404.astro         # 404 page
-    sitemap.xml.ts    # Sitemap endpoint
-    skills/
-      [slug].astro    # Skill detail pages
+    404.astro             # 404 page, with a way back in every locale
+    sitemap.xml.ts        # Sitemap endpoint
+    [...locale]/
+      index.astro         # Home page
+      skills/
+        [slug].astro      # Skill detail pages
+  i18n/
+    config.ts             # Locales, BCP 47 tags, path helpers
+    ui.ts                 # UI strings and FAQ per locale
   styles/
-    globals.css       # Tailwind and global styles
+    globals.css           # Tailwind and global styles
   data/
-    skills.generated.ts # Generated skill data
-    skill-record.ts   # Skill record types
-    catalog.ts        # Catalog constants
-    seo.ts            # SEO and structured data helpers
+    skills.generated.ts   # Generated skill data
+    skill-record.ts       # Skill record types
+    catalog.ts            # Catalog constants
+    seo.ts                # SEO and structured data helpers
 ```
 
 ## Deploy
@@ -63,7 +69,25 @@ pnpm build
 pnpm deploy:cf
 ```
 
-Astro pre-renders the catalog, every skill detail page, the 404 page, and `sitemap.xml` into `dist/`.
+Astro pre-renders the catalog, every skill detail page, the 404 page, and `sitemap.xml` into `dist/` — the catalog and detail pages once per locale.
+
+## Languages
+
+The site renders in English, Chinese, and Japanese. English owns the bare paths
+(`/skills/foo`); the others are prefixed (`/zh/skills/foo`, `/ja/skills/foo`).
+
+Two kinds of text are translated, and they live in different places:
+
+- **UI strings and the FAQ** — `src/i18n/ui.ts`. English defines the shape, so a
+  key missing from another locale is a type error.
+- **Skill summaries** — `content/skill-descriptions.json` at the repository
+  root, authored via the `/skill-descriptions` command. Skill bodies stay in
+  whatever language they were written in; the detail page says so when that
+  differs from the locale being read.
+
+Adding a locale means extending `LOCALES` in `src/i18n/config.ts`, adding its
+tags and name there, filling in `ui.ts`, and writing that locale into every
+entry of `content/skill-descriptions.json`.
 
 ## Generating Skill Data
 

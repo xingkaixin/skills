@@ -1,0 +1,80 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import CopyCommand from "@/components/CopyCommand.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
+import SkillCatalog from "@/components/SkillCatalog.astro";
+import { skillCategories, skillsData } from "@/data/skills.generated";
+import { getHomeSeo } from "@/data/seo";
+import { DEFAULT_LOCALE, LOCALES, type Locale } from "@/i18n/config";
+import { ui } from "@/i18n/ui";
+
+export function getStaticPaths() {
+  return LOCALES.map((locale) => ({
+    // The default locale owns the bare "/" path, so its segment stays empty.
+    params: { locale: locale === DEFAULT_LOCALE ? undefined : locale },
+    props: { locale },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+const seo = getHomeSeo(locale);
+const strings = ui[locale];
+---
+
+<BaseLayout
+  locale={locale}
+  path="/"
+  title={seo.title}
+  description={seo.description}
+  ogType={seo.ogType}
+  structuredData={seo.structuredData}
+>
+  <SiteHeader variant="home" locale={locale} path="/" />
+
+  <main id="main-content">
+    <section class="border-b border-divider px-6 pt-14 pb-10 sm:px-10">
+      <div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.15fr_1fr] lg:items-end">
+        <div>
+          <p class="eyebrow text-accent">{strings.home.eyebrow}</p>
+          <h1
+            class:list={[
+              "mt-3.5 text-[2.25rem] leading-[1.12] font-semibold tracking-[-0.02em] text-balance sm:text-[2.75rem]",
+              // A `ch` is the width of "0", so a full-width character spends
+              // two of them; the Japanese heading needs the wider measure to
+              // break across the same number of lines.
+              locale === "ja" ? "max-w-[24ch]" : "max-w-[15ch]",
+            ]}
+          >
+            {strings.home.heading}
+          </h1>
+          <p class="mt-4.5 max-w-[46ch] text-[15px] leading-7 text-text-secondary">
+            {strings.home.intro(skillsData.length)}
+          </p>
+        </div>
+        <div class="flex flex-col gap-3">
+          <p class="text-xs text-text-secondary">{strings.home.installAll}</p>
+          <CopyCommand command="npx skills add xingkaixin/skills" locale={locale} />
+          <p class="font-mono text-xs text-text-muted">
+            {strings.home.installOne} <span class="text-text-secondary">--skill &lt;slug&gt;</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <SkillCatalog skills={skillsData} categories={skillCategories} locale={locale} />
+
+    <section id="faq" aria-labelledby="faq-heading" class="px-6 pt-16 pb-20 sm:px-10">
+      <div class="mx-auto max-w-6xl border-t border-divider pt-12">
+        <h2 id="faq-heading" class="text-lg font-semibold text-text">{strings.home.faqHeading}</h2>
+        <dl class="mt-6 grid gap-6 sm:grid-cols-2">
+          {strings.faq.map((item) => (
+            <div>
+              <dt class="text-sm font-medium text-text">{item.question}</dt>
+              <dd class="mt-1.5 text-sm leading-7 text-text-secondary">{item.answer}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

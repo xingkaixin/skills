@@ -9,42 +9,61 @@ import { skillContent } from "@/data/skills.content.generated";
 import { skillsData } from "@/data/skills.generated";
 import { extractToc } from "@/data/skill-toc";
 import { formatRepoLabel, type SkillRecord } from "@/data/skill-record";
+import { DEFAULT_LOCALE, LOCALES, localeHref, localeTags, type Locale } from "@/i18n/config";
+import { ui } from "@/i18n/ui";
 
 export function getStaticPaths() {
-  return skillsData.map((skill) => ({
-    params: { slug: skill.slug },
-    props: { skill },
-  }));
+  return LOCALES.flatMap((locale) =>
+    skillsData.map((skill) => ({
+      params: {
+        locale: locale === DEFAULT_LOCALE ? undefined : locale,
+        slug: skill.slug,
+      },
+      props: { skill, locale },
+    })),
+  );
 }
 
-const { skill } = Astro.props as { skill: SkillRecord };
-const seo = getSkillSeo(skill);
+const { skill, locale } = Astro.props as { skill: SkillRecord; locale: Locale };
+const strings = ui[locale];
+const seo = getSkillSeo(skill, locale);
+const path = `/skills/${skill.slug}`;
 const body = skillContent[skill.slug];
 const toc = extractToc(body);
-const categoryHref = `/?category=${encodeURIComponent(skill.category)}`;
+const categoryHref = localeHref(locale, `/?category=${encodeURIComponent(skill.category)}`);
 const related = skillsData
   .filter((item) => item.category === skill.category && item.slug !== skill.slug)
   .slice(0, 3);
 const meta = [
-  { label: "Added", value: skill.firstAdded },
-  { label: "Updated", value: skill.lastModified },
-  { label: "Source", value: skill.sourceKind },
+  { label: strings.skill.added, value: skill.firstAdded },
+  { label: strings.skill.updated, value: skill.lastModified },
+  { label: strings.skill.source, value: skill.sourceKind },
 ];
+// The body stays in whatever language it was written in; say so when that is
+// not the language the reader picked.
+const bodyLanguageNote =
+  localeTags[locale] === skill.contentLanguage
+    ? null
+    : skill.contentLanguage === "zh-CN"
+      ? strings.skill.writtenInChinese
+      : strings.skill.writtenInEnglish;
 ---
 
 <BaseLayout
+  locale={locale}
+  path={path}
   title={seo.title}
   description={seo.description}
-  canonicalUrl={seo.canonicalUrl}
   ogType={seo.ogType}
   structuredData={seo.structuredData}
-  lang={skill.language}
 >
-  <SiteHeader variant="detail" />
+  <SiteHeader variant="detail" locale={locale} path={path} />
 
   <div class="border-b border-divider px-6 py-2.5 sm:px-10">
     <nav aria-label="Breadcrumb" class="mx-auto max-w-6xl font-mono text-[11.5px] text-text-muted">
-      <a href="/" class="transition hover:text-text">skills</a>
+      <a href={localeHref(locale)} class="transition hover:text-text">
+        {strings.skill.breadcrumbRoot}
+      </a>
       <span class="mx-1.5">/</span>
       <a href={categoryHref} class="transition hover:text-text">{skill.category}</a>
       <span class="mx-1.5">/</span>
@@ -60,11 +79,12 @@ const meta = [
           {skill.slug}
         </h1>
         <p class="mt-4.5 max-w-[64ch] text-[15px] leading-7 text-text-secondary text-pretty">
-          {skill.description}
+          {skill.displayDescription[locale]}
         </p>
 
         <CopyCommand
           command={`npx skills add xingkaixin/skills --skill ${skill.slug}`}
+          locale={locale}
           tone="solid"
           class="mt-6.5 max-w-[42.5rem]"
         />
@@ -77,7 +97,7 @@ const meta = [
             </div>
           ))}
           <div>
-            <dt class="eyebrow text-[9.5px] text-text-muted">Repo</dt>
+            <dt class="eyebrow text-[9.5px] text-text-muted">{strings.skill.repository}</dt>
             <dd class="mt-1.5">
               <a href={skill.sourceRepo} class="font-mono text-[13px] text-accent hover:underline">
                 {formatRepoLabel(skill.sourceRepo)}
@@ -88,26 +108,33 @@ const meta = [
 
         {body && (
           <div class="mt-11 border-t border-divider pt-9">
-            <SkillProse html={body} />
+            {bodyLanguageNote && (
+              <p class="mb-7 text-[12.5px] text-text-muted">{bodyLanguageNote}</p>
+            )}
+            <div lang={skill.contentLanguage}>
+              <SkillProse html={body} locale={locale} />
+            </div>
           </div>
         )}
       </div>
 
       <aside class="flex flex-col gap-5.5 lg:sticky lg:top-6">
-        <SkillToc entries={toc} />
+        <SkillToc entries={toc} locale={locale} />
 
         {related.length > 0 && (
           <div class="border-t border-divider pt-5">
-            <p class="eyebrow mb-3 tracking-[0.18em] text-text-muted">More in {skill.category}</p>
+            <p class="eyebrow mb-3 tracking-[0.18em] text-text-muted">
+              {strings.skill.moreIn(skill.category)}
+            </p>
             <div class="flex flex-col gap-2">
               {related.map((item) => (
                 <a
-                  href={`/skills/${item.slug}`}
+                  href={localeHref(locale, `/skills/${item.slug}`)}
                   class="flex flex-col gap-1.5 rounded-lg border border-border p-3 transition hover:border-text hover:bg-surface"
                 >
                   <span class="font-mono text-[11.5px] break-words text-text">{item.slug}</span>
                   <span class="line-clamp-2 text-[11.5px] leading-5 text-text-muted">
-                    {item.description}
+                    {item.displayDescription[locale]}
                   </span>
                 </a>
               ))}

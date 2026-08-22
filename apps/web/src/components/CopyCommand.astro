@@ -1,12 +1,16 @@
 ---
+import type { Locale } from "@/i18n/config";
+import { ui } from "@/i18n/ui";
+
 interface Props {
   command: string;
+  locale: Locale;
   tone?: "outline" | "solid";
-  label?: string;
   class?: string;
 }
 
-const { command, tone = "outline", label = "Copy", class: className = "" } = Astro.props;
+const { command, locale, tone = "outline", class: className = "" } = Astro.props;
+const strings = ui[locale].copy;
 ---
 
 <div class:list={["command-box", className]}>
@@ -16,24 +20,25 @@ const { command, tone = "outline", label = "Copy", class: className = "" } = Ast
     class="copy-button pressable"
     data-tone={tone}
     data-copy={command}
-    data-copy-label={label}
+    data-copy-label={strings.action}
+    data-copy-done={strings.done}
   >
-    {label}
+    {strings.action}
   </button>
 </div>
 
 <script>
   const RESET_DELAY = 1400;
 
+  // Delegated so it also covers the copy buttons SkillProse builds at runtime.
   document.addEventListener("click", (event) => {
     const button = (event.target as Element | null)?.closest<HTMLElement>("[data-copy]");
     if (!button) return;
 
-    const text = button.getAttribute("data-copy") ?? "";
-    void navigator.clipboard?.writeText(text);
-    button.textContent = "Copied";
+    void navigator.clipboard?.writeText(button.getAttribute("data-copy") ?? "");
+    button.textContent = button.getAttribute("data-copy-done");
     window.setTimeout(() => {
-      button.textContent = button.getAttribute("data-copy-label") ?? "Copy";
+      button.textContent = button.getAttribute("data-copy-label");
     }, RESET_DELAY);
   });
 </script>

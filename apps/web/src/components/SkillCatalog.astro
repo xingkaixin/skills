@@ -1,13 +1,17 @@
 ---
 import SearchIcon from "@/components/SearchIcon.astro";
 import type { SkillRecord } from "@/data/skill-record";
+import { localeHref, type Locale } from "@/i18n/config";
+import { ui } from "@/i18n/ui";
 
 interface Props {
   skills: SkillRecord[];
   categories: string[];
+  locale: Locale;
 }
 
-const { skills, categories } = Astro.props;
+const { skills, categories, locale } = Astro.props;
+const strings = ui[locale].catalog;
 
 // Server render matches the default "recent" sort so the no-JS view is already ordered.
 const ordered = [...skills].sort(
@@ -20,28 +24,32 @@ const counts = new Map(
   ]),
 );
 const sortOptions = [
-  { key: "recent", label: "Recent" },
-  { key: "az", label: "A–Z" },
+  { key: "recent", label: strings.sortRecent },
+  { key: "az", label: strings.sortAlphabetical },
 ];
 ---
 
-<div data-catalog>
+<div
+  data-catalog
+  data-count-one={strings.count(1)}
+  data-count-many={strings.count(2)}
+>
   <div class="border-b border-divider px-6 sm:px-10">
     <div class="mx-auto flex max-w-6xl flex-col gap-3 py-3 sm:flex-row sm:items-center sm:gap-4">
       <form
-        action="/"
+        action={localeHref(locale)}
         method="get"
         role="search"
         class="flex flex-1 items-center gap-2.5 rounded-lg border border-border px-3.5 py-2.5 transition focus-within:border-text"
         data-catalog-search
       >
         <SearchIcon />
-        <label class="sr-only" for="catalog-search">Search skills</label>
+        <label class="sr-only" for="catalog-search">{ui[locale].header.searchSkills}</label>
         <input
           id="catalog-search"
           type="search"
           name="q"
-          placeholder="Search skills, e.g. release, iOS, commit"
+          placeholder={strings.searchPlaceholder}
           data-search-focus
           class="w-full min-w-0 bg-transparent text-[13px] text-text outline-none placeholder:text-text-muted"
         />
@@ -50,7 +58,7 @@ const sortOptions = [
       <div
         class="flex shrink-0 items-center gap-1 rounded-lg border border-border p-[3px]"
         role="group"
-        aria-label="Sort skills"
+        aria-label={strings.sortLabel}
       >
         {sortOptions.map((option, index) => (
           <button
@@ -70,10 +78,10 @@ const sortOptions = [
     <div
       class="mx-auto flex max-w-6xl flex-wrap items-center gap-2 py-3"
       role="group"
-      aria-label="Filter by category"
+      aria-label={strings.filterLabel}
     >
       <button type="button" class="chip pressable" data-category="all" aria-pressed="true">
-        All<span class="chip-count">{skills.length}</span>
+        {strings.all}<span class="chip-count">{skills.length}</span>
       </button>
       {categories.map((category) => (
         <button type="button" class="chip pressable" data-category={category} aria-pressed="false">
@@ -86,7 +94,7 @@ const sortOptions = [
         aria-live="polite"
         aria-atomic="true"
       >
-        {skills.length} skills
+        {strings.count(skills.length)}
       </span>
     </div>
   </div>
@@ -95,22 +103,22 @@ const sortOptions = [
     <div class="mx-auto grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-3" data-catalog-grid>
     {ordered.map((skill) => (
       <a
-        href={`/skills/${skill.slug}`}
+        href={localeHref(locale, `/skills/${skill.slug}`)}
         class="skill-card"
         data-skill
         data-category={skill.category}
         data-slug={skill.slug}
         data-modified={skill.lastModified}
-        data-haystack={`${skill.slug} ${skill.description}`.toLowerCase()}
+        data-haystack={`${skill.slug} ${skill.displayDescription[locale]}`.toLowerCase()}
       >
         <span class="flex items-center justify-between gap-2">
           <span class="eyebrow text-accent">{skill.category}</span>
           <span class="font-mono text-[10px] text-text-muted">{skill.sourceKind}</span>
         </span>
         <h3 class="font-mono text-sm font-medium break-words text-text">{skill.slug}</h3>
-        <p class="line-clamp-3 text-[13px] leading-6 text-text-secondary">{skill.description}</p>
+        <p class="line-clamp-3 text-[13px] leading-6 text-text-secondary">{skill.displayDescription[locale]}</p>
         <span class="mt-auto flex items-center justify-between pt-1.5 font-mono text-[10.5px] text-text-muted">
-          <span>updated {skill.lastModified}</span>
+          <span>{strings.updated(skill.lastModified)}</span>
           <span aria-hidden="true">→</span>
         </span>
       </a>
@@ -119,7 +127,7 @@ const sortOptions = [
   </div>
 
   <p class="px-6 pt-10 text-center text-sm text-text-secondary sm:px-10" data-catalog-empty hidden>
-    No skill matches this filter.
+    {strings.empty}
   </p>
 </div>
 
@@ -176,7 +184,11 @@ const sortOptions = [
 
       setPressed(chips, "category", state.category);
       setPressed(sorts, "sort", state.sort);
-      countLabel.textContent = `${visible} ${visible === 1 ? "skill" : "skills"}`;
+      // Two rendered samples stand in for the count function, which cannot
+      // cross into the client bundle: swap the digit in whichever fits.
+      const countTemplate =
+        visible === 1 ? root!.dataset.countOne! : root!.dataset.countMany!;
+      countLabel.textContent = countTemplate.replace(/\d+/, String(visible));
       empty.toggleAttribute("hidden", visible > 0);
 
       if (!syncUrl) return;
