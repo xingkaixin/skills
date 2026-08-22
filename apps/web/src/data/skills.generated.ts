@@ -6,342 +6,497 @@ export const skillsData: SkillRecord[] = [
     "slug": "agent-friendly-cli-design",
     "name": "agent-friendly-cli-design",
     "description": "Use when designing, reviewing, or refactoring a command-line interface that AI agents will invoke — covers non-interactive execution, resource/command layering, unified verbs, output trimming for token budgets, idempotency, and self-correcting error messages. Trigger this when building a new CLI, wrapping an API as a CLI, or auditing an existing CLI for agent usability.",
+    "displayDescription": {
+      "en": "Design a CLI that AI agents can actually drive: resource and verb layering, non-interactive defaults, token-lean output, and errors that teach the agent how to retry.",
+      "zh": "把命令行设计成 agent 用得顺手的样子：资源与动词分层、非交互默认、精简输出省 token、错误消息能自我纠偏。",
+      "ja": "AI エージェントが扱える CLI を設計する。リソースと動詞の階層化、非対話デフォルト、トークンを節約する出力、リトライを導くエラーメッセージ。"
+    },
     "category": "backend",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "ai-avoid",
     "name": "ai-avoid",
     "description": "适用于编辑或审阅文本，使其听起来更自然、更像人类书写。",
+    "displayDescription": {
+      "en": "Strip the tells that mark text as machine-written — magic adverbs, worn-out grand nouns, and the sentence rhythms that give AI prose away.",
+      "zh": "去掉文字里的 AI 味：那些故作深沉的副词、被用滥的大词，以及一眼就能认出的句式节奏。",
+      "ja": "AI が書いた文章に出る癖を取り除く。もったいぶった副詞、使い古された大げさな語彙、すぐそれと分かる文のリズム。"
+    },
     "category": "writing",
     "sourceRepo": "https://github.com/ninehills/skills",
     "sourceKind": "upstream",
     "firstAdded": "2026-03-12",
     "lastModified": "2026-03-12",
-    "language": "en"
+    "contentLanguage": "en"
   },
   {
     "slug": "article-illustrator",
     "name": "article-illustrator",
     "description": "Analyzes article structure, identifies positions requiring visual aids, generates illustration prompts with Type × Style two-dimension approach. Outputs prompt files only — no image generation. Use when user asks to \"illustrate article\", \"add images\", \"generate images for article\", or \"为文章配图\".",
+    "displayDescription": {
+      "en": "Read an article, find the spots that need a visual, and write ready-to-use image prompts along two axes: information type and visual style.",
+      "zh": "读一篇文章，找出真正需要配图的位置，按「信息类型 × 视觉风格」两个维度产出可直接使用的绘图提示词。",
+      "ja": "記事を読んで図解が要る箇所を見つけ、情報タイプとビジュアルスタイルの二軸で、そのまま使える画像プロンプトを書き出す。"
+    },
     "category": "writing",
     "sourceRepo": "https://github.com/jimliu/baoyu-skills",
     "sourceKind": "adapted",
     "firstAdded": "2026-03-28",
     "lastModified": "2026-03-28",
-    "language": "en"
+    "contentLanguage": "en"
   },
   {
     "slug": "bilingual-release-changelog",
     "name": "bilingual-release-changelog",
     "description": "Use when generating a changelog, bumping a version, or publishing a release for a project that maintains Chinese + English changelogs (CHANGELOG.md / CHANGELOG_zh.md / docs/zh + docs/en). Covers commit-range analysis, user-facing wording rules, single-source versioning per language stack (Python hatchling, Go ldflags, npm multi-platform, frontend package.json), tag/CI publishing, and recovery from partially failed releases.",
+    "displayDescription": {
+      "en": "Ship a release with Chinese and English changelogs in sync — commit-range analysis, user-facing wording, version bumps per stack, and recovery when a release half-fails.",
+      "zh": "以中文为源、英文为译，同步维护双语 changelog，并走完版本号更新、打 tag 发布，以及发布中途失败后的补救。",
+      "ja": "中国語を原文、英語を訳文として changelog を同期させ、バージョン更新からタグ公開、失敗したリリースの復旧までを通す。"
+    },
     "category": "ci",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "cloudflare-deploy-migration",
     "name": "cloudflare-deploy-migration",
     "description": "Use when deploying a site to Cloudflare or migrating one off Vercel — static sites to Pages, Next.js via vinext to Workers, full-stack apps to Workers with D1/KV/Durable Objects. Covers wrangler config split (dev/deploy/e2e), secret management, CI with artifact handoff and HOME-isolated wrangler E2E, analytics replacement, and a root-cause pitfall table (charset mojibake, assets-only worker 404, D1 migration naming, bundle guards).",
+    "displayDescription": {
+      "en": "Move a site onto Cloudflare — static to Pages, Next.js via vinext, full-stack to Workers with D1 and KV — with the wrangler config splits and pitfalls mapped out.",
+      "zh": "把站点搬上 Cloudflare：纯静态走 Pages，Next.js 走 vinext，带后端走 Workers 加 D1/KV，附 wrangler 配置拆分与踩坑根因表。",
+      "ja": "サイトを Cloudflare へ移す。静的サイトは Pages、Next.js は vinext、バックエンド込みは Workers と D1/KV。wrangler 設定の分割と落とし穴つき。"
+    },
     "category": "deploy",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "code-review-checklist",
     "name": "code-review-checklist",
     "description": "Use when reviewing a pull request, diff, or code change, or when giving feedback on someone else's code. Provides a layered review pass (design → call-sites → naming → run-it → verify) plus rules for what to skip, how to phrase feedback with Socratic questions, and when to say no.",
+    "displayDescription": {
+      "en": "Review a diff in layers — design first, then call sites, then naming, then actually run it — and know what to skip and how to phrase the hard feedback.",
+      "zh": "分层做 code review：先看设计，再看调用点，然后是命名，最后真的跑一遍。附带哪些该略过、难开口的意见怎么说。",
+      "ja": "差分を層ごとにレビューする。まず設計、次に呼び出し箇所、命名、そして実際に動かす。省くべき指摘と、言いにくい指摘の伝え方も。"
+    },
     "category": "workflow",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "codebase-review-loop",
     "name": "codebase-review-loop",
     "description": "Use when auditing a codebase and tracking improvement findings over time — writing numbered improvement-proposal documents with prioritized, evidence-backed findings, verifying findings read-only against current code before fixing (\"ground truth first\"), fixing one finding at a time with a verification gate, writing status back into the document, and raising test coverage with parallel per-module subagents.",
+    "displayDescription": {
+      "en": "Audit a codebase through numbered improvement proposals: evidence-backed findings, a read-only recheck before fixing, one fix at a time, status written back.",
+      "zh": "用编号提案文档承载代码库审查：写带证据的 findings，动手前只读核对是否仍成立，一次只修一条，改完回写状态。",
+      "ja": "番号付きの改善提案書でコードベース監査を回す。根拠付きの指摘、着手前の再確認、一件ずつの修正、状態の書き戻し。"
+    },
     "category": "workflow",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "coding-agent-session-formats",
     "name": "coding-agent-session-formats",
     "description": "Use when parsing, exporting, visualizing, or computing token/cost stats from local coding-agent session files (Codex rollout jsonl, Claude Code project jsonl, Kimi context/wire jsonl, OpenCode/zcode SQLite, Pi tree jsonl). Covers storage paths per agent, message schemas, assistant message ordering/dedup rules, a unified export schema, cache-aware cost calculation, and streaming-parse performance rules for 100-400MB files.",
+    "displayDescription": {
+      "en": "Parse local session files from Codex, Claude Code, Kimi, OpenCode, and Pi — storage paths, message schemas, a unified export shape, and cache-aware cost math.",
+      "zh": "解析各家 coding agent 的本地会话文件（Codex、Claude Code、Kimi、OpenCode、Pi）：存储路径、消息结构、统一导出格式与含缓存的成本计算。",
+      "ja": "各種 coding agent のローカルセッションを解析する。Codex や Claude Code などの保存先、メッセージ構造、統一エクスポート形式、キャッシュ込みのコスト計算。"
+    },
     "category": "backend",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "en"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "cover-image",
     "name": "cover-image",
     "description": "Generates cover image prompts for articles with 5 dimensions (type, palette, rendering, text, mood) combining 10 color palettes and 7 rendering styles. Outputs a structured prompt file for downstream image generation. Use when user asks to \"generate cover image prompt\" or \"create cover prompt\".",
+    "displayDescription": {
+      "en": "Turn an article into a cover-image prompt, tuned across five dimensions: type, palette, rendering style, text weight, and mood.",
+      "zh": "把一篇文章转成封面图提示词，可在类型、配色、渲染风格、文字比重、情绪五个维度上调。",
+      "ja": "記事から表紙画像のプロンプトを作る。タイプ、配色、描画スタイル、文字量、ムードの五つの軸で調整できる。"
+    },
     "category": "writing",
     "sourceRepo": "https://github.com/jimliu/baoyu-skills",
     "sourceKind": "adapted",
     "firstAdded": "2026-03-28",
     "lastModified": "2026-03-28",
-    "language": "en"
+    "contentLanguage": "en"
   },
   {
     "slug": "decision-complete-plan",
     "name": "decision-complete-plan",
     "description": "Use when writing an implementation plan that another session or agent will execute verbatim, or when executing such a plan. Enforces \"decision complete\" handoff: explore code before asking questions, split unknowns into discoverable facts vs user preferences, an eight-section plan template (conclusion-first summary, root cause with file:line evidence, confirmed decisions, minimal-change steps, interface changes, tests, explicit assumptions), and an execute-side verify-before-edit protocol.",
+    "displayDescription": {
+      "en": "Write an implementation plan another agent can execute without asking anything: explore before you ask, separate facts from preferences, state every assumption.",
+      "zh": "写出别人拿来就能直接执行、不必再做决策的实施计划：先查代码再提问，区分可查证的事实与用户偏好，把假设全部写明。",
+      "ja": "他のエージェントが判断を挟まず実行できる実装計画を書く。聞く前に調べ、確認できる事実と好みの問題を分け、前提をすべて明示する。"
+    },
     "category": "workflow",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "design-system-as-input-ui",
     "name": "design-system-as-input-ui",
     "description": "Use when generating multi-screen UI with an AI coding agent (Claude Code, Cursor) and the screens come out visually inconsistent — different blues, radii, spacing per screen. Provides a workflow that turns a design system into a reusable *input contract* so every screen references one source of truth instead of guessing pixel-by-pixel. Trigger when building more than one screen, a dashboard, or any product where visual coherence across screens matters.",
+    "displayDescription": {
+      "en": "Stop AI-generated screens from each inventing their own blue. Feed the agent a design system as a token contract instead of describing pixels every time.",
+      "zh": "让 AI 生成的每一屏不再各自发明一种蓝。把设计系统作为 token 契约喂给它，而不是每次重新描述像素。",
+      "ja": "AI が画面ごとに違う青を発明するのを止める。毎回ピクセルを説明する代わりに、デザインシステムをトークン契約として渡す。"
+    },
     "category": "design",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "electron-desktop-release",
     "name": "electron-desktop-release",
     "description": "Use when packaging, signing, notarizing, or securing an Electron desktop app — electron-vite + electron-builder monorepo setup, macOS Developer ID signing and notarization pitfalls (identity naming, timestamp slowness, Team API keys), CI/local build split, and secret storage architecture (safeStorage/Keychain, main-process-only secrets, SQLite is not a secret store).",
+    "displayDescription": {
+      "en": "Package, sign, and notarize an Electron app for distribution outside the store, and keep its secrets somewhere that is actually a secret store.",
+      "zh": "把 Electron 应用打包、签名、公证，做站外分发，并把密钥放进真正的密钥存储里——不是 SQLite。",
+      "ja": "Electron アプリをパッケージ化し、署名と公証を経てストア外配布する。秘密情報は SQLite ではなく然るべき保管先へ。"
+    },
     "category": "desktop",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "en-zh-literary-translation",
     "name": "en-zh-literary-translation",
     "description": "Use when translating English prose into Chinese and the goal is natural, readable Chinese rather than literal word-for-word output. Applies the 信/达/雅 (faithful/fluent/elegant) framework with concrete transformation rules for sentence restructuring, register, and de-translationese. Do not use for code, terse UI strings, or technical reference tables where literal precision matters more than flow.",
+    "displayDescription": {
+      "en": "Translate English prose into Chinese that reads as if it were written in Chinese, using the faithful/fluent/elegant framework and concrete rules for killing translationese.",
+      "zh": "把英文译成读起来像中文原生写作的中文：以信达雅为判准，配一套消除翻译腔的具体改写规则。",
+      "ja": "英文を、もともと中国語で書かれたように読める中国語に訳す。信・達・雅を基準に、翻訳調を消す具体的な書き換え規則を添えて。"
+    },
     "category": "writing",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "error-message-writing",
     "name": "error-message-writing",
     "description": "Use when writing, reviewing, or suggesting an error message, toast, failure state, or empty/exception copy in any product, UI, or code. Applies the four anti-patterns to avoid and five principles to follow, distinguishes generic vs. unclear failures, and scores each message against a nine-point checklist.",
+    "displayDescription": {
+      "en": "Write error messages that answer what happened, why, and how to fix it — with four anti-patterns to avoid and a nine-point check for each message.",
+      "zh": "写出能回答「发生了什么、为什么、怎么办」的错误消息：四个要避开的反模式，加一份九点自查清单。",
+      "ja": "何が起きたか、なぜか、どう直すかに答えるエラーメッセージを書く。避けるべき四つのアンチパターンと九項目のチェックつき。"
+    },
     "category": "design",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "frontend-large-data-performance",
     "name": "frontend-large-data-performance",
     "description": "Use when a frontend must handle large files or streaming data — 50-300MB JSONL parsing, huge document rendering, LLM streaming UIs. Covers benchmark-driven optimization (append-only worker buffers, incremental aggregation, virtual-list/observer conflicts), a first-principles WASM adoption test, streaming UI protocols (init/append chart deltas, stable component references, single in-progress view), and known runtime pitfalls (Bun idleTimeout).",
+    "displayDescription": {
+      "en": "Make a frontend survive 50-300MB files and streaming data, with benchmark-driven fixes for quadratic batching, full re-derivation, and virtual-list conflicts.",
+      "zh": "让前端扛住 50–300MB 大文件与流式数据：以 benchmark 驱动，解掉 O(n²) 批次合并、全量重派生、虚拟列表冲突这几类根因。",
+      "ja": "50〜300MB のファイルやストリーミングデータに耐えるフロントエンドにする。ベンチマーク駆動で二乗のバッチ結合や全再計算を潰す。"
+    },
     "category": "frontend",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "git-commit-message",
     "name": "git-commit-message",
     "description": "Use when writing or reviewing a git commit message, drafting commit text before running git commit, or splitting work into commits. Enforces the seven-rule convention (subject/body separation, 50-char imperative subject, 72-char body wrap, explain what/why not how) with concrete good/bad examples.",
+    "displayDescription": {
+      "en": "Write commit messages that carry the why a diff cannot: the seven-rule convention, with a good and a bad example for each.",
+      "zh": "写出 diff 表达不了的「为什么」：七条 commit message 规范，每条配正反例。",
+      "ja": "差分では伝わらない「なぜ」を書き残すコミットメッセージ。七つの規則を、良い例と悪い例つきで。"
+    },
     "category": "ci",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "ios-on-device-vision-ml",
     "name": "ios-on-device-vision-ml",
     "description": "Use when building on-device visual recognition on iOS — camera viewfinder capture, Vision foreground segmentation (VNGenerateForegroundInstanceMaskRequest), color/classification pipelines, CoreML/LiteRT model evaluation on Mac, and synthetic (AI-generated) datasets for indie developers without real data. Covers WYSIWYG crop geometry, per-instance mask selection, evaluation-set design, distillation-based training routes, and model/privacy boundaries.",
+    "displayDescription": {
+      "en": "Build on-device visual recognition on iOS: viewfinder crop geometry, Vision foreground segmentation, classification and color, and evaluating models on synthetic data.",
+      "zh": "在 iOS 上做端侧视觉识别：取景框裁切的几何映射、Vision 前景分割、分类与主色，以及用合成数据评估模型。",
+      "ja": "iOS で端末内の画像認識を作る。ファインダーの切り出し幾何、Vision の前景分割、分類と主要色、合成データでのモデル評価。"
+    },
     "category": "ios",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "ios-recording-system-integration",
     "name": "ios-recording-system-integration",
     "description": "Use when building iOS recording features that integrate with Live Activities (Dynamic Island), the Action Button (App Intents), background audio, or realtime ASR over WebSocket. Covers the hard iOS boundaries (first mic activation must be foreground, Action Button assignment is unreadable, Live Activity is not a streaming channel), an intent state machine with audioSessionPrimed fallback, Dynamic Island debugging, and two ASR protocol paradigms (OpenAI-Realtime JSON vs binary frame).",
+    "displayDescription": {
+      "en": "Wire iOS recording into Live Activities, the Action Button, and background audio, starting from the four hard platform limits that shape the whole design.",
+      "zh": "把 iOS 录音接进灵动岛、Action Button 与后台录音：先认清四条决定整个产品设计的系统硬边界。",
+      "ja": "iOS の録音を Live Activity、アクションボタン、バックグラウンド再生につなぐ。設計全体を左右する四つの制約から始める。"
+    },
     "category": "ios",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "ios-widget-appstore-shipping",
     "name": "ios-widget-appstore-shipping",
     "description": "Use when building WidgetKit extensions or shipping an iOS app to the App Store — App Group data sharing (widgets cannot rely on the main app bundle), timeline/config refresh pitfalls, simulator-vs-device icon debugging, Info.plist encryption exemption (ITSAppUsesNonExemptEncryption in every bundle), TestFlight flow, screenshot rules (no fake status bars), review-rejection root-cause analysis (Kids Category, 2.3.10, 5.1.1 BYOK disclosure), and localization via system settings.",
+    "displayDescription": {
+      "en": "Ship a WidgetKit extension and get the app through review: App Group data sharing, refresh pitfalls, encryption declarations, and real rejection post-mortems.",
+      "zh": "做 WidgetKit 扩展并把 App 送过审：App Group 数据共享、刷新的坑、加密豁免声明，以及真实被拒案例的根因。",
+      "ja": "WidgetKit 拡張を作り、審査を通す。App Group によるデータ共有、更新の落とし穴、暗号化の申告、実際のリジェクト事例の分析。"
+    },
     "category": "ios",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "issue-driven-dev-loop",
     "name": "issue-driven-dev-loop",
     "description": "Use when working through a backlog of issues one by one — picking up an issue, refining its design, implementing, opening a PR, updating issue status after merge, and moving to the next. Covers local file-based .issues/ trackers (meta.yaml, status-as-directory), design-confirm-implement loops, branch/commit conventions, draft PRs with CI follow-up, and parallelizing independent issues with subagents.",
+    "displayDescription": {
+      "en": "Work a backlog end to end: pick up an issue, settle the design, implement, open the PR, update status after merge, move to the next.",
+      "zh": "把 backlog 一条条走完：领取 issue、敲定设计、实现、提 PR、合并后更新状态，然后继续下一条。",
+      "ja": "バックログを一件ずつ回す。issue を取り、設計を固め、実装し、PR を出し、マージ後に状態を更新して次へ進む。"
+    },
     "category": "workflow",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "issue-tracker",
     "name": "issue-tracker",
     "description": "Local Markdown issue tracking system for managing feature requests, bugs, and version iterations within project repositories. Use when the user says \"创建 issue\", \"新建需求\", \"建 bug\", \"issue\", \"需求跟踪\", \"版本迭代\", \"milestone\", \"里程碑\", \"看板\", \"issue 状态\", \"关联 PR\", \"更新进度\", \"归档\", \"backlog\", or wants to create, update, query, move, or visualize issues stored in the local .issues/ directory. Also trigger when the user asks to generate an HTML view of an issue, check PR status, move issues between milestones or status lanes, initialize issue tracking for a project, or produce a summary of current iteration progress. Trigger even if the user just says \"开个 issue\" or references an issue ID like \"RD-400\".",
+    "displayDescription": {
+      "en": "Track issues in Markdown inside the repo itself — milestones, status lanes, PR links, and an HTML board — with no Linear or GitHub Issues involved.",
+      "zh": "用仓库内的 Markdown 管理 issue：里程碑、状态泳道、PR 关联、HTML 看板，不依赖 Linear 或 GitHub Issues。",
+      "ja": "リポジトリ内の Markdown で issue を管理する。マイルストーン、ステータス区分、PR 紐付け、HTML ボード。外部サービスは不要。"
+    },
     "category": "workflow",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "en"
+    "contentLanguage": "en"
   },
   {
     "slug": "klip-writing",
     "name": "klip-writing",
     "description": "Write KLIP (Kevin's Lightweight Improvement Proposal) documents for Fin-Agent and related projects. Use when user says \"写klip\", \"klip\", \"KLIP\",\"improvement proposal\", \"设计文档\", \"技术方案\", \"RFC\", \"proposal\",or wants to produce a structured technical design/evaluation/migration document for a software project. Also trigger when user asks to document a technical decision, evaluate a technology migration, design a new feature, or review codebase optimization opportunities.",
+    "displayDescription": {
+      "en": "Write a KLIP: a structured technical design document that carries one decision from background and motivation all the way to acceptance criteria.",
+      "zh": "撰写 KLIP：一种结构化技术设计文档，把一个技术决策从背景动机一路写到验收标准。",
+      "ja": "KLIP を書く。技術的な意思決定を、背景と動機から受け入れ基準まで一貫して記述する構造化された設計文書。"
+    },
     "category": "writing",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-04-02",
     "lastModified": "2026-04-21",
-    "language": "en"
+    "contentLanguage": "en"
   },
   {
     "slug": "monorepo-architecture-principles",
     "name": "monorepo-architecture-principles",
     "description": "Use when organizing a monorepo, splitting a single repo into packages, evaluating an architecture migration, or reviewing structural decisions. Covers the layered apps/packages paradigm (single contract layer, one-way dependency DAG, bottom-up extraction order), ten recurring architecture principles (single data source with no fallback forks, execution-location correctness, cost-vs-pain gating for rewrites), named anti-patterns, and native-module/packaging pitfalls.",
+    "displayDescription": {
+      "en": "Organize a monorepo that stays organized: a one-way dependency graph over apps and packages, ten recurring principles, and the anti-patterns worth naming.",
+      "zh": "把 monorepo 组织成不会失控的样子：apps 与 packages 之上的单向依赖图、十条反复出现的原则，以及值得命名的反模式。",
+      "ja": "崩れない monorepo の組み方。apps と packages にまたがる一方向の依存グラフ、繰り返し現れる十の原則、名前を付けるべきアンチパターン。"
+    },
     "category": "backend",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "react-state-management-decisions",
     "name": "react-state-management-decisions",
     "description": "Use when deciding where React state should live or planning a state-management migration — useState vs useRef vs useMemo vs Context vs Zustand vs React Query. Provides a decision tree, a useRef semantic classification (most refs should NOT migrate), Zustand/React Query responsibility boundaries, progressive migration strategy, and persist-based draft state patterns.",
+    "displayDescription": {
+      "en": "Decide where each piece of React state belongs — useState, useRef, useMemo, Context, Zustand, or React Query — from a decision tree instead of habit.",
+      "zh": "按语义给每份 React 状态找对归属：useState、useRef、useMemo、Context、Zustand 还是 React Query，用决策树而不是惯性。",
+      "ja": "React の状態をどこに置くかを決める。useState、useRef、useMemo、Context、Zustand、React Query を、習慣ではなく決定木で選ぶ。"
+    },
     "category": "frontend",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "save-the-cat-writing",
     "name": "save-the-cat-writing",
     "description": "Save the Cat 方法论改编的 AI 辅助开发类公众号写作自检清单。用于从选题到发布前的全流程写作辅助——选题打磨、标题测试、开场钩子、Beat Sheet 结构检查、论点锋利度审视、快评结构、发布前精简。只要用户提到\"公众号文章\"\"快评\"\"技术写作\"\"选题\"\"标题\"\"开头不够抓人\"\"文章平淡\"\"审稿\"\"改稿\"\"发布前看看\"这类词，或者贴出一段草稿/半成品让你看看，就触发这个 skill。凯哥（Kevin）写 AI 开发类内容时用这套方法，对\"正确但无聊\"\"万金油结尾\"\"泛泛而谈\"零容忍。",
+    "displayDescription": {
+      "en": "A Save the Cat checklist for tech writing: sharpen the topic, test the headline, rescue a flat opening, and cut hard before publishing.",
+      "zh": "改编自 Save the Cat 的技术写作自检清单：打磨选题、测试标题、救活平淡的开场，发布前再砍一刀。",
+      "ja": "Save the Cat を技術記事向けに翻案したチェックリスト。題材を絞り、見出しを試し、退屈な冒頭を直し、公開前に削る。"
+    },
     "category": "writing",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-04-24",
     "lastModified": "2026-04-24",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "stock-report",
     "name": "stock-report",
     "description": "使用本仓库的 ds CLI + Python 生成稳定结构的 A 股数据报告。只要用户想“给一个股票名称/代码生成报告”“批量前先验证单个标的报告流程”“按当前仓库固定模板重跑报告”，就应该使用这个 skill，即使用户没有明确提到 skill 名称。默认依赖本地 `ds` 已安装并登录、`python3` 可用。",
+    "displayDescription": {
+      "en": "Generate a fixed-format HTML report for a single A-share stock through this repository's ds CLI data pipeline.",
+      "zh": "给定一只 A 股标的，走本仓库的 ds CLI 采集链路拉数，生成统一版式的 HTML 报告。",
+      "ja": "A 株の銘柄を一つ指定し、このリポジトリの ds CLI のデータ取得経路を通して、定型の HTML レポートを生成する。"
+    },
     "category": "finance",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-03-11",
     "lastModified": "2026-03-11",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "tauri-menubar-agent-app",
     "name": "tauri-menubar-agent-app",
     "description": "Use when building a macOS menu-bar (tray) app with Tauri v2, especially one that observes external CLI agents via hooks — covers native window layering with objc2 (transparent windows, NSStatusWindowLevel, flipped coordinates), Unix-socket IPC from hook bridge binaries, multi-agent event normalization, and non-intrusive interaction design.",
+    "displayDescription": {
+      "en": "Build a macOS menu-bar app in Tauri v2 that watches external coding agents: native window layering through objc2, Unix-socket hook bridges, event normalization.",
+      "zh": "用 Tauri v2 做 macOS 菜单栏应用，并监听外部 coding agent：经 objc2 处理原生窗口层级，用 Unix socket 桥接 hook，统一多 agent 事件。",
+      "ja": "Tauri v2 で macOS のメニューバーアプリを作り、外部の coding agent を監視する。objc2 によるウィンドウ階層、Unix ソケット連携、イベント正規化。"
+    },
     "category": "desktop",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "tech-stack-scaffolding",
     "name": "tech-stack-scaffolding",
     "description": "Use when bootstrapping a new project or aligning an existing one to house conventions — frontend/fullstack (bun+vite+react+tailwind v4+shadcn+oxlint/oxfmt), browser extensions (WXT/MV3), Python CLI (uv+hatchling+Typer+just), Go CLI (mise+golangci-lint+just). Provides drop-in config templates, script naming conventions per stack, icon/zip pipelines, and the concise AGENTS.md format (readable in one minute).",
+    "displayDescription": {
+      "en": "Bootstrap a new project on house conventions across four stacks — web, browser extension, Python CLI, Go CLI — with drop-in configs and script naming.",
+      "zh": "按既定惯例初始化新项目：Web、浏览器插件、Python CLI、Go CLI 四条技术栈主线，配可直接拷贝的配置与脚本命名。",
+      "ja": "決めごとに沿って新規プロジェクトを立ち上げる。Web、ブラウザ拡張、Python CLI、Go CLI の四系統に、そのまま使える設定とスクリプト命名。"
+    },
     "category": "backend",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "en"
+    "contentLanguage": "en"
   },
   {
     "slug": "triple-mind-deep-reading",
     "name": "triple-mind-deep-reading",
     "description": "Use when analyzing a long-form article, podcast transcript, talk, paper, or a complex decision in depth — and a flat summary is not enough. Runs the source through three deliberate lenses (Challenger, Builder, Practitioner) to surface weaknesses, extensions, and actionable takeaways. Do not use for quick factual lookups, short texts, or when the user only wants a plain summary.",
+    "displayDescription": {
+      "en": "Read a long article or talk through three deliberate lenses — Challenger, Builder, Practitioner — instead of flattening it into a summary.",
+      "zh": "读长文或演讲时不做平铺总结，而是依次戴上挑战者、建设者、实践者三副眼镜，对同一批观点做三重加工。",
+      "ja": "長文や講演を要約で終わらせず、挑戦者・構築者・実践者という三つの視点を順に通して読み解く。"
+    },
     "category": "writing",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   },
   {
     "slug": "use-modern-go",
     "name": "use-modern-go",
     "description": "Apply modern Go syntax guidelines based on project's Go version. Use when user ask for modern Go code guidelines.",
+    "displayDescription": {
+      "en": "Write Go that matches the version the project actually targets, reaching for slices, maps, and cmp instead of the legacy patterns they replaced.",
+      "zh": "按项目实际的 Go 版本写代码：该用 slices、maps、cmp 的地方就别再写老写法，也不越级用更新版本的特性。",
+      "ja": "プロジェクトが対象とする Go のバージョンに合わせて書く。slices や maps、cmp を使い、置き換えられた古い書き方は避ける。"
+    },
     "category": "backend",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-03-12",
     "lastModified": "2026-03-12",
-    "language": "en"
+    "contentLanguage": "en"
   },
   {
     "slug": "writing-agent-skills",
     "name": "writing-agent-skills",
     "description": "Use when creating, rewriting, reviewing, or testing an agent skill (a SKILL.md package for Claude Code, Codex, or any agent) — covers picking the skill type, writing directive instructions, engineering the description as a routing contract, splitting deterministic work into scripts, and building an eval harness to verify it. Trigger when someone says \"write a skill\", \"improve this skill\", \"why doesn't my skill trigger\", \"test/eval this skill\", or is designing reusable operational workflows for an agent.",
+    "displayDescription": {
+      "en": "Build an agent skill that actually triggers and delivers: pick the type, write directive instructions, engineer the description as a routing contract, then eval it.",
+      "zh": "写出真的会被触发、也真的有产出的 agent skill：选类型、写指令式正文、把 description 当路由契约来设计，最后做评估验证。",
+      "ja": "確実に呼び出され、成果を出す agent skill を作る。種類を選び、指示型の本文を書き、description をルーティング契約として設計し、評価する。"
+    },
     "category": "workflow",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
     "firstAdded": "2026-07-18",
     "lastModified": "2026-07-18",
-    "language": "zh-CN"
+    "contentLanguage": "zh-CN"
   }
 ];
 

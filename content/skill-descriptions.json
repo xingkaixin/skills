@@ -1,1 +1,188 @@
-{}
+{
+  "agent-friendly-cli-design": {
+    "sourceHash": "3e5140fc56238a20",
+    "en": "Design a CLI that AI agents can actually drive: resource and verb layering, non-interactive defaults, token-lean output, and errors that teach the agent how to retry.",
+    "zh": "把命令行设计成 agent 用得顺手的样子：资源与动词分层、非交互默认、精简输出省 token、错误消息能自我纠偏。",
+    "ja": "AI エージェントが扱える CLI を設計する。リソースと動詞の階層化、非対話デフォルト、トークンを節約する出力、リトライを導くエラーメッセージ。"
+  },
+  "ai-avoid": {
+    "sourceHash": "cecdbbb100eab72c",
+    "en": "Strip the tells that mark text as machine-written — magic adverbs, worn-out grand nouns, and the sentence rhythms that give AI prose away.",
+    "zh": "去掉文字里的 AI 味：那些故作深沉的副词、被用滥的大词，以及一眼就能认出的句式节奏。",
+    "ja": "AI が書いた文章に出る癖を取り除く。もったいぶった副詞、使い古された大げさな語彙、すぐそれと分かる文のリズム。"
+  },
+  "article-illustrator": {
+    "sourceHash": "0e9bbdd6742b3334",
+    "en": "Read an article, find the spots that need a visual, and write ready-to-use image prompts along two axes: information type and visual style.",
+    "zh": "读一篇文章，找出真正需要配图的位置，按「信息类型 × 视觉风格」两个维度产出可直接使用的绘图提示词。",
+    "ja": "記事を読んで図解が要る箇所を見つけ、情報タイプとビジュアルスタイルの二軸で、そのまま使える画像プロンプトを書き出す。"
+  },
+  "bilingual-release-changelog": {
+    "sourceHash": "20ed6b7cc0e73c2e",
+    "en": "Ship a release with Chinese and English changelogs in sync — commit-range analysis, user-facing wording, version bumps per stack, and recovery when a release half-fails.",
+    "zh": "以中文为源、英文为译，同步维护双语 changelog，并走完版本号更新、打 tag 发布，以及发布中途失败后的补救。",
+    "ja": "中国語を原文、英語を訳文として changelog を同期させ、バージョン更新からタグ公開、失敗したリリースの復旧までを通す。"
+  },
+  "cloudflare-deploy-migration": {
+    "sourceHash": "92b8168b1c31a000",
+    "en": "Move a site onto Cloudflare — static to Pages, Next.js via vinext, full-stack to Workers with D1 and KV — with the wrangler config splits and pitfalls mapped out.",
+    "zh": "把站点搬上 Cloudflare：纯静态走 Pages，Next.js 走 vinext，带后端走 Workers 加 D1/KV，附 wrangler 配置拆分与踩坑根因表。",
+    "ja": "サイトを Cloudflare へ移す。静的サイトは Pages、Next.js は vinext、バックエンド込みは Workers と D1/KV。wrangler 設定の分割と落とし穴つき。"
+  },
+  "code-review-checklist": {
+    "sourceHash": "829c34c8535eecf5",
+    "en": "Review a diff in layers — design first, then call sites, then naming, then actually run it — and know what to skip and how to phrase the hard feedback.",
+    "zh": "分层做 code review：先看设计，再看调用点，然后是命名，最后真的跑一遍。附带哪些该略过、难开口的意见怎么说。",
+    "ja": "差分を層ごとにレビューする。まず設計、次に呼び出し箇所、命名、そして実際に動かす。省くべき指摘と、言いにくい指摘の伝え方も。"
+  },
+  "codebase-review-loop": {
+    "sourceHash": "de1478959df08ead",
+    "en": "Audit a codebase through numbered improvement proposals: evidence-backed findings, a read-only recheck before fixing, one fix at a time, status written back.",
+    "zh": "用编号提案文档承载代码库审查：写带证据的 findings，动手前只读核对是否仍成立，一次只修一条，改完回写状态。",
+    "ja": "番号付きの改善提案書でコードベース監査を回す。根拠付きの指摘、着手前の再確認、一件ずつの修正、状態の書き戻し。"
+  },
+  "coding-agent-session-formats": {
+    "sourceHash": "0a3e4f2cb6226ae4",
+    "en": "Parse local session files from Codex, Claude Code, Kimi, OpenCode, and Pi — storage paths, message schemas, a unified export shape, and cache-aware cost math.",
+    "zh": "解析各家 coding agent 的本地会话文件（Codex、Claude Code、Kimi、OpenCode、Pi）：存储路径、消息结构、统一导出格式与含缓存的成本计算。",
+    "ja": "各種 coding agent のローカルセッションを解析する。Codex や Claude Code などの保存先、メッセージ構造、統一エクスポート形式、キャッシュ込みのコスト計算。"
+  },
+  "cover-image": {
+    "sourceHash": "884585215dfe1157",
+    "en": "Turn an article into a cover-image prompt, tuned across five dimensions: type, palette, rendering style, text weight, and mood.",
+    "zh": "把一篇文章转成封面图提示词，可在类型、配色、渲染风格、文字比重、情绪五个维度上调。",
+    "ja": "記事から表紙画像のプロンプトを作る。タイプ、配色、描画スタイル、文字量、ムードの五つの軸で調整できる。"
+  },
+  "decision-complete-plan": {
+    "sourceHash": "51ecef59fb8db3fd",
+    "en": "Write an implementation plan another agent can execute without asking anything: explore before you ask, separate facts from preferences, state every assumption.",
+    "zh": "写出别人拿来就能直接执行、不必再做决策的实施计划：先查代码再提问，区分可查证的事实与用户偏好，把假设全部写明。",
+    "ja": "他のエージェントが判断を挟まず実行できる実装計画を書く。聞く前に調べ、確認できる事実と好みの問題を分け、前提をすべて明示する。"
+  },
+  "design-system-as-input-ui": {
+    "sourceHash": "c7581cbca8a7941e",
+    "en": "Stop AI-generated screens from each inventing their own blue. Feed the agent a design system as a token contract instead of describing pixels every time.",
+    "zh": "让 AI 生成的每一屏不再各自发明一种蓝。把设计系统作为 token 契约喂给它，而不是每次重新描述像素。",
+    "ja": "AI が画面ごとに違う青を発明するのを止める。毎回ピクセルを説明する代わりに、デザインシステムをトークン契約として渡す。"
+  },
+  "electron-desktop-release": {
+    "sourceHash": "3df033a24a31e3c3",
+    "en": "Package, sign, and notarize an Electron app for distribution outside the store, and keep its secrets somewhere that is actually a secret store.",
+    "zh": "把 Electron 应用打包、签名、公证，做站外分发，并把密钥放进真正的密钥存储里——不是 SQLite。",
+    "ja": "Electron アプリをパッケージ化し、署名と公証を経てストア外配布する。秘密情報は SQLite ではなく然るべき保管先へ。"
+  },
+  "en-zh-literary-translation": {
+    "sourceHash": "75e506953f099579",
+    "en": "Translate English prose into Chinese that reads as if it were written in Chinese, using the faithful/fluent/elegant framework and concrete rules for killing translationese.",
+    "zh": "把英文译成读起来像中文原生写作的中文：以信达雅为判准，配一套消除翻译腔的具体改写规则。",
+    "ja": "英文を、もともと中国語で書かれたように読める中国語に訳す。信・達・雅を基準に、翻訳調を消す具体的な書き換え規則を添えて。"
+  },
+  "error-message-writing": {
+    "sourceHash": "6f42ab5a4f7035c6",
+    "en": "Write error messages that answer what happened, why, and how to fix it — with four anti-patterns to avoid and a nine-point check for each message.",
+    "zh": "写出能回答「发生了什么、为什么、怎么办」的错误消息：四个要避开的反模式，加一份九点自查清单。",
+    "ja": "何が起きたか、なぜか、どう直すかに答えるエラーメッセージを書く。避けるべき四つのアンチパターンと九項目のチェックつき。"
+  },
+  "frontend-large-data-performance": {
+    "sourceHash": "e5af7ef3290ed9c6",
+    "en": "Make a frontend survive 50-300MB files and streaming data, with benchmark-driven fixes for quadratic batching, full re-derivation, and virtual-list conflicts.",
+    "zh": "让前端扛住 50–300MB 大文件与流式数据：以 benchmark 驱动，解掉 O(n²) 批次合并、全量重派生、虚拟列表冲突这几类根因。",
+    "ja": "50〜300MB のファイルやストリーミングデータに耐えるフロントエンドにする。ベンチマーク駆動で二乗のバッチ結合や全再計算を潰す。"
+  },
+  "git-commit-message": {
+    "sourceHash": "15259c562d707c5a",
+    "en": "Write commit messages that carry the why a diff cannot: the seven-rule convention, with a good and a bad example for each.",
+    "zh": "写出 diff 表达不了的「为什么」：七条 commit message 规范，每条配正反例。",
+    "ja": "差分では伝わらない「なぜ」を書き残すコミットメッセージ。七つの規則を、良い例と悪い例つきで。"
+  },
+  "ios-on-device-vision-ml": {
+    "sourceHash": "69c2042f19139300",
+    "en": "Build on-device visual recognition on iOS: viewfinder crop geometry, Vision foreground segmentation, classification and color, and evaluating models on synthetic data.",
+    "zh": "在 iOS 上做端侧视觉识别：取景框裁切的几何映射、Vision 前景分割、分类与主色，以及用合成数据评估模型。",
+    "ja": "iOS で端末内の画像認識を作る。ファインダーの切り出し幾何、Vision の前景分割、分類と主要色、合成データでのモデル評価。"
+  },
+  "ios-recording-system-integration": {
+    "sourceHash": "8ed93089a377e293",
+    "en": "Wire iOS recording into Live Activities, the Action Button, and background audio, starting from the four hard platform limits that shape the whole design.",
+    "zh": "把 iOS 录音接进灵动岛、Action Button 与后台录音：先认清四条决定整个产品设计的系统硬边界。",
+    "ja": "iOS の録音を Live Activity、アクションボタン、バックグラウンド再生につなぐ。設計全体を左右する四つの制約から始める。"
+  },
+  "ios-widget-appstore-shipping": {
+    "sourceHash": "b57ab65b0704530b",
+    "en": "Ship a WidgetKit extension and get the app through review: App Group data sharing, refresh pitfalls, encryption declarations, and real rejection post-mortems.",
+    "zh": "做 WidgetKit 扩展并把 App 送过审：App Group 数据共享、刷新的坑、加密豁免声明，以及真实被拒案例的根因。",
+    "ja": "WidgetKit 拡張を作り、審査を通す。App Group によるデータ共有、更新の落とし穴、暗号化の申告、実際のリジェクト事例の分析。"
+  },
+  "issue-driven-dev-loop": {
+    "sourceHash": "6d5a5ac4744567e7",
+    "en": "Work a backlog end to end: pick up an issue, settle the design, implement, open the PR, update status after merge, move to the next.",
+    "zh": "把 backlog 一条条走完：领取 issue、敲定设计、实现、提 PR、合并后更新状态，然后继续下一条。",
+    "ja": "バックログを一件ずつ回す。issue を取り、設計を固め、実装し、PR を出し、マージ後に状態を更新して次へ進む。"
+  },
+  "issue-tracker": {
+    "sourceHash": "01f7a5af378496ea",
+    "en": "Track issues in Markdown inside the repo itself — milestones, status lanes, PR links, and an HTML board — with no Linear or GitHub Issues involved.",
+    "zh": "用仓库内的 Markdown 管理 issue：里程碑、状态泳道、PR 关联、HTML 看板，不依赖 Linear 或 GitHub Issues。",
+    "ja": "リポジトリ内の Markdown で issue を管理する。マイルストーン、ステータス区分、PR 紐付け、HTML ボード。外部サービスは不要。"
+  },
+  "klip-writing": {
+    "sourceHash": "ed71b8894bc0940e",
+    "en": "Write a KLIP: a structured technical design document that carries one decision from background and motivation all the way to acceptance criteria.",
+    "zh": "撰写 KLIP：一种结构化技术设计文档，把一个技术决策从背景动机一路写到验收标准。",
+    "ja": "KLIP を書く。技術的な意思決定を、背景と動機から受け入れ基準まで一貫して記述する構造化された設計文書。"
+  },
+  "monorepo-architecture-principles": {
+    "sourceHash": "27c4c17e063aa413",
+    "en": "Organize a monorepo that stays organized: a one-way dependency graph over apps and packages, ten recurring principles, and the anti-patterns worth naming.",
+    "zh": "把 monorepo 组织成不会失控的样子：apps 与 packages 之上的单向依赖图、十条反复出现的原则，以及值得命名的反模式。",
+    "ja": "崩れない monorepo の組み方。apps と packages にまたがる一方向の依存グラフ、繰り返し現れる十の原則、名前を付けるべきアンチパターン。"
+  },
+  "react-state-management-decisions": {
+    "sourceHash": "badc731900d0a94b",
+    "en": "Decide where each piece of React state belongs — useState, useRef, useMemo, Context, Zustand, or React Query — from a decision tree instead of habit.",
+    "zh": "按语义给每份 React 状态找对归属：useState、useRef、useMemo、Context、Zustand 还是 React Query，用决策树而不是惯性。",
+    "ja": "React の状態をどこに置くかを決める。useState、useRef、useMemo、Context、Zustand、React Query を、習慣ではなく決定木で選ぶ。"
+  },
+  "save-the-cat-writing": {
+    "sourceHash": "c4ce3d8a539b0461",
+    "en": "A Save the Cat checklist for tech writing: sharpen the topic, test the headline, rescue a flat opening, and cut hard before publishing.",
+    "zh": "改编自 Save the Cat 的技术写作自检清单：打磨选题、测试标题、救活平淡的开场，发布前再砍一刀。",
+    "ja": "Save the Cat を技術記事向けに翻案したチェックリスト。題材を絞り、見出しを試し、退屈な冒頭を直し、公開前に削る。"
+  },
+  "stock-report": {
+    "sourceHash": "b4a248c5e35e25d4",
+    "en": "Generate a fixed-format HTML report for a single A-share stock through this repository's ds CLI data pipeline.",
+    "zh": "给定一只 A 股标的，走本仓库的 ds CLI 采集链路拉数，生成统一版式的 HTML 报告。",
+    "ja": "A 株の銘柄を一つ指定し、このリポジトリの ds CLI のデータ取得経路を通して、定型の HTML レポートを生成する。"
+  },
+  "tauri-menubar-agent-app": {
+    "sourceHash": "25ff6a760cb36933",
+    "en": "Build a macOS menu-bar app in Tauri v2 that watches external coding agents: native window layering through objc2, Unix-socket hook bridges, event normalization.",
+    "zh": "用 Tauri v2 做 macOS 菜单栏应用，并监听外部 coding agent：经 objc2 处理原生窗口层级，用 Unix socket 桥接 hook，统一多 agent 事件。",
+    "ja": "Tauri v2 で macOS のメニューバーアプリを作り、外部の coding agent を監視する。objc2 によるウィンドウ階層、Unix ソケット連携、イベント正規化。"
+  },
+  "tech-stack-scaffolding": {
+    "sourceHash": "7bc75983c938dc0c",
+    "en": "Bootstrap a new project on house conventions across four stacks — web, browser extension, Python CLI, Go CLI — with drop-in configs and script naming.",
+    "zh": "按既定惯例初始化新项目：Web、浏览器插件、Python CLI、Go CLI 四条技术栈主线，配可直接拷贝的配置与脚本命名。",
+    "ja": "決めごとに沿って新規プロジェクトを立ち上げる。Web、ブラウザ拡張、Python CLI、Go CLI の四系統に、そのまま使える設定とスクリプト命名。"
+  },
+  "triple-mind-deep-reading": {
+    "sourceHash": "681537a82136197f",
+    "en": "Read a long article or talk through three deliberate lenses — Challenger, Builder, Practitioner — instead of flattening it into a summary.",
+    "zh": "读长文或演讲时不做平铺总结，而是依次戴上挑战者、建设者、实践者三副眼镜，对同一批观点做三重加工。",
+    "ja": "長文や講演を要約で終わらせず、挑戦者・構築者・実践者という三つの視点を順に通して読み解く。"
+  },
+  "use-modern-go": {
+    "sourceHash": "f524eb2b7e2e072b",
+    "en": "Write Go that matches the version the project actually targets, reaching for slices, maps, and cmp instead of the legacy patterns they replaced.",
+    "zh": "按项目实际的 Go 版本写代码：该用 slices、maps、cmp 的地方就别再写老写法，也不越级用更新版本的特性。",
+    "ja": "プロジェクトが対象とする Go のバージョンに合わせて書く。slices や maps、cmp を使い、置き換えられた古い書き方は避ける。"
+  },
+  "writing-agent-skills": {
+    "sourceHash": "b6a1d90a3e66c435",
+    "en": "Build an agent skill that actually triggers and delivers: pick the type, write directive instructions, engineer the description as a routing contract, then eval it.",
+    "zh": "写出真的会被触发、也真的有产出的 agent skill：选类型、写指令式正文、把 description 当路由契约来设计，最后做评估验证。",
+    "ja": "確実に呼び出され、成果を出す agent skill を作る。種類を選び、指示型の本文を書き、description をルーティング契約として設計し、評価する。"
+  }
+}
