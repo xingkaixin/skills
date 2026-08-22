@@ -13,9 +13,12 @@ marketplace 和 Codex marketplace 都由同一套 publication 模块生成。
 ├── .claude-plugin/
 ├── apps/web/
 ├── plugins/{category}-skills/
+├── content/
+│   └── skill-descriptions.json
 ├── scripts/
 │   ├── catalog/
-│   └── generate-web-skills.ts
+│   ├── generate-web-skills.ts
+│   └── skill-descriptions.ts
 └── skills/{category}/{skill-name}/
     └── SKILL.md
 ```
@@ -44,10 +47,16 @@ pnpm preview
 1. 选择单一分类并创建 `skills/{category}/{skill-name}`
 2. 添加包含 `name` 和 `description` frontmatter 的 `SKILL.md`
 3. 按需添加 `scripts/`、`references/` 或 `assets/`
-4. 运行 `pnpm generate:web-data`
-5. 运行 `pnpm check`
+4. 运行 `/skill-descriptions` 补齐展示描述（英/中/日）
+5. 运行 `pnpm generate:web-data`
+6. 运行 `pnpm check`
 
 slug 必须全局唯一。本地 Markdown 引用必须指向 skill 包内真实存在的文件。
+
+`content/skill-descriptions.json` 存放网站展示用的三语描述，与 SKILL.md 的
+frontmatter description 是两回事——后者是给 agent 的触发文本。每条记录了来源
+SKILL.md 的哈希，SKILL.md 变更后描述未跟进时构建会失败。若改动不影响 skill 的
+实际行为，用 `pnpm descriptions:touch <slug>` 保留原文并重新盖章。
 不要手工维护 marketplace 的 skill 列表。
 
 ## 发布模型
