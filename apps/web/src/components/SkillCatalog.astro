@@ -1,5 +1,6 @@
 ---
 import SearchIcon from "@/components/SearchIcon.astro";
+import { skillSearchText } from "@/data/skill-catalog";
 import type { SkillRecord } from "@/data/skill-record";
 import { localeHref, type Locale } from "@/i18n/config";
 import { ui } from "@/i18n/ui";
@@ -109,7 +110,7 @@ const sortOptions = [
         data-category={skill.category}
         data-slug={skill.slug}
         data-modified={skill.lastModified}
-        data-haystack={`${skill.slug} ${skill.displayDescription[locale]}`.toLowerCase()}
+        data-haystack={skillSearchText(skill)}
       >
         <span class="flex items-center justify-between gap-2">
           <span class="eyebrow text-accent">{skill.category}</span>
@@ -132,6 +133,12 @@ const sortOptions = [
 </div>
 
 <script>
+  import {
+    CATALOG_SEARCH_EVENT,
+    matchesSkillQuery,
+    type CatalogSearchState,
+  } from "@/data/skill-catalog";
+
   const root = document.querySelector<HTMLElement>("[data-catalog]");
 
   if (root) {
@@ -147,7 +154,7 @@ const sortOptions = [
 
     const params = new URLSearchParams(window.location.search);
     const initialCategory = params.get("category");
-    const state = {
+    const state: CatalogSearchState = {
       category: initialCategory && knownCategories.has(initialCategory) ? initialCategory : "all",
       query: params.get("q") ?? "",
       sort: "recent",
@@ -177,7 +184,7 @@ const sortOptions = [
       for (const card of cards) {
         const matches =
           (state.category === "all" || card.dataset.category === state.category) &&
-          (!needle || card.dataset.haystack!.includes(needle));
+          matchesSkillQuery(card.dataset.haystack!, needle);
         card.toggleAttribute("hidden", !matches);
         if (matches) visible += 1;
       }
@@ -222,10 +229,29 @@ const sortOptions = [
 
     for (const button of sorts) {
       button.addEventListener("click", () => {
-        state.sort = button.dataset.sort!;
+        state.sort = button.dataset.sort === "az" ? "az" : "recent";
         reorder();
         render(true);
       });
     }
+
+    document.addEventListener(CATALOG_SEARCH_EVENT, (event) => {
+      const detail = (event as CustomEvent<Partial<CatalogSearchState>>).detail;
+      if (
+        typeof detail?.query !== "string" ||
+        typeof detail.category !== "string" ||
+        !knownCategories.has(detail.category) ||
+        (detail.sort !== "recent" && detail.sort !== "az")
+      ) {
+        return;
+      }
+
+      state.query = detail.query;
+      state.category = detail.category;
+      state.sort = detail.sort;
+      search.value = detail.query;
+      reorder();
+      render(true);
+    });
   }
 </script>

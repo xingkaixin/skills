@@ -89,6 +89,18 @@ Adding a locale means extending `LOCALES` in `src/i18n/config.ts`, adding its
 tags and name there, filling in `ui.ts`, and writing that locale into every
 entry of `content/skill-descriptions.json`.
 
+## WebMCP
+
+Browsers that implement the Web Model Context API can discover three read-only
+tools on every page:
+
+- `search_skills` searches skill metadata and synchronizes the visible catalog.
+- `get_skill` returns exact metadata and the localized detail URL for one skill.
+- `get_install_command` returns, but never executes, a validated install command.
+
+The tools are registered through `document.modelContext` when the API exists.
+Other browsers keep the same site behavior without a polyfill.
+
 ## Generating Skill Data
 
 Skill data is auto-generated from the repository's skill definitions:

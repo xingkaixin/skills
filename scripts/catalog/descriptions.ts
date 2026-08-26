@@ -1,20 +1,10 @@
 import { createHash } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { LOCALES, type LocalizedText } from "./locales.ts";
 
-export const LOCALES = ["en", "zh", "ja"] as const;
-export type Locale = (typeof LOCALES)[number];
-
-export const DEFAULT_LOCALE: Locale = "en";
-
-/** BCP 47 tags for `<html lang>`, `og:locale`, and `hreflang`. */
-export const localeTags: Record<Locale, string> = {
-  en: "en",
-  zh: "zh-CN",
-  ja: "ja",
-};
-
-export type LocalizedText = Record<Locale, string>;
+export { DEFAULT_LOCALE, LOCALES, localeTags } from "./locales.ts";
+export type { Locale, LocalizedText } from "./locales.ts";
 
 export interface SkillDescription extends LocalizedText {
   /** Hash of the SKILL.md this text was written from; guards against silent drift. */

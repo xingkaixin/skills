@@ -100,5 +100,10 @@ const ogImageUrl = new URL("/og-image.png", Astro.site).href;
     <div class="font-sans min-h-screen">
       <slot />
     </div>
+    <script>
+      import { registerWebMcpTools } from "@/webmcp/register";
+
+      registerWebMcpTools();
+    </script>
   </body>
 </html>

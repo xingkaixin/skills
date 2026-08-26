@@ -3,9 +3,16 @@ import type { SkillRecord } from "./skill-record.ts";
 import { localeHref, type Locale } from "../i18n/config.ts";
 
 export const MAX_SKILL_SEARCH_RESULTS = 20;
+export const CATALOG_SEARCH_EVENT = "skills:catalog-search";
 
 export type SkillSort = "recent" | "az";
 export type InstallScope = "all" | "skill";
+
+export interface CatalogSearchState {
+  query: string;
+  category: string;
+  sort: SkillSort;
+}
 
 export interface SkillSearchOptions {
   query?: string;
@@ -15,10 +22,7 @@ export interface SkillSearchOptions {
   locale: Locale;
 }
 
-export interface SkillSearchResult {
-  query: string;
-  category: string;
-  sort: SkillSort;
+export interface SkillSearchResult extends CatalogSearchState {
   total: number;
   skills: Array<{
     slug: string;

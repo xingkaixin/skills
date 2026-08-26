@@ -2,10 +2,10 @@ export {
   DEFAULT_LOCALE,
   LOCALES,
   localeTags,
-} from "../../../../scripts/catalog/descriptions.ts";
-export type { Locale, LocalizedText } from "../../../../scripts/catalog/descriptions.ts";
+} from "../../../../scripts/catalog/locales.ts";
+export type { Locale, LocalizedText } from "../../../../scripts/catalog/locales.ts";
 
-import { DEFAULT_LOCALE, type Locale } from "../../../../scripts/catalog/descriptions.ts";
+import { DEFAULT_LOCALE, type Locale } from "../../../../scripts/catalog/locales.ts";
 
 /** Endonyms: each language names itself as its own speakers write it. */
 export const localeNames: Record<Locale, string> = {

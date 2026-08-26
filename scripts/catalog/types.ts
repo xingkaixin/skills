@@ -1,4 +1,4 @@
-import type { LocalizedText } from "./descriptions.ts";
+import type { LocalizedText } from "./locales.ts";
 
 export type SkillSourceKind = "self" | "upstream" | "adapted";
 
