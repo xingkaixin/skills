@@ -1,4 +1,5 @@
 export {
+  SKILLS_INSTALL_SOURCE,
   SITE_NAME,
   SITE_REPO,
   SITE_URL,

@@ -5,6 +5,7 @@ import SiteHeader from "@/components/SiteHeader.astro";
 import SkillProse from "@/components/SkillProse.astro";
 import SkillToc from "@/components/SkillToc.astro";
 import { getSkillSeo } from "@/data/seo";
+import { getInstallCommand } from "@/data/skill-catalog";
 import { skillContent } from "@/data/skills.content.generated";
 import { skillsData } from "@/data/skills.generated";
 import { extractToc } from "@/data/skill-toc";
@@ -29,6 +30,7 @@ const strings = ui[locale];
 const seo = getSkillSeo(skill, locale);
 const path = `/skills/${skill.slug}`;
 const body = skillContent[skill.slug];
+const installCommand = getInstallCommand(skillsData, "skill", skill.slug);
 const toc = extractToc(body);
 const categoryHref = localeHref(locale, `/?category=${encodeURIComponent(skill.category)}`);
 const related = skillsData
@@ -83,7 +85,7 @@ const bodyLanguageNote =
         </p>
 
         <CopyCommand
-          command={`npx skills add xingkaixin/skills --skill ${skill.slug}`}
+          command={installCommand}
           locale={locale}
           tone="solid"
           class="mt-6.5 max-w-[42.5rem]"

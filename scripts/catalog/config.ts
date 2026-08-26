@@ -3,6 +3,7 @@ import type { SkillCatalogEntry } from "./types.ts";
 export const SITE_NAME = "xingkaixin/skills";
 export const SITE_REPO = "https://github.com/xingkaixin/skills";
 export const SITE_URL = "https://skills.xingkaixin.me";
+export const SKILLS_INSTALL_SOURCE = "xingkaixin/skills";
 
 export interface CategoryMetadata {
   description: string;

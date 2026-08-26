@@ -3,6 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import CopyCommand from "@/components/CopyCommand.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
 import SkillCatalog from "@/components/SkillCatalog.astro";
+import { getInstallCommand } from "@/data/skill-catalog";
 import { skillCategories, skillsData } from "@/data/skills.generated";
 import { getHomeSeo } from "@/data/seo";
 import { DEFAULT_LOCALE, LOCALES, type Locale } from "@/i18n/config";
@@ -19,6 +20,7 @@ export function getStaticPaths() {
 const { locale } = Astro.props as { locale: Locale };
 const seo = getHomeSeo(locale);
 const strings = ui[locale];
+const installCommand = getInstallCommand(skillsData, "all");
 ---
 
 <BaseLayout
@@ -53,7 +55,7 @@ const strings = ui[locale];
         </div>
         <div class="flex flex-col gap-3">
           <p class="text-xs text-text-secondary">{strings.home.installAll}</p>
-          <CopyCommand command="npx skills add xingkaixin/skills" locale={locale} />
+          <CopyCommand command={installCommand} locale={locale} />
           <p class="font-mono text-xs text-text-muted">
             {strings.home.installOne} <span class="text-text-secondary">--skill &lt;slug&gt;</span>
           </p>
