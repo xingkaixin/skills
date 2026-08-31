@@ -116,7 +116,7 @@ const sortOptions = [
           <span class="eyebrow text-accent">{skill.category}</span>
           <span class="font-mono text-[10px] text-text-muted">{skill.sourceKind}</span>
         </span>
-        <h3 class="font-mono text-sm font-medium break-words text-text">{skill.slug}</h3>
+        <h2 class="font-mono text-sm font-medium break-words text-text">{skill.slug}</h2>
         <p class="line-clamp-3 text-[13px] leading-6 text-text-secondary">{skill.displayDescription[locale]}</p>
         <span class="mt-auto flex items-center justify-between pt-1.5 font-mono text-[10.5px] text-text-muted">
           <span>{strings.updated(skill.lastModified)}</span>
@@ -144,7 +144,7 @@ const sortOptions = [
   if (root) {
     const grid = root.querySelector<HTMLElement>("[data-catalog-grid]")!;
     const cards = Array.from(root.querySelectorAll<HTMLElement>("[data-skill]"));
-    const chips = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-category]"));
+    const chips = Array.from(root.querySelectorAll<HTMLButtonElement>("button[data-category]"));
     const sorts = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-sort]"));
     const search = root.querySelector<HTMLInputElement>("#catalog-search")!;
     const form = root.querySelector<HTMLFormElement>("[data-catalog-search]")!;
