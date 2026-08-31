@@ -60,6 +60,11 @@ README、安装指南或变更日志。
 新增或移动 skill 时选择一个明确分类，并保持 slug 全仓库唯一。新增分类时，
 只为平台无法推导的展示信息补充一项 category metadata。
 
+新增分类必须同步适配 Web 列表卡片背景，在
+`apps/web/src/assets/card-backgrounds/{category}.png` 补充与分类同名的素材，
+保持现有轻量、低对比的点缀风格，并检查桌面和移动端的显示效果。
+通用兜底背景只用于容错，不能作为新分类已完成背景适配的依据。
+
 ### 生成物必须可复现
 
 不要手工编辑 `*.generated.ts`、marketplace JSON 或 plugin manifest。运行生成命令
