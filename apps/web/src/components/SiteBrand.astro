@@ -13,21 +13,6 @@ const { locale } = Astro.props;
   href={localeHref(locale)}
   class="inline-flex items-center gap-2.5 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
 >
-  <span class="brand-mark" aria-hidden="true">
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      class="h-[15px] w-[15px]"
-    >
-      <path d="M15 12h-5"></path>
-      <path d="M15 8h-5"></path>
-      <path d="M19 17V5a2 2 0 0 0-2-2H4"></path>
-      <path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 0 0-2 2z"></path>
-    </svg>
-  </span>
+  <img src="/favicon.svg" alt="" width="28" height="28" class="h-7 w-7 shrink-0" />
   <span class="text-sm font-semibold text-text">{SITE_NAME}</span>
 </a>

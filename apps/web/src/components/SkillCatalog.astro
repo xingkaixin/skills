@@ -1,7 +1,9 @@
 ---
+import arrowRight from "@phosphor-icons/core/regular/arrow-right.svg?no-inline";
 import type { ImageMetadata } from "astro";
 import { Image } from "astro:assets";
 import openFolio from "@/assets/backgrounds/open-folio.png";
+import PhosphorIcon from "@/components/PhosphorIcon.astro";
 import SearchIcon from "@/components/SearchIcon.astro";
 import { skillSearchText } from "@/data/skill-catalog";
 import type { SkillRecord } from "@/data/skill-record";
@@ -150,7 +152,7 @@ const sortOptions = [
         <p class="line-clamp-3 text-[13px] leading-6 text-text-secondary">{skill.displayDescription[locale]}</p>
         <span class="mt-auto flex items-center justify-between pt-1.5 font-mono text-[10.5px] text-text-muted">
           <span>{strings.updated(skill.lastModified)}</span>
-          <span aria-hidden="true">→</span>
+          <PhosphorIcon src={arrowRight} class="h-3.5 w-3.5" />
         </span>
       </a>
     ))}

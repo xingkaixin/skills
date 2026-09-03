@@ -15,7 +15,7 @@
   --color-text: #111111;
   --color-text-secondary: #5b6270;
   --color-text-muted: #606a78;
-  --color-accent: #2f62b8;
+  --color-accent: #3155ea;
   --color-accent-soft: #f4f7fd;
   --color-accent-border: #dbe4f4;
   --font-sans: var(--font-sora);
@@ -69,17 +69,6 @@ button {
 ::selection {
   background: #111111;
   color: #ffffff;
-}
-
-.brand-mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.5rem;
-  background: var(--color-text);
-  color: #ffffff;
-  width: 1.75rem;
-  height: 1.75rem;
 }
 
 /* Mono micro-label used for section kickers, meta keys and card eyebrows.
