@@ -16,7 +16,7 @@
     "test": "node --test tests/*.test.ts && python3 -m unittest discover -s tests -p 'test_*.py'",
     "typecheck": "pnpm exec tsc -p tsconfig.json && pnpm --filter web typecheck"
   },
-  "packageManager": "pnpm@11.14.0",
+  "packageManager": "pnpm@12.3.4",
   "devDependencies": {
     "@types/node": "^26.1.1",
     "@types/sanitize-html": "^2.16.1",
