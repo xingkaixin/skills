@@ -1,0 +1,4 @@
+/markdown/*
+  Content-Type: text/markdown; charset=utf-8
+/api-docs.md
+  Content-Type: text/markdown; charset=utf-8

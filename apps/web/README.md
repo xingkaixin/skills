@@ -113,3 +113,36 @@ This scans `skills/{category}/{skill-name}` and updates Web data, Claude marketp
 Codex marketplace, and category plugin manifests. The category directory is the source
 of truth for catalog membership; platform-specific display metadata lives in
 `scripts/catalog/config.ts`.
+
+## Agent HTTP access
+
+The build generates `/api/skills.json`, `/openapi.json`,
+`/.well-known/api-catalog`, and Markdown copies of all localized home and skill
+pages from the same catalog and skill sources. `/api-docs.md` describes the
+read-only catalog API. Do not edit these build outputs in `dist/`.
+
+The Pages advanced-mode worker in `public/_worker.js` negotiates Markdown for
+explicit `Accept: text/markdown` requests, respecting quality values. HTML stays
+the default. Both representations carry `Vary: Accept` and `private, no-store`
+to prevent caches from mixing representations. The worker also adds discovery
+Link headers and the API catalog media type, including for HEAD requests.
+`_routes.json` limits worker invocation to page and API catalog routes; ordinary
+static assets bypass it. This uses Pages Functions, not the paid Markdown for
+Agents switch, and page requests consume the project's Functions allowance.
+
+`robots.txt` declares `ai-train=yes, search=yes, ai-input=yes` for all agents.
+
+Astro dev/preview do not execute the Pages worker. To verify production HTTP
+behavior locally, run from the repository root:
+
+```sh
+pnpm build
+pnpm --filter web exec wrangler pages dev dist --port 8788
+curl -i -H 'Accept: text/markdown' http://localhost:8788/
+curl -I http://localhost:8788/.well-known/api-catalog
+```
+
+Deploy the entire `dist/` directory, including `_worker.js` and `_routes.json`,
+using the existing Pages deployment command. After deployment, scan the public
+URL with `POST https://isitagentready.com/api/scan` and JSON body
+`{"url":"https://skills.xingkaixin.me"}`.
