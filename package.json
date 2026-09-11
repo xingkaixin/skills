@@ -18,12 +18,12 @@
   },
   "packageManager": "pnpm@12.3.4",
   "devDependencies": {
-    "@types/node": "^26.1.1",
+    "@types/node": "^26.5.1",
     "@types/sanitize-html": "^2.16.1",
     "github-slugger": "^2.0.0",
     "gray-matter": "^4.0.3",
-    "marked": "^18.0.7",
-    "sanitize-html": "^2.17.6",
+    "marked": "^18.0.12",
+    "sanitize-html": "^2.17.7",
     "typescript": "^6.0.3"
   }
 }
