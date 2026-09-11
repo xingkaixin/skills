@@ -23,9 +23,9 @@ export const skillsData: SkillRecord[] = [
     "name": "ai-avoid",
     "description": "适用于编辑或审阅文本，使其听起来更自然、更像人类书写。",
     "displayDescription": {
-      "en": "Strip the tells that mark text as machine-written — magic adverbs, worn-out grand nouns, and the sentence rhythms that give AI prose away.",
-      "zh": "去掉文字里的 AI 味：那些故作深沉的副词、被用滥的大词，以及一眼就能认出的句式节奏。",
-      "ja": "AI が書いた文章に出る癖を取り除く。もったいぶった副詞、使い古された大げさな語彙、すぐそれと分かる文のリズム。"
+      "en": "Edit prose to remove inflated vocabulary, formulaic contrasts, false suspense, and repetitive sentence rhythms while preserving meaning.",
+      "zh": "编辑文字，去掉夸大的词汇、套路化对比、虚假悬念和重复句式，同时保留原意。",
+      "ja": "意味を保ちながら文章を編集し、大げさな語彙、定型的な対比、不要なもったいぶり、繰り返す文のリズムを取り除く。"
     },
     "category": "writing",
     "sourceRepo": "https://github.com/ninehills/skills",
