@@ -9,13 +9,13 @@ Simplified style tier for quick selection:
 | `vector` | vector-illustration | Knowledge articles, tutorials, tech content |
 | `minimal-flat` | notion | General, knowledge sharing, SaaS |
 | `sci-fi` | blueprint | AI, frontier tech, system design |
-| `hand-drawn` | sketch/warm | Relaxed, reflective, casual content |
+| `hand-drawn` | sketch-notes | Educational infographics, concept explainers, onboarding |
 | `line-sketch` | line-sketch | 克制留白的简笔画，个人随笔、反思类内容 |
 | `editorial` | editorial | Processes, data, journalism |
 | `scene` | warm/watercolor | Narratives, emotional, lifestyle |
 | `poster` | screen-print | Opinion, editorial, cultural, cinematic |
 
-Use Core Styles for most cases. See full Style Gallery below for granular control.
+Use Core Styles for most cases. When no clear content signal or user preference applies, recommend `hand-drawn` (`sketch-notes`). See full Style Gallery below for granular control.
 
 ---
 
@@ -43,7 +43,8 @@ Use Core Styles for most cases. See full Style Gallery below for granular contro
 | `retro` | 80s/90s neon geometric | 80s/90s nostalgic, bold |
 | `sketch` | Raw pencil notebook style | Brainstorming, creative exploration |
 | `screen-print` | Bold poster art, halftone textures, limited colors | Opinion, editorial, cultural, cinematic |
-| `sketch-notes` | Soft hand-drawn warm notes | Educational, warm notes |
+| `sketch-notes` | Warm cream paper, black lines, pastel section blocks | Educational infographics, concept explainers |
+| `ink-notes` | Black ink on pure white with sparse semantic accents | Before/After comparisons, professional visual notes, frameworks |
 | `vintage` | Aged parchment historical | Historical, heritage |
 | `hand-drawn-edu` | Hand-drawn macaron educational infographic | Educational infographics, tutorials, slide summaries |
 | `line-sketch` | 简笔画：无脸小人、伞黄点缀、中文手写引言 | 个人随笔、哲思反思、克制内敛的叙事 |
@@ -52,14 +53,14 @@ Full specifications: `references/styles/<style>.md`
 
 ## Type × Style Compatibility Matrix
 
-| | vector-illustration | notion | warm | minimal | blueprint | watercolor | elegant | editorial | scientific | screen-print | line-sketch | hand-drawn-edu |
-|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| infographic | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓✓ | ✓✓ | ✓ | ✓ | ✓✓ |
-| scene | ✓ | ✓ | ✓✓ | ✓ | ✗ | ✓✓ | ✓ | ✓ | ✗ | ✓✓ | ✓✓ | ✓ |
-| flowchart | ✓✓ | ✓✓ | ✓ | ✓ | ✓✓ | ✗ | ✓ | ✓✓ | ✓ | ✗ | ✓ | ✓✓ |
-| comparison | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓ | ✓ | ✓✓ | ✓✓ | ✓ | ✓ | ✓ | ✓✓ |
-| framework | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓✓ | ✗ | ✓✓ | ✓ | ✓✓ | ✓ | ✓ | ✓✓ |
-| timeline | ✓ | ✓✓ | ✓ | ✓ | ✓ | ✓✓ | ✓✓ | ✓✓ | ✓ | ✓ | ✓ | ✓ |
+| | vector-illustration | notion | warm | minimal | blueprint | watercolor | elegant | editorial | scientific | screen-print | line-sketch | hand-drawn-edu | sketch-notes | ink-notes |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| infographic | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓✓ | ✓✓ | ✓ | ✓ | ✓✓ | ✓✓ | ✓ |
+| scene | ✓ | ✓ | ✓✓ | ✓ | ✗ | ✓✓ | ✓ | ✓ | ✗ | ✓✓ | ✓✓ | ✓ | ✗ | ✗ |
+| flowchart | ✓✓ | ✓✓ | ✓ | ✓ | ✓✓ | ✗ | ✓ | ✓✓ | ✓ | ✗ | ✓ | ✓✓ | ✓✓ | ✓✓ |
+| comparison | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓ | ✓ | ✓✓ | ✓✓ | ✓ | ✓ | ✓ | ✓✓ | ✓✓ | ✓✓ |
+| framework | ✓✓ | ✓✓ | ✓ | ✓✓ | ✓✓ | ✗ | ✓✓ | ✓ | ✓✓ | ✓ | ✓ | ✓✓ | ✓✓ | ✓✓ |
+| timeline | ✓ | ✓✓ | ✓ | ✓ | ✓ | ✓✓ | ✓✓ | ✓✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 
 ✓✓ = highly recommended | ✓ = compatible | ✗ = not recommended
 
@@ -67,10 +68,10 @@ Full specifications: `references/styles/<style>.md`
 
 | Type | Primary Style | Secondary Styles |
 |------|---------------|------------------|
-| infographic | vector-illustration | notion, blueprint, editorial, hand-drawn-edu |
+| infographic | sketch-notes | vector-illustration, notion, blueprint, editorial, hand-drawn-edu |
 | scene | warm | watercolor, elegant |
-| flowchart | vector-illustrator | notion, blueprint, hand-drawn-edu |
-| comparison | vector-illustrator | notion, elegant, hand-drawn-edu |
+| flowchart | sketch-notes | vector-illustration, notion, blueprint, hand-drawn-edu |
+| comparison | sketch-notes | vector-illustration, notion, elegant, hand-drawn-edu, ink-notes |
 | framework | blueprint | vector-illustration, notion, hand-drawn-edu |
 | timeline | elegant | warm, editorial |
 
@@ -78,15 +79,17 @@ Full specifications: `references/styles/<style>.md`
 
 | Content Signals | Recommended Type | Recommended Style |
 |-----------------|------------------|-------------------|
+| No strong signal / general article | infographic | sketch-notes |
+| Manifesto, mindset shift, whiteboard, professional visual note | comparison / framework | ink-notes |
 | API, metrics, data, comparison, numbers | infographic | blueprint, vector-illustration |
-| Knowledge, concept, tutorial, learning, guide | infographic | vector-illustration, notion, hand-drawn-edu |
+| Knowledge, concept, tutorial, learning, guide | infographic | sketch-notes, vector-illustration, notion, hand-drawn-edu |
 | Tech, AI, programming, development, code | infographic | vector-illustration, blueprint |
-| How-to, steps, workflow, process, tutorial | flowchart | vector-illustration, notion |
+| How-to, steps, workflow, process, tutorial | flowchart | sketch-notes, vector-illustration, notion |
 | Framework, model, architecture, principles | framework | blueprint, vector-illustration |
 | vs, pros/cons, before/after, alternatives | comparison | vector-illustration, notion |
 | Story, emotion, journey, experience, personal | scene | warm, watercolor |
 | History, timeline, progress, evolution | timeline | elegant, warm |
-| Productivity, SaaS, tool, app, software | infographic | notion, vector-illustration |
+| Productivity, SaaS, tool, app, software | infographic | sketch-notes, notion, vector-illustration |
 | Business, professional, strategy, corporate | framework | elegant |
 | Opinion, editorial, culture, philosophy, cinematic, dramatic, poster | scene | screen-print |
 | 随笔, 反思, 哲思, 生活观察, 情绪, 克制, 留白, 涂鸦, 简笔画 | scene | line-sketch |
@@ -215,3 +218,28 @@ Full specifications: `references/styles/<style>.md`
 - Auto-selects layout: flow=arrows, comparison=split, cycle=circular, composition=cards, hierarchy=nested
 - Doodle decorations (stars, underlines, arrows) with generous whitespace
 - Bold centered summary quote at bottom
+
+---
+
+## Palette Gallery
+
+Palettes override a style's default colors. Check the palette's compatibility notes before combining: `--style vector-illustration --palette macaron`.
+
+| Palette | Description | Best For |
+|---------|-------------|----------|
+| `macaron` | Soft pastel blocks (blue, mint, lavender, peach) on warm cream | Educational, knowledge, tutorials |
+| `warm` | Warm earth tones (orange, terracotta, gold) on soft peach, no cool colors | Brand, product, lifestyle |
+| `neon` | Vibrant neon (pink, cyan, yellow) on dark purple | Gaming, retro, pop culture |
+| `mono-ink` | Black ink on pure white with sparse semantic accents (coral red, muted teal, dusty lavender) | Professional visual notes, Before/After, manifestos |
+
+Full specifications: `references/palettes/<palette>.md`
+
+When no palette is specified, the style's built-in Color Palette is used.
+
+## Palette Override Rules
+
+1. Read style file → rendering rules (Visual Elements, Style Rules)
+2. Read palette file → Colors + Background
+3. Palette colors **replace** style's default Color Palette
+4. Palette Background **replaces** style's default Background color
+5. Style's texture description is preserved

@@ -1,6 +1,6 @@
 ---
 name: article-illustrator
-description: Analyzes article structure, identifies positions requiring visual aids, generates illustration prompts with Type × Style two-dimension approach. Outputs prompt files only — no image generation. Use when user asks to "illustrate article", "add images", "generate images for article", or "为文章配图".
+description: Analyzes article structure, identifies positions requiring visual aids, generates illustration prompts with Type × Style approach with an optional palette override. Outputs prompt files only — no image generation. Use when user asks to "illustrate article", "add images", "generate images for article", or "为文章配图".
 ---
 
 # Article Illustrator
@@ -14,9 +14,11 @@ Analyze articles, identify illustration positions, generate structured prompts f
 | **Type** | Information structure | infographic, scene, flowchart, comparison, framework, timeline |
 | **Style** | Visual aesthetics | notion, warm, minimal, blueprint, watercolor, elegant |
 
+Optional `--palette` overrides colors without changing the rendering style: macaron, warm, neon, mono-ink.
+
 Combine freely: `--type infographic --style blueprint`
 
-Or use presets: `--preset tech-explainer` → type + style in one flag. See [Style Presets](references/style-presets.md).
+Or use presets: `--preset tech-explainer` → type + style + optional palette in one flag. See [Style Presets](references/style-presets.md).
 
 ## Types
 
@@ -85,9 +87,11 @@ Full procedures: [references/workflow.md](references/workflow.md#step-1-analyze-
 
 Full procedures: [references/workflow.md](references/workflow.md#step-2-confirm-settings)
 
+Resolve palette from an explicit `--palette`, then the selected preset, then `preferred_palette` in EXTEND.md. Without an override, use the style's built-in colors. See [Palette Gallery](references/styles.md#palette-gallery).
+
 ### Step 3: Generate Outline
 
-Save `outline.md` with frontmatter (type, density, style, image_count) and entries:
+Save `outline.md` with frontmatter (type, density, style, optional palette, image_count) and entries:
 
 ```yaml
 ## Illustration 1
@@ -101,12 +105,14 @@ Full template: [references/workflow.md](references/workflow.md#step-3-generate-o
 
 ### Step 4: Create Prompt Files
 
+Read the selected style file and any palette file before writing. Copy their rendering rules and resolved colors into each prompt; a style name alone is insufficient.
+
 **Output**: One `illustration-{NN}.md` file per illustration, in the same directory as the article.
 
 Each file contains:
-- YAML frontmatter (type, style, references)
+- YAML frontmatter (type, style, optional palette, references)
 - Content Context (title, summary, keywords)
-- Visual Design (type, style, aspect, language)
+- Visual Design (type, style, palette, aspect, language)
 - Illustration Prompt (structured prompt)
 - Rendering Notes (style characteristics)
 - Reference Style (if reference images provided)
@@ -119,7 +125,7 @@ Full template: [references/prompt-construction.md](references/prompt-constructio
 Article Illustration Prompts Ready!
 
 Article: [path]
-Type: [type] | Density: [level] | Style: [style]
+Type: [type] | Density: [level] | Style: [style] | Palette: [override or style default]
 
 Prompt Files:
 ✓ illustration-01.md
@@ -162,6 +168,6 @@ Prompt files are saved in the same directory as the article:
 | [references/workflow.md](references/workflow.md) | Detailed procedures |
 | [references/usage.md](references/usage.md) | Command syntax |
 | [references/styles.md](references/styles.md) | Style gallery |
-| [references/style-presets.md](references/style-presets.md) | Preset shortcuts (type + style) |
+| [references/style-presets.md](references/style-presets.md) | Preset shortcuts (type + style + palette) |
 | [references/prompt-construction.md](references/prompt-construction.md) | Prompt templates |
 | [references/config/first-time-setup.md](references/config/first-time-setup.md) | First-time setup |

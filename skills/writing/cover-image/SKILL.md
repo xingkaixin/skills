@@ -1,6 +1,6 @@
 ---
 name: cover-image
-description: Generates cover image prompts for articles with 5 dimensions (type, palette, rendering, text, mood) combining 10 color palettes and 7 rendering styles. Outputs a structured prompt file for downstream image generation. Use when user asks to "generate cover image prompt" or "create cover prompt".
+description: Generates cover image prompts for articles with 5 dimensions (type, palette, rendering, text, mood) combining 11 color palettes and 8 rendering styles. Outputs a structured prompt file for downstream image generation. Use when user asks to "generate cover image prompt" or "create cover prompt".
 ---
 
 # Cover Image Prompt Generator
@@ -35,8 +35,8 @@ Generate structured prompts for article cover images with 5-dimensional customiz
 | Option | Description |
 |--------|-------------|
 | `--type <name>` | hero, conceptual, typography, metaphor, scene, minimal |
-| `--palette <name>` | warm, elegant, cool, dark, earth, vivid, pastel, mono, retro, duotone |
-| `--rendering <name>` | flat-vector, hand-drawn, painterly, digital, pixel, chalk, screen-print |
+| `--palette <name>` | warm, elegant, cool, dark, earth, vivid, pastel, mono, retro, duotone, macaron |
+| `--rendering <name>` | flat-vector, hand-drawn, painterly, digital, pixel, chalk, screen-print, line-sketch |
 | `--style <name>` | Preset shorthand (see [Style Presets](references/style-presets.md)) |
 | `--text <level>` | none, title-only, title-subtitle, text-rich |
 | `--mood <level>` | subtle, balanced, bold |
@@ -52,8 +52,8 @@ Generate structured prompts for article cover images with 5-dimensional customiz
 | Dimension | Values | Default |
 |-----------|--------|---------|
 | **Type** | hero, conceptual, typography, metaphor, scene, minimal | auto |
-| **Palette** | warm, elegant, cool, dark, earth, vivid, pastel, mono, retro, duotone | auto |
-| **Rendering** | flat-vector, hand-drawn, painterly, digital, pixel, chalk, screen-print | auto |
+| **Palette** | warm, elegant, cool, dark, earth, vivid, pastel, mono, retro, duotone, macaron | auto |
+| **Rendering** | flat-vector, hand-drawn, painterly, digital, pixel, chalk, screen-print, line-sketch | auto |
 | **Text** | none, title-only, title-subtitle, text-rich | title-only |
 | **Mood** | subtle, balanced, bold | balanced |
 | **Font** | clean, handwritten, serif, display | clean |
@@ -65,10 +65,10 @@ Auto-selection rules: [references/auto-selection.md](references/auto-selection.m
 **Types**: hero, conceptual, typography, metaphor, scene, minimal
 → Details: [references/types.md](references/types.md)
 
-**Palettes**: warm, elegant, cool, dark, earth, vivid, pastel, mono, retro, duotone
+**Palettes**: warm, elegant, cool, dark, earth, vivid, pastel, mono, retro, duotone, macaron
 → Details: [references/palettes/](references/palettes/)
 
-**Renderings**: flat-vector, hand-drawn, painterly, digital, pixel, chalk, screen-print
+**Renderings**: flat-vector, hand-drawn, painterly, digital, pixel, chalk, screen-print, line-sketch
 → Details: [references/renderings/](references/renderings/)
 
 **Text Levels**: none (pure visual) | title-only (default) | title-subtitle | text-rich (with tags)
@@ -166,6 +166,8 @@ Full confirmation flow and question format: [references/workflow/confirm-options
 | All 6 + `--aspect` specified | All | None |
 
 ### Step 3: Create Prompt
+
+Read the selected palette and rendering references. Include their concrete colors and rendering rules in the prompt, plus the constraint that color names, hex codes, and palette labels must not appear as visible text.
 
 Save to article directory as `cover.md`. Template: [references/workflow/prompt-template.md](references/workflow/prompt-template.md)
 

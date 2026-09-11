@@ -20,6 +20,8 @@ preferred_style:
   name: null              # Style name or null for auto-select
   description: ""         # Override/notes
 
+preferred_palette: null   # macaron|warm|neon|mono-ink or null for style colors
+
 language: null            # zh|en|ja|ko|auto (null = auto-detect)
 ---
 ```
@@ -34,6 +36,7 @@ language: null            # zh|en|ja|ko|auto (null = auto-detect)
 | `watermark.position` | enum | bottom-right | Position on image |
 | `preferred_style.name` | string | null | Style name or null |
 | `preferred_style.description` | string | "" | Custom notes/override |
+| `preferred_palette` | string | null | Palette override; absent or null keeps the style colors |
 | `language` | string | null | Output language (null = auto-detect) |
 
 ## Position Options

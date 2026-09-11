@@ -34,6 +34,7 @@ Keywords: [关键词]
 # Visual Design
 Type: [confirmed type]
 Style: [confirmed style]
+Palette: [resolved override or style default]
 Aspect ratio: 16:9
 Language: [confirmed language]
 
@@ -44,7 +45,7 @@ Language: [confirmed language]
 [Key characteristics from the selected style definition]
 
 # Reference Style — MUST INCORPORATE（如有引用图片）
-[If references provided, detailed description per reference-images.md]
+[If references provided, describe their relevant traits using the Reference Image Handling section in workflow.md]
 ```
 
 **⚠️ CRITICAL - When to include `references` field**:
@@ -93,6 +94,17 @@ STYLE (extracted):
 
 **Add to ALL prompts**:
 > Clean composition with generous white space. Simple or no background. Main elements centered or positioned by content needs.
+
+---
+
+## Color Specification Rules
+
+Colors in prompts use hex codes for **rendering guidance only** — they tell the model which colors to use, NOT what text to display.
+
+**⚠️ CRITICAL**: Image generation models sometimes render color names and hex values as visible text labels in the image (e.g., painting "Macaron Blue #A8D8EA" as a label). This must be prevented.
+
+**Add to ALL prompts that contain a COLORS section**:
+> Color values (#hex) and color names are rendering guidance only — do NOT display color names, hex codes, or palette labels as visible text in the image.
 
 ---
 
@@ -344,4 +356,36 @@ Include a subtle watermark "[content]" positioned at [position].
 
 ## Reference Image Handling
 
-Full details: [workflow.md#step-1-pre-check](workflow.md#step-1-pre-check)
+Full details: [workflow.md#step-1-analyze-content--save-references](workflow.md#step-1-analyze-content--save-references)
+
+---
+
+## Palette Override
+
+When a palette is specified (via `--palette` or preset), it overrides the style's default colors:
+
+1. Read style file → get rendering rules (Visual Elements, Style Rules, line treatment)
+2. Read palette file (`palettes/<palette>.md`) → get Colors + Background
+3. Palette Colors **replace** style's default Color Palette in prompt
+4. Palette Background **replaces** style's Background color (keep style's texture description)
+5. Build prompt: style rendering instructions + palette colors
+
+**Prompt frontmatter** includes palette when specified:
+```yaml
+---
+type: infographic
+style: vector-illustration
+palette: macaron
+---
+```
+
+**Example**: `vector-illustration` + `macaron` palette:
+```
+Flat vector illustration infographic. Clean black outlines on all elements.
+PALETTE: macaron — soft pastel color blocks
+COLORS: Warm Cream background (#F5F0E8), Macaron Blue (#A8D8EA), Mint (#B5E5CF),
+        Lavender (#D5C6E0), Peach (#FFD5C2), Coral Red (#E8655A) for emphasis
+ELEMENTS: Geometric simplified icons, no gradients, playful decorative elements
+```
+
+When no palette is specified, use the style's built-in Color Palette as before.

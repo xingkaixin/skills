@@ -31,17 +31,17 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/ninehills/skills",
     "sourceKind": "upstream",
     "firstAdded": "2026-03-12",
-    "lastModified": "2026-03-12",
+    "lastModified": "2026-09-11",
     "contentLanguage": "en"
   },
   {
     "slug": "article-illustrator",
     "name": "article-illustrator",
-    "description": "Analyzes article structure, identifies positions requiring visual aids, generates illustration prompts with Type × Style two-dimension approach. Outputs prompt files only — no image generation. Use when user asks to \"illustrate article\", \"add images\", \"generate images for article\", or \"为文章配图\".",
+    "description": "Analyzes article structure, identifies positions requiring visual aids, generates illustration prompts with Type × Style approach with an optional palette override. Outputs prompt files only — no image generation. Use when user asks to \"illustrate article\", \"add images\", \"generate images for article\", or \"为文章配图\".",
     "displayDescription": {
-      "en": "Read an article, find the spots that need a visual, and write ready-to-use image prompts along two axes: information type and visual style.",
-      "zh": "读一篇文章，找出真正需要配图的位置，按「信息类型 × 视觉风格」两个维度产出可直接使用的绘图提示词。",
-      "ja": "記事を読んで図解が要る箇所を見つけ、情報タイプとビジュアルスタイルの二軸で、そのまま使える画像プロンプトを書き出す。"
+      "en": "Find where an article needs illustrations and write image prompts by information type, visual style, and optional palette. Includes educational diagrams and black-ink visual notes.",
+      "zh": "找出文章需要配图的位置，按信息类型、视觉风格和可选调色板生成绘图提示词，支持教学图解和墨线笔记风格。",
+      "ja": "記事で図解が必要な箇所を見つけ、情報タイプ、ビジュアルスタイル、任意の配色で画像プロンプトを作る。教育向け図解や黒インクのビジュアルノートにも対応。"
     },
     "category": "writing",
     "sourceRepo": "https://github.com/jimliu/baoyu-skills",
@@ -133,11 +133,11 @@ export const skillsData: SkillRecord[] = [
   {
     "slug": "cover-image",
     "name": "cover-image",
-    "description": "Generates cover image prompts for articles with 5 dimensions (type, palette, rendering, text, mood) combining 10 color palettes and 7 rendering styles. Outputs a structured prompt file for downstream image generation. Use when user asks to \"generate cover image prompt\" or \"create cover prompt\".",
+    "description": "Generates cover image prompts for articles with 5 dimensions (type, palette, rendering, text, mood) combining 11 color palettes and 8 rendering styles. Outputs a structured prompt file for downstream image generation. Use when user asks to \"generate cover image prompt\" or \"create cover prompt\".",
     "displayDescription": {
-      "en": "Turn an article into a cover-image prompt, tuned across five dimensions: type, palette, rendering style, text weight, and mood.",
-      "zh": "把一篇文章转成封面图提示词，可在类型、配色、渲染风格、文字比重、情绪五个维度上调。",
-      "ja": "記事から表紙画像のプロンプトを作る。タイプ、配色、描画スタイル、文字量、ムードの五つの軸で調整できる。"
+      "en": "Turn an article into a cover-image prompt with configurable type, palette, rendering, text, and mood. Choose from 11 palettes and 8 rendering styles, with color instructions kept out of visible image text.",
+      "zh": "把文章转成封面图提示词，调整类型、配色、渲染、文字和情绪。支持 11 种调色板和 8 种渲染风格，并约束颜色说明不作为图中文字出现。",
+      "ja": "記事から表紙画像のプロンプトを作り、タイプ、配色、描画、文字、ムードを調整する。11 種類の配色と 8 種類の描画スタイルに対応し、色指定が画像内の文字にならないよう指示する。"
     },
     "category": "writing",
     "sourceRepo": "https://github.com/jimliu/baoyu-skills",

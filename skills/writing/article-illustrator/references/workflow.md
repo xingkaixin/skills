@@ -37,7 +37,7 @@ test -f EXTEND.md && echo "found"
 | Found | Read, parse, display summary → Continue |
 | Not found | ⛔ **BLOCKING**: Run first-time setup ONLY ([config/first-time-setup.md](config/first-time-setup.md)) → Complete and save EXTEND.md → Then continue |
 
-**Supports**: Watermark | Preferred style | Language
+**Supports**: Watermark | Preferred style | Preferred palette | Language
 
 ---
 
@@ -151,7 +151,7 @@ For each reference image:
 
 ### Q1: Preset or Type ⚠️ REQUIRED
 
-Based on Step 1 content analysis, recommend a preset first (sets both type & style). Look up [style-presets.md](style-presets.md) "Content Type → Preset Recommendations" table.
+Based on Step 1 content analysis, recommend a preset first (sets type, style, and an optional palette). Look up [style-presets.md](style-presets.md) "Content Type → Preset Recommendations" table.
 
 - [Recommended preset] — [brief: type + style + why] (Recommended)
 - [Alternative preset] — [brief]
@@ -186,7 +186,7 @@ If no `preferred_style` (present Core Styles first):
 |------------|---------|----------|
 | `minimal-flat` | notion | General, knowledge sharing, SaaS |
 | `sci-fi` | blueprint | AI, frontier tech, system design |
-| `hand-drawn` | sketch/warm | Relaxed, reflective, casual |
+| `hand-drawn` | sketch-notes | Educational infographics, concept explainers |
 | `editorial` | editorial | Processes, data, journalism |
 | `scene` | warm/watercolor | Narratives, emotional, lifestyle |
 | `poster` | screen-print | Opinion, editorial, cultural, cinematic |
@@ -216,6 +216,8 @@ Reference Images:
 
 ---
 
+Resolve palette from `--palette`, then the chosen preset, then EXTEND.md `preferred_palette`. If none is set, retain the style colors. Record any override in the outline and each prompt.
+
 ## Step 3: Generate Outline
 
 Save as `outline.md` in article directory:
@@ -224,7 +226,8 @@ Save as `outline.md` in article directory:
 ---
 type: infographic
 density: balanced
-style: blueprint
+style: sketch-notes
+palette: macaron
 image_count: 4
 references:                    # Only if references provided
   - ref_id: 01
@@ -262,6 +265,8 @@ references:                    # Only if references provided
 
 ### 4.1 Create Prompt Files ⛔ BLOCKING
 
+Read `references/styles/<style>.md` before writing. If a palette override is selected, read `references/palettes/<palette>.md` too. Apply its colors and background while retaining the style's line work, composition, and texture. Include the actual style rules and resolved colors in the prompt.
+
 **Every illustration MUST have a saved prompt file before completion. DO NOT skip this step.**
 
 For each illustration in the outline:
@@ -271,7 +276,8 @@ For each illustration in the outline:
    ```yaml
    ---
    type: infographic
-   style: blueprint
+   style: sketch-notes
+   palette: macaron                # Omit when no palette override applies
    references:                    # ⚠️ ONLY if files EXIST in refs/ directory
      - ref_id: 01
        filename: refs/01-ref-{slug}.png
@@ -280,7 +286,7 @@ For each illustration in the outline:
    ```
 3. **Follow template** from [prompt-construction.md](prompt-construction.md):
    - Content Context: title, summary, keywords
-   - Visual Design: type, style, aspect, language
+   - Visual Design: type, style, palette, aspect, language
    - Illustration Prompt: structured prompt content
    - Rendering Notes: style characteristics
    - Reference Style (if applicable)
@@ -305,7 +311,7 @@ Prompt Files:
 Article Illustration Prompts Ready!
 
 Article: [path]
-Type: [type] | Density: [level] | Style: [style]
+Type: [type] | Density: [level] | Style: [style] | Palette: [override or style default]
 Language: [language]
 
 Prompt Files:

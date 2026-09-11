@@ -18,9 +18,9 @@ watermark:
 
 preferred_type: null      # hero|conceptual|typography|metaphor|scene|minimal or null for auto-select
 
-preferred_palette: null   # warm|elegant|cool|dark|earth|vivid|pastel|mono|retro or null for auto-select
+preferred_palette: null   # warm|elegant|cool|dark|earth|vivid|pastel|mono|retro|duotone|macaron or null for auto-select
 
-preferred_rendering: null # flat-vector|hand-drawn|painterly|digital|pixel|chalk or null for auto-select
+preferred_rendering: null # flat-vector|hand-drawn|painterly|digital|pixel|chalk|screen-print|line-sketch or null for auto-select
 
 preferred_text: title-only  # none|title-only|title-subtitle|text-rich
 

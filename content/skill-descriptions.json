@@ -12,10 +12,10 @@
     "ja": "意味を保ちながら文章を編集し、大げさな語彙、定型的な対比、不要なもったいぶり、繰り返す文のリズムを取り除く。"
   },
   "article-illustrator": {
-    "sourceHash": "0e9bbdd6742b3334",
-    "en": "Read an article, find the spots that need a visual, and write ready-to-use image prompts along two axes: information type and visual style.",
-    "zh": "读一篇文章，找出真正需要配图的位置，按「信息类型 × 视觉风格」两个维度产出可直接使用的绘图提示词。",
-    "ja": "記事を読んで図解が要る箇所を見つけ、情報タイプとビジュアルスタイルの二軸で、そのまま使える画像プロンプトを書き出す。"
+    "sourceHash": "15b679fede5420ed",
+    "en": "Find where an article needs illustrations and write image prompts by information type, visual style, and optional palette. Includes educational diagrams and black-ink visual notes.",
+    "zh": "找出文章需要配图的位置，按信息类型、视觉风格和可选调色板生成绘图提示词，支持教学图解和墨线笔记风格。",
+    "ja": "記事で図解が必要な箇所を見つけ、情報タイプ、ビジュアルスタイル、任意の配色で画像プロンプトを作る。教育向け図解や黒インクのビジュアルノートにも対応。"
   },
   "bilingual-release-changelog": {
     "sourceHash": "20ed6b7cc0e73c2e",
@@ -48,10 +48,10 @@
     "ja": "各種 coding agent のローカルセッションを解析する。Codex や Claude Code などの保存先、メッセージ構造、統一エクスポート形式、キャッシュ込みのコスト計算。"
   },
   "cover-image": {
-    "sourceHash": "884585215dfe1157",
-    "en": "Turn an article into a cover-image prompt, tuned across five dimensions: type, palette, rendering style, text weight, and mood.",
-    "zh": "把一篇文章转成封面图提示词，可在类型、配色、渲染风格、文字比重、情绪五个维度上调。",
-    "ja": "記事から表紙画像のプロンプトを作る。タイプ、配色、描画スタイル、文字量、ムードの五つの軸で調整できる。"
+    "sourceHash": "9c701d847dd1f239",
+    "en": "Turn an article into a cover-image prompt with configurable type, palette, rendering, text, and mood. Choose from 11 palettes and 8 rendering styles, with color instructions kept out of visible image text.",
+    "zh": "把文章转成封面图提示词，调整类型、配色、渲染、文字和情绪。支持 11 种调色板和 8 种渲染风格，并约束颜色说明不作为图中文字出现。",
+    "ja": "記事から表紙画像のプロンプトを作り、タイプ、配色、描画、文字、ムードを調整する。11 種類の配色と 8 種類の描画スタイルに対応し、色指定が画像内の文字にならないよう指示する。"
   },
   "decision-complete-plan": {
     "sourceHash": "51ecef59fb8db3fd",

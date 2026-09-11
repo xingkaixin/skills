@@ -4,22 +4,25 @@
 
 ```bash
 # Auto-select type and style based on content
-/baoyu-article-illustrator path/to/article.md
+/article-illustrator path/to/article.md
 
 # Specify type
-/baoyu-article-illustrator path/to/article.md --type infographic
+/article-illustrator path/to/article.md --type infographic
 
 # Specify style
-/baoyu-article-illustrator path/to/article.md --style blueprint
+/article-illustrator path/to/article.md --style blueprint
 
 # Combine type and style
-/baoyu-article-illustrator path/to/article.md --type flowchart --style notion
+/article-illustrator path/to/article.md --type flowchart --style notion
+
+# Override palette without changing style
+/article-illustrator path/to/article.md --style vector-illustration --palette macaron
 
 # Specify density
-/baoyu-article-illustrator path/to/article.md --density rich
+/article-illustrator path/to/article.md --density rich
 
 # Direct content input (paste mode)
-/baoyu-article-illustrator
+/article-illustrator
 [paste content]
 ```
 
@@ -29,8 +32,9 @@
 |--------|-------------|
 | `--type <name>` | Illustration type (see Type Gallery in SKILL.md) |
 | `--style <name>` | Visual style (see references/styles.md) |
-| `--preset <name>` | Shorthand for type + style combo (see [style-presets.md](style-presets.md)) |
-| `--density <level>` | Image count: minimal / balanced / rich |
+| `--palette <name>` | Override style colors: macaron / warm / neon / mono-ink |
+| `--preset <name>` | Shorthand for type + style + optional palette combo (see [style-presets.md](style-presets.md)) |
+| `--density <level>` | Image count: minimal / balanced / per-section / rich |
 
 ## Input Modes
 
@@ -55,30 +59,30 @@ Use the prompt files with your preferred image generation tool.
 
 **Technical article with data**:
 ```bash
-/baoyu-article-illustrator api-design.md --type infographic --style blueprint
+/article-illustrator api-design.md --type infographic --style blueprint
 ```
 
 **Same thing with preset**:
 ```bash
-/baoyu-article-illustrator api-design.md --preset tech-explainer
+/article-illustrator api-design.md --preset tech-explainer
 ```
 
 **Personal story**:
 ```bash
-/baoyu-article-illustrator journey.md --preset storytelling
+/article-illustrator journey.md --preset storytelling
 ```
 
 **Tutorial with steps**:
 ```bash
-/baoyu-article-illustrator how-to-deploy.md --preset tutorial --density rich
+/article-illustrator how-to-deploy.md --preset tutorial --density rich
 ```
 
 **Opinion article with poster style**:
 ```bash
-/baoyu-article-illustrator opinion.md --preset opinion-piece
+/article-illustrator opinion.md --preset opinion-piece
 ```
 
 **Preset with override**:
 ```bash
-/baoyu-article-illustrator article.md --preset tech-explainer --style notion
+/article-illustrator article.md --preset tech-explainer --style notion
 ```
