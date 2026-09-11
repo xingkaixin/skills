@@ -71,6 +71,9 @@ pnpm deploy:cf
 
 Astro pre-renders the catalog, every skill detail page, the 404 page, and `sitemap.xml` into `dist/` — the catalog and detail pages once per locale.
 
+HTML pages use the `file` build format so Pages serves the extensionless canonical
+URLs directly, without redirecting to trailing-slash URLs.
+
 ## Languages
 
 The site renders in English, Chinese, and Japanese. English owns the bare paths

@@ -10,6 +10,7 @@ export default defineConfig({
   integrations: [agentAssets()],
   output: "static",
   trailingSlash: "never",
+  build: { format: "file" },
   i18n: {
     defaultLocale: DEFAULT_LOCALE,
     locales: [...LOCALES],

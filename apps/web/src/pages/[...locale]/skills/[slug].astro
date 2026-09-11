@@ -34,7 +34,7 @@ const path = `/skills/${skill.slug}`;
 const body = skillContent[skill.slug];
 const installCommand = getInstallCommand(skillsData, "skill", skill.slug);
 const toc = extractToc(body);
-const categoryHref = localeHref(locale, `/?category=${encodeURIComponent(skill.category)}`);
+const categoryHref = `${localeHref(locale)}?category=${encodeURIComponent(skill.category)}`;
 const related = skillsData
   .filter((item) => item.category === skill.category && item.slug !== skill.slug)
   .slice(0, 3);
