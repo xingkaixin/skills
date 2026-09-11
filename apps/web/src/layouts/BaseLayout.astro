@@ -108,9 +108,10 @@ const ogImageUrl = new URL("/og-image.png", Astro.site).href;
       <slot />
     </div>
     <script>
-      import { registerWebMcpTools } from "@/webmcp/register";
-
-      registerWebMcpTools();
+      if ("modelContext" in document && document.modelContext) {
+        const { registerWebMcpTools } = await import("@/webmcp/register");
+        registerWebMcpTools();
+      }
     </script>
   </body>
 </html>
