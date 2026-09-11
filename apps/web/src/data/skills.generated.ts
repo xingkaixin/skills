@@ -47,7 +47,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/jimliu/baoyu-skills",
     "sourceKind": "adapted",
     "firstAdded": "2026-03-28",
-    "lastModified": "2026-03-28",
+    "lastModified": "2026-09-11",
     "contentLanguage": "en"
   },
   {
@@ -143,7 +143,7 @@ export const skillsData: SkillRecord[] = [
     "sourceRepo": "https://github.com/jimliu/baoyu-skills",
     "sourceKind": "adapted",
     "firstAdded": "2026-03-28",
-    "lastModified": "2026-03-28",
+    "lastModified": "2026-09-11",
     "contentLanguage": "en"
   },
   {
