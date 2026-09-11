@@ -91,6 +91,7 @@ const ogImageUrl = new URL("/og-image.png", Astro.site).href;
     <script define:vars={{ siteOrigin: new URL(SITE_URL).origin }}>
       if (window.location.origin === siteOrigin) {
         const cloudflare = document.createElement("script");
+        cloudflare.type = "module";
         cloudflare.src = "https://static.cloudflareinsights.com/beacon.min.js";
         cloudflare.dataset.cfBeacon = '{"token":"c3176e48d15945b890292c7f23f0359e"}';
 

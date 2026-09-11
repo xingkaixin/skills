@@ -74,6 +74,19 @@ Astro pre-renders the catalog, every skill detail page, the 404 page, and `sitem
 HTML pages use the `file` build format so Pages serves the extensionless canonical
 URLs directly, without redirecting to trailing-slash URLs.
 
+### Analytics
+
+`BaseLayout.astro` loads the existing `skills.xingkaixin.me` Cloudflare Web
+Analytics site and Umami on the production domain. Keep Pages Web Analytics
+disabled. In the `xingkaixin.me` zone, use a Configuration Rule matching only
+`http.host eq "skills.xingkaixin.me"` with Disable RUM enabled to prevent an
+additional automatic beacon. The manual beacon continues to report to its
+existing analytics site.
+
+After changing Pages analytics settings, redeploy and check the production page:
+old deployments can still contain the Pages-injected snippet. Verify that only
+the manual Cloudflare beacon loads and that its reporting requests succeed.
+
 ## Languages
 
 The site renders in English, Chinese, and Japanese. English owns the bare paths
