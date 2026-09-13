@@ -483,6 +483,22 @@ export const skillsData: SkillRecord[] = [
     "contentLanguage": "en"
   },
   {
+    "slug": "visual-design-principles",
+    "name": "visual-design-principles",
+    "description": "设计、修改或评审 UI、网页、海报、演示稿和文档的视觉层级、分组、对齐、字体与配色。根据《写给大家看的设计书》把视觉原则转为具体布局决策，并检查实际成品。适用于页面杂乱、重点不清、图文脱节、字体冲突或跨页面不一致；不替代用户研究、交互逻辑或现有设计系统。",
+    "displayDescription": {
+      "en": "Apply grouping, alignment, repetition, contrast, typography, and color to interfaces, posters, slides, and documents, then inspect and refine the actual result.",
+      "zh": "将分组、对齐、重复、对比、字体与配色用于界面、海报、演示稿和文档，并检查实际成品，修正层级与布局问题。",
+      "ja": "グループ化、整列、反復、コントラスト、書体、配色を UI、ポスター、スライド、文書に適用し、実際の仕上がりを確認して階層とレイアウトを改善する。"
+    },
+    "category": "design",
+    "sourceRepo": "https://github.com/xingkaixin/skills",
+    "sourceKind": "self",
+    "firstAdded": "2026-09-13",
+    "lastModified": "2026-09-13",
+    "contentLanguage": "zh-CN"
+  },
+  {
     "slug": "writing-agent-skills",
     "name": "writing-agent-skills",
     "description": "Use when creating, rewriting, reviewing, or testing an agent skill (a SKILL.md package for Claude Code, Codex, or any agent) — covers picking the skill type, writing directive instructions, engineering the description as a routing contract, splitting deterministic work into scripts, and building an eval harness to verify it. Trigger when someone says \"write a skill\", \"improve this skill\", \"why doesn't my skill trigger\", \"test/eval this skill\", or is designing reusable operational workflows for an agent.",

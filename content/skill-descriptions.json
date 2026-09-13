@@ -179,6 +179,12 @@
     "zh": "按项目实际的 Go 版本写代码：该用 slices、maps、cmp 的地方就别再写老写法，也不越级用更新版本的特性。",
     "ja": "プロジェクトが対象とする Go のバージョンに合わせて書く。slices や maps、cmp を使い、置き換えられた古い書き方は避ける。"
   },
+  "visual-design-principles": {
+    "sourceHash": "4bffd13bc5986e8c",
+    "en": "Apply grouping, alignment, repetition, contrast, typography, and color to interfaces, posters, slides, and documents, then inspect and refine the actual result.",
+    "zh": "将分组、对齐、重复、对比、字体与配色用于界面、海报、演示稿和文档，并检查实际成品，修正层级与布局问题。",
+    "ja": "グループ化、整列、反復、コントラスト、書体、配色を UI、ポスター、スライド、文書に適用し、実際の仕上がりを確認して階層とレイアウトを改善する。"
+  },
   "writing-agent-skills": {
     "sourceHash": "b6a1d90a3e66c435",
     "en": "Build an agent skill that actually triggers and delivers: pick the type, write directive instructions, engineer the description as a routing contract, then eval it.",

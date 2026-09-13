@@ -43,11 +43,11 @@ export const categoryMetadata: Record<string, CategoryMetadata> = {
     defaultPrompt: "Help me deploy or migrate this application.",
   },
   design: {
-    description: "Design system and interface writing skills",
+    description: "Visual design, design system, and interface writing skills",
     displayName: "Design Skills",
-    shortDescription: "Design system and interface writing skills.",
+    shortDescription: "Visual design, design systems, and interface writing.",
     longDescription:
-      "Product design workflows for input-driven design systems and effective error messages.",
+      "Design workflows for visual hierarchy, layout, typography, color, input-driven design systems, and effective error messages.",
     codexCategory: "Productivity",
     defaultPrompt: "Help me improve this product design.",
   },

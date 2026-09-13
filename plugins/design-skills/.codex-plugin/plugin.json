@@ -1,7 +1,7 @@
 {
   "name": "design-skills",
   "version": "1.0.0",
-  "description": "Design system and interface writing skills.",
+  "description": "Visual design, design system, and interface writing skills.",
   "author": {
     "name": "XingKaiXin",
     "email": "xingkaixin@gmail.com"
@@ -10,8 +10,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Design Skills",
-    "shortDescription": "Design system and interface writing skills.",
-    "longDescription": "Product design workflows for input-driven design systems and effective error messages.",
+    "shortDescription": "Visual design, design systems, and interface writing.",
+    "longDescription": "Design workflows for visual hierarchy, layout, typography, color, input-driven design systems, and effective error messages.",
     "developerName": "XingKaiXin",
     "category": "Productivity",
     "capabilities": [

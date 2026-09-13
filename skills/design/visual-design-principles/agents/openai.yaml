@@ -1,0 +1,4 @@
+interface:
+  display_name: "视觉设计原则"
+  short_description: "把分组、对齐、重复、对比转为布局决策，结合字体与色彩检查实际成品"
+  default_prompt: "使用 $visual-design-principles 完成这次设计，明确内容关系与视觉层级，并检查和修正实际成品。"

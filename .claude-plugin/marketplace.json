@@ -43,12 +43,13 @@
     },
     {
       "name": "design-skills",
-      "description": "Design system and interface writing skills",
+      "description": "Visual design, design system, and interface writing skills",
       "source": "./",
       "strict": false,
       "skills": [
         "./skills/design/design-system-as-input-ui",
-        "./skills/design/error-message-writing"
+        "./skills/design/error-message-writing",
+        "./skills/design/visual-design-principles"
       ]
     },
     {
