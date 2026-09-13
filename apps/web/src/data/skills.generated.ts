@@ -494,8 +494,8 @@ export const skillsData: SkillRecord[] = [
     "category": "design",
     "sourceRepo": "https://github.com/xingkaixin/skills",
     "sourceKind": "self",
-    "firstAdded": "2026-09-13",
-    "lastModified": "2026-09-13",
+    "firstAdded": "2026-09-14",
+    "lastModified": "2026-09-14",
     "contentLanguage": "zh-CN"
   },
   {
