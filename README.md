@@ -42,6 +42,16 @@ pnpm preview
 
 `pnpm check` 会执行生成物一致性、ESLint、TypeScript、Astro、测试和生产构建。
 
+Web 样式规则在 `apps/web/eslint.config.mjs` 中配置，运行 `pnpm lint` 即可检查。
+当前对 `src/**/*.astro` 启用 `shadcn/no-raw-colors` 和仅检查颜色的
+`shadcn/no-arbitrary-values`，统一使用 `src/styles/globals.css` 中的主题颜色。
+自定义字号、间距和布局尺寸继续允许。
+
+为覆盖 `class:list` 和 frontmatter 中的类名，规则会扫描 Astro 文件中的字符串字面量，
+因此普通文本中类似类名的字符串也可能被检查。CSS 声明、客户端脚本和运行时拼接的
+类名不在这两条规则的完整覆盖范围内。规则选项见
+[@shadcn/lint 文档](https://github.com/shadcn-ui/lint/blob/main/docs/rules.md)。
+
 ## 新增 skill
 
 1. 选择单一分类并创建 `skills/{category}/{skill-name}`
