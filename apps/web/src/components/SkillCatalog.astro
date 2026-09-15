@@ -53,12 +53,12 @@ const sortOptions = [
   data-count-many={strings.count(2)}
 >
   <div class="border-b border-divider px-6 sm:px-10">
-    <div class="mx-auto flex max-w-6xl flex-col gap-3 py-3 sm:flex-row sm:items-center sm:gap-4">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center gap-3 py-3 sm:flex-nowrap sm:gap-4">
       <form
         action={localeHref(locale)}
         method="get"
         role="search"
-        class="flex flex-1 items-center gap-2.5 rounded-lg border border-border px-3.5 py-2.5 transition focus-within:border-text"
+        class="flex flex-1 basis-full items-center gap-2.5 rounded-lg border border-border px-3.5 py-2.5 transition focus-within:border-text sm:basis-auto"
         data-catalog-search
       >
         <SearchIcon />
@@ -89,6 +89,14 @@ const sortOptions = [
           </button>
         ))}
       </div>
+      <span
+        class="ml-auto font-mono text-xs text-text-muted"
+        data-catalog-count
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {strings.count(skills.length)}
+      </span>
     </div>
   </div>
 
@@ -106,14 +114,6 @@ const sortOptions = [
           {category}<span class="chip-count">{counts.get(category)}</span>
         </button>
       ))}
-      <span
-        class="ml-auto font-mono text-xs text-text-muted"
-        data-catalog-count
-        aria-live="polite"
-        aria-atomic="true"
-      >
-        {strings.count(skills.length)}
-      </span>
     </div>
   </div>
 

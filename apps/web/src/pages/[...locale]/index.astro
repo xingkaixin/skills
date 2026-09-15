@@ -63,7 +63,11 @@ const installCommand = getInstallCommand(skillsData, "all");
               locale === "ja" ? "max-w-[24ch]" : "max-w-[15ch]",
             ]}
           >
-            {strings.home.heading}
+            {locale === "zh"
+              ? strings.home.heading.split(/(按需加载)/).map((part) => (
+                  <span class:list={[part === "按需加载" && "whitespace-nowrap"]}>{part}</span>
+                ))
+              : strings.home.heading}
           </h1>
           <p class="mt-4.5 max-w-[46ch] text-[15px] leading-7 text-text-secondary">
             {strings.home.intro(skillsData.length)}

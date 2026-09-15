@@ -22,9 +22,9 @@ const buttonClass =
 ---
 
 <header class="border-b border-divider px-6 sm:px-10">
-  <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 py-3">
+  <div class="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 py-3 sm:flex sm:justify-between sm:gap-4">
     <SiteBrand locale={locale} />
-    <div class="flex flex-wrap items-center gap-2">
+    <div class="col-span-2 row-start-2 flex flex-wrap items-center gap-2 sm:ml-auto">
       {variant === "home" ? (
         <>
           <a href="#categories" class={linkClass}>{strings.header.categories}</a>
@@ -35,7 +35,7 @@ const buttonClass =
           action={localeHref(locale)}
           method="get"
           role="search"
-          class="flex w-44 items-center gap-2 rounded-lg border border-border px-3 py-2 transition focus-within:border-text sm:w-60"
+          class="flex w-full items-center gap-2 rounded-lg border border-border px-3 py-2 transition focus-within:border-text sm:w-60"
         >
           <SearchIcon />
           <label class="sr-only" for="header-search">{strings.header.searchSkills}</label>
@@ -51,8 +51,8 @@ const buttonClass =
         </form>
       )}
       <LanguageSwitcher locale={locale} path={path} />
-      <a href={SITE_REPO} class={buttonClass}>{strings.header.repository}</a>
     </div>
+    <a href={SITE_REPO} class={buttonClass}>{strings.header.repository}</a>
   </div>
 </header>
 
