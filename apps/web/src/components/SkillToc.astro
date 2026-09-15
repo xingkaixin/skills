@@ -6,27 +6,33 @@ import { ui } from "@/i18n/ui";
 interface Props {
   entries: TocEntry[];
   locale: Locale;
+  collapsible?: boolean;
 }
 
-const { entries, locale } = Astro.props;
+const { entries, locale, collapsible = false } = Astro.props;
+const Container = collapsible ? "details" : "div";
+const Heading = collapsible ? "summary" : "p";
+const headingId = collapsible ? "mobile-toc-heading" : "toc-heading";
 ---
 
 {entries.length > 0 && (
-  <nav aria-labelledby="toc-heading" data-toc>
-    <p id="toc-heading" class="eyebrow mb-2.5 ml-3.5 tracking-[0.18em] text-text-muted">
-      {ui[locale].skill.onThisPage}
-    </p>
-    <div class="flex max-h-[60vh] flex-col overflow-y-auto">
-      {entries.map((entry) => (
-        <a
-          href={`#${entry.id}`}
-          class:list={["toc-link", entry.depth > 0 && "toc-link-nested"]}
-          data-toc-link={entry.id}
-        >
-          {entry.label}
-        </a>
-      ))}
-    </div>
+  <nav aria-labelledby={headingId} data-toc>
+    <Container>
+      <Heading id={headingId} class:list={["mb-2.5 text-text-muted", collapsible ? "cursor-pointer py-2 text-sm" : "eyebrow ml-3.5 tracking-[0.18em]"]}>
+        {ui[locale].skill.onThisPage}
+      </Heading>
+      <div class="flex max-h-[60vh] flex-col overflow-y-auto">
+        {entries.map((entry) => (
+          <a
+            href={`#${entry.id}`}
+            class:list={["toc-link", entry.depth > 0 && "toc-link-nested"]}
+            data-toc-link={collapsible ? undefined : entry.id}
+          >
+            {entry.label}
+          </a>
+        ))}
+      </div>
+    </Container>
   </nav>
 )}
 

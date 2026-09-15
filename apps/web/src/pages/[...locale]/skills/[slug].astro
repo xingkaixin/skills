@@ -124,7 +124,10 @@ const bodyLanguageNote =
         </dl>
 
         {body && (
-          <div class="mt-11 border-t border-divider pt-9">
+          <div class="mt-8 border-t border-divider pt-4 lg:mt-11 lg:pt-9">
+            <div class="mb-5 lg:hidden">
+              <SkillToc entries={toc} locale={locale} collapsible />
+            </div>
             {bodyLanguageNote && (
               <p class="mb-7 text-[12.5px] text-text-muted">{bodyLanguageNote}</p>
             )}
@@ -136,7 +139,9 @@ const bodyLanguageNote =
       </div>
 
       <aside class="flex flex-col gap-5.5 lg:sticky lg:top-6">
-        <SkillToc entries={toc} locale={locale} />
+        <div class="hidden lg:block">
+          <SkillToc entries={toc} locale={locale} />
+        </div>
 
         {related.length > 0 && (
           <div class="border-t border-divider pt-5">
