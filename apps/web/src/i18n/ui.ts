@@ -11,7 +11,7 @@ const en = {
   skipToContent: "Skip to main content",
   siteTagline: "AI Agent Skill Catalog",
   siteDescription:
-    "Browse and install AI agent skills for Claude Code and other AI coding tools. A curated catalog covering frontend, backend, writing, design, and more.",
+    "Install AI agent skills for Claude Code and Codex. Browse reusable instructions for code review, frontend development, writing, design, and releases.",
   header: {
     categories: "Categories",
     faq: "FAQ",
@@ -22,9 +22,9 @@ const en = {
   },
   home: {
     eyebrow: "Agent skills catalog",
-    heading: "Focused expertise your agent loads on demand.",
+    heading: "Agent skills for coding, writing and design.",
     intro: (count: number) =>
-      `${count} small, specific skills for Claude Code and any agent that reads SKILL.md. Filter by category, sort by what changed last, copy one install command.`,
+      `${count} installable skills for Claude Code and Codex, covering code review, frontend development, writing, design and releases. Choose a task and copy its install command.`,
     installAll: "Install the whole catalog",
     installOne: "or add one:",
     faqHeading: "FAQ",
@@ -78,7 +78,7 @@ const en = {
     {
       question: "Which AI tools are supported?",
       answer:
-        "These skills target Claude Code and other agents that follow the open Agent Skills format. Any coding tool able to read a SKILL.md instruction file can load them, so the catalog stays portable across compatible AI assistants.",
+        "These skills target Claude Code, Codex and other agents that follow the open Agent Skills format. Any coding tool able to read a SKILL.md instruction file can load them, so the catalog stays portable across compatible AI assistants.",
     },
   ] as FaqItem[],
 };
@@ -89,7 +89,7 @@ const zh: UiStrings = {
   skipToContent: "跳到主要内容",
   siteTagline: "AI Agent 技能目录",
   siteDescription:
-    "浏览并安装适用于 Claude Code 及其他 AI 编程工具的 agent skill。涵盖前端、后端、写作、设计等方向的精选目录。",
+    "浏览并安装适用于 Claude Code 和 Codex 的 Agent Skills，涵盖代码审查、前端开发、写作、设计与发布。按任务选择技能，复制命令即可安装。",
   header: {
     categories: "分类",
     faq: "常见问题",
@@ -100,9 +100,9 @@ const zh: UiStrings = {
   },
   home: {
     eyebrow: "Agent 技能目录",
-    heading: "让 agent 按需加载的专项能力。",
+    heading: "编程、写作与设计的 Agent Skills。",
     intro: (count: number) =>
-      `${count} 个小而具体的 skill，适用于 Claude Code 以及任何能读 SKILL.md 的 agent。按分类筛选，按更新时间排序，一条命令装好。`,
+      `${count} 个可安装的技能，适用于 Claude Code 和 Codex，涵盖代码审查、前端开发、写作、设计与发布。找到要完成的任务，复制命令即可安装。`,
     installAll: "安装整个目录",
     installOne: "或只装一个：",
     faqHeading: "常见问题",
@@ -156,7 +156,7 @@ const zh: UiStrings = {
     {
       question: "支持哪些 AI 工具？",
       answer:
-        "这些 skill 面向 Claude Code 以及其他遵循开放 Agent Skills 格式的 agent。任何能读取 SKILL.md 指令文件的编程工具都能加载，因此目录可以在兼容的 AI 助手之间通用。",
+        "这些 skill 面向 Claude Code、Codex 以及其他遵循开放 Agent Skills 格式的 agent。任何能读取 SKILL.md 指令文件的编程工具都能加载，因此目录可以在兼容的 AI 助手之间通用。",
     },
   ],
 };
@@ -165,7 +165,7 @@ const ja: UiStrings = {
   skipToContent: "本文へスキップ",
   siteTagline: "AI エージェント スキルカタログ",
   siteDescription:
-    "Claude Code をはじめとする AI コーディングツール向けの agent skill を探してインストールできます。フロントエンド、バックエンド、ライティング、デザインなどを収録。",
+    "Claude Code と Codex 向けの Agent Skills を探してインストール。コードレビュー、フロントエンド開発、執筆、デザイン、リリースに使える手順を収録。",
   header: {
     categories: "カテゴリ",
     faq: "よくある質問",
@@ -176,9 +176,9 @@ const ja: UiStrings = {
   },
   home: {
     eyebrow: "エージェント スキルカタログ",
-    heading: "必要なときだけ読み込む、絞り込まれた専門知識。",
+    heading: "開発・執筆・デザインのための Agent Skills。",
     intro: (count: number) =>
-      `Claude Code と SKILL.md を読めるあらゆるエージェント向けの、小さく具体的なスキルが ${count} 件。カテゴリで絞り込み、更新順に並べ替え、コマンド一つで導入できます。`,
+      `Claude Code と Codex 向けのスキルを ${count} 件収録。コードレビュー、フロントエンド開発、執筆、デザイン、リリースから必要な作業を選び、コマンドをコピーして導入できます。`,
     installAll: "カタログ全体をインストール",
     installOne: "個別に追加する場合:",
     faqHeading: "よくある質問",
@@ -232,7 +232,7 @@ const ja: UiStrings = {
     {
       question: "どの AI ツールに対応していますか?",
       answer:
-        "これらのスキルは Claude Code と、オープンな Agent Skills 形式に従う他のエージェントを対象としています。SKILL.md を読めるコーディングツールなら読み込めるため、互換性のある AI アシスタント間で持ち運べます。",
+        "これらのスキルは Claude Code、Codex と、オープンな Agent Skills 形式に従う他のエージェントを対象としています。SKILL.md を読めるコーディングツールなら読み込めるため、互換性のある AI アシスタント間で持ち運べます。",
     },
   ],
 };

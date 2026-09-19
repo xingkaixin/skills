@@ -58,16 +58,14 @@ const installCommand = getInstallCommand(skillsData, "all");
             class:list={[
               "mt-3.5 text-[2.25rem] leading-[1.12] font-semibold tracking-[-0.02em] text-balance sm:text-[2.75rem]",
               // A `ch` is the width of "0", so a full-width character spends
-              // two of them; the Japanese heading needs the wider measure to
+              // two of them; CJK headings need the wider measure to
               // break across the same number of lines.
-              locale === "ja" ? "max-w-[24ch]" : "max-w-[15ch]",
+              locale === "en" ? "max-w-[15ch]" : "max-w-[24ch]",
             ]}
           >
-            {locale === "zh"
-              ? strings.home.heading.split(/(按需加载)/).map((part) => (
-                  <span class:list={[part === "按需加载" && "whitespace-nowrap"]}>{part}</span>
-                ))
-              : strings.home.heading}
+            {strings.home.heading.split(/(Agent Skills)/).map((part) => (
+              <span class:list={[part === "Agent Skills" && "whitespace-nowrap"]}>{part}</span>
+            ))}
           </h1>
           <p class="mt-4.5 max-w-[46ch] text-[15px] leading-7 text-text-secondary">
             {strings.home.intro(skillsData.length)}

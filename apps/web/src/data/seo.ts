@@ -2,6 +2,7 @@ import { SITE_NAME, SITE_REPO, SITE_URL } from "@/data/catalog";
 import { skillsData } from "@/data/skills.generated";
 import type { SkillRecord } from "@/data/skill-record";
 import { localeHref, type Locale } from "@/i18n/config";
+import { skillTitles } from "@/data/skill-titles";
 import { ui } from "@/i18n/ui";
 
 export type JsonLdValue =
@@ -40,7 +41,9 @@ export function getHomeSeo(locale: Locale): PageSeo {
 
 export function getSkillSeo(skill: SkillRecord, locale: Locale): PageSeo {
   return {
-    title: `${skill.slug} - ${SITE_NAME}`,
+    title: skillTitles[skill.slug]
+      ? `${skill.slug}: ${skillTitles[skill.slug][locale]} | Skills`
+      : `${skill.slug} - ${SITE_NAME}`,
     description: skill.displayDescription[locale],
     ogType: "article",
     structuredData: [
