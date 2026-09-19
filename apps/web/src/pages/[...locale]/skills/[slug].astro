@@ -6,6 +6,7 @@ import CopyCommand from "@/components/CopyCommand.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
 import SkillProse from "@/components/SkillProse.astro";
 import SkillToc from "@/components/SkillToc.astro";
+import { relatedSkills } from "@/data/related-skills";
 import { getSkillSeo } from "@/data/seo";
 import { getInstallCommand } from "@/data/skill-catalog";
 import { skillContent } from "@/data/skills.content.generated";
@@ -35,9 +36,17 @@ const body = skillContent[skill.slug];
 const installCommand = getInstallCommand(skillsData, "skill", skill.slug);
 const toc = extractToc(body);
 const categoryHref = `${localeHref(locale)}?category=${encodeURIComponent(skill.category)}`;
-const related = skillsData
-  .filter((item) => item.category === skill.category && item.slug !== skill.slug)
-  .slice(0, 3);
+const curated = relatedSkills[skill.slug];
+const related = curated
+  ? curated.map((link) => {
+      const item = skillsData.find((candidate) => candidate.slug === link.slug);
+      if (!item) throw new Error(`Unknown related skill: ${link.slug}`);
+      return { ...item, reason: link.reason[locale] };
+    })
+  : skillsData
+      .filter((item) => item.category === skill.category && item.slug !== skill.slug)
+      .slice(0, 3)
+      .map((item) => ({ ...item, reason: item.displayDescription[locale] }));
 const meta = [
   { label: strings.skill.added, value: skill.firstAdded },
   { label: strings.skill.updated, value: skill.lastModified },
@@ -146,7 +155,7 @@ const bodyLanguageNote =
         {related.length > 0 && (
           <div class="border-t border-divider pt-5">
             <p class="eyebrow mb-3 tracking-[0.18em] text-text-muted">
-              {strings.skill.moreIn(skill.category)}
+              {curated ? strings.skill.nextSteps : strings.skill.moreIn(skill.category)}
             </p>
             <div class="flex flex-col gap-2">
               {related.map((item) => (
@@ -155,8 +164,8 @@ const bodyLanguageNote =
                   class="flex flex-col gap-1.5 rounded-lg border border-border p-3 transition hover:border-text hover:bg-surface"
                 >
                   <span class="font-mono text-[11.5px] break-words text-text">{item.slug}</span>
-                  <span class="line-clamp-2 text-[11.5px] leading-5 text-text-muted">
-                    {item.displayDescription[locale]}
+                  <span class="text-[11.5px] leading-5 text-text-muted">
+                    {item.reason}
                   </span>
                 </a>
               ))}
