@@ -1,4 +1,6 @@
 ---
+import caretDown from "@phosphor-icons/core/regular/caret-down.svg?no-inline";
+import PhosphorIcon from "@/components/PhosphorIcon.astro";
 import { LOCALES, localeHref, localeNames, localeTags, type Locale } from "@/i18n/config";
 import { ui } from "@/i18n/ui";
 
@@ -11,16 +13,47 @@ interface Props {
 const { locale, path } = Astro.props;
 ---
 
-<nav aria-label={ui[locale].header.language} class="flex items-center gap-0.5 rounded-lg border border-border p-[3px]">
-  {LOCALES.map((option) => (
-    <a
-      href={localeHref(option, path)}
-      hreflang={localeTags[option]}
-      lang={localeTags[option]}
-      class="seg-button pressable"
-      aria-current={option === locale ? "true" : undefined}
-    >
-      {localeNames[option]}
-    </a>
-  ))}
-</nav>
+<details class="relative shrink-0" data-language-switcher>
+  <summary
+    aria-label={`${ui[locale].header.language}: ${localeNames[locale]}`}
+    class="flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-lg border border-border px-3 text-[13px] text-text transition-colors hover:border-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent [&::-webkit-details-marker]:hidden"
+  >
+    <span lang={localeTags[locale]}>{localeNames[locale]}</span>
+    <PhosphorIcon src={caretDown} class="h-3 w-3" />
+  </summary>
+  <nav
+    aria-label={ui[locale].header.language}
+    class="absolute top-full right-0 z-20 mt-2 min-w-36 rounded-lg border border-border bg-bg p-1 shadow-lg"
+  >
+    {LOCALES.map((option) => (
+      <a
+        href={localeHref(option, path)}
+        hreflang={localeTags[option]}
+        lang={localeTags[option]}
+        class="flex min-h-11 items-center rounded-md px-3 text-[13px] text-text-secondary hover:bg-surface hover:text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent aria-[current=true]:bg-text aria-[current=true]:text-bg"
+        aria-current={option === locale ? "true" : undefined}
+      >
+        {localeNames[option]}
+      </a>
+    ))}
+  </nav>
+</details>
+
+<script>
+  const switcher = document.querySelector<HTMLDetailsElement>("[data-language-switcher]");
+
+  if (switcher) {
+    document.addEventListener("click", (event) => {
+      if (event.target instanceof Node && !switcher.contains(event.target)) {
+        switcher.open = false;
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape" || !switcher.open) return;
+
+      switcher.open = false;
+      switcher.querySelector("summary")?.focus();
+    });
+  }
+</script>

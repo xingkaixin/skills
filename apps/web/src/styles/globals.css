@@ -96,8 +96,7 @@ button {
 }
 
 /* Filter chip and segmented sort control both read their state from
-   aria-pressed, so the client script only flips the attribute. The language
-   switcher is links rather than buttons, so it marks the current one instead. */
+   aria-pressed, so the client script only flips the attribute. */
 .chip {
   display: inline-flex;
   align-items: center;
@@ -145,8 +144,7 @@ button {
   color: var(--color-text);
 }
 
-.seg-button[aria-pressed="true"],
-.seg-button[aria-current="true"] {
+.seg-button[aria-pressed="true"] {
   background: var(--color-text);
   color: #ffffff;
 }

@@ -16,26 +16,26 @@ interface Props {
 const { variant = "home", locale, path } = Astro.props;
 const strings = ui[locale];
 const linkClass =
-  "pressable inline-flex min-h-11 items-center rounded-lg px-3 text-[13px] text-text-secondary transition hover:text-text";
+  "pressable inline-flex min-h-11 items-center whitespace-nowrap rounded-lg px-2 text-[13px] text-text-secondary transition hover:text-text sm:px-3";
 const buttonClass =
   "pressable inline-flex min-h-11 items-center rounded-lg border border-border px-3 text-[13px] text-text transition hover:border-text";
 ---
 
 <header class="border-b border-divider px-6 sm:px-10">
-  <div class="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 py-3 sm:flex sm:justify-between sm:gap-4">
+  <div class="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 py-3 md:flex md:justify-between md:gap-4">
     <SiteBrand locale={locale} />
-    <div class="col-span-2 row-start-2 flex flex-wrap items-center gap-2 sm:ml-auto">
+    <div class="col-span-2 row-start-2 flex min-w-0 items-center justify-between gap-3 md:ml-auto">
       {variant === "home" ? (
-        <>
+        <nav class="flex items-center gap-1">
           <a href="#categories" class={linkClass}>{strings.header.categories}</a>
           <a href="#faq" class={linkClass}>{strings.header.faq}</a>
-        </>
+        </nav>
       ) : (
         <form
           action={localeHref(locale)}
           method="get"
           role="search"
-          class="flex w-full items-center gap-2 rounded-lg border border-border px-3 py-2 transition focus-within:border-text sm:w-60"
+          class="flex min-h-11 min-w-0 flex-1 items-center gap-2 rounded-lg border border-border px-3 py-2 transition focus-within:border-text md:w-60 md:flex-none"
         >
           <SearchIcon />
           <label class="sr-only" for="header-search">{strings.header.searchSkills}</label>
@@ -45,9 +45,9 @@ const buttonClass =
             name="q"
             placeholder={strings.header.search}
             data-search-focus
-            class="w-full min-w-0 bg-transparent text-[13px] text-text outline-none placeholder:text-text-muted"
+            class="w-full min-w-0 bg-transparent text-base text-text outline-none placeholder:text-text-muted md:text-[13px]"
           />
-          <kbd class="hidden rounded border border-border px-1.5 py-0.5 font-mono text-[10px] text-text-muted sm:block">⌘K</kbd>
+          <kbd class="hidden rounded border border-border px-1.5 py-0.5 font-mono text-[10px] text-text-muted md:block">⌘K</kbd>
         </form>
       )}
       <LanguageSwitcher locale={locale} path={path} />
