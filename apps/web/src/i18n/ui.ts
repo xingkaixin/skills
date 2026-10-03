@@ -55,6 +55,7 @@ const en = {
   copy: {
     action: "Copy",
     done: "Copied",
+    failed: "Copy failed",
   },
   notFound: {
     heading: "Page not found",
@@ -134,6 +135,7 @@ const zh: UiStrings = {
   copy: {
     action: "复制",
     done: "已复制",
+    failed: "复制失败",
   },
   notFound: {
     heading: "页面不存在",
@@ -211,6 +213,7 @@ const ja: UiStrings = {
   copy: {
     action: "コピー",
     done: "コピーしました",
+    failed: "コピーできませんでした",
   },
   notFound: {
     heading: "ページが見つかりません",

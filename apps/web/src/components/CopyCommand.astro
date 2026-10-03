@@ -5,11 +5,12 @@ import { ui } from "@/i18n/ui";
 interface Props {
   command: string;
   locale: Locale;
+  skill?: string;
   tone?: "outline" | "solid";
   class?: string;
 }
 
-const { command, locale, tone = "outline", class: className = "" } = Astro.props;
+const { command, locale, skill, tone = "outline", class: className = "" } = Astro.props;
 const strings = ui[locale].copy;
 ---
 
@@ -22,6 +23,9 @@ const strings = ui[locale].copy;
     data-copy={command}
     data-copy-label={strings.action}
     data-copy-done={strings.done}
+    data-copy-failed={strings.failed}
+    data-install-skill={skill ?? "all"}
+    data-install-locale={locale}
   >
     {strings.action}
   </button>
@@ -31,14 +35,32 @@ const strings = ui[locale].copy;
   const RESET_DELAY = 1400;
 
   // Delegated so it also covers the copy buttons SkillProse builds at runtime.
-  document.addEventListener("click", (event) => {
+  document.addEventListener("click", async (event) => {
     const button = (event.target as Element | null)?.closest<HTMLElement>("[data-copy]");
     if (!button) return;
 
-    void navigator.clipboard?.writeText(button.getAttribute("data-copy") ?? "");
+    try {
+      await navigator.clipboard.writeText(button.getAttribute("data-copy") ?? "");
+    } catch {
+      button.textContent = button.getAttribute("data-copy-failed") ?? button.getAttribute("data-copy-label");
+      window.setTimeout(() => {
+        button.textContent = button.getAttribute("data-copy-label");
+      }, RESET_DELAY);
+      return;
+    }
+
     button.textContent = button.getAttribute("data-copy-done");
     window.setTimeout(() => {
       button.textContent = button.getAttribute("data-copy-label");
     }, RESET_DELAY);
+
+    const skill = button.dataset.installSkill;
+    if (skill) {
+      void window.umami?.track("install-command-copy", {
+        skill,
+        scope: skill === "all" ? "all" : "skill",
+        locale: button.dataset.installLocale ?? "en",
+      });
+    }
   });
 </script>

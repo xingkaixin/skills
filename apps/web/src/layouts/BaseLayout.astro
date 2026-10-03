@@ -88,7 +88,7 @@ const ogImageUrl = new URL("/og-image.png", Astro.site).href;
     {jsonLdSources.map((source) => (
       <script is:inline type="application/ld+json" set:html={source} />
     ))}
-    <script define:vars={{ siteOrigin: new URL(SITE_URL).origin }}>
+    <script is:inline define:vars={{ siteOrigin: new URL(SITE_URL).origin }}>
       if (window.location.origin === siteOrigin) {
         const cloudflare = document.createElement("script");
         cloudflare.type = "module";
@@ -98,6 +98,11 @@ const ogImageUrl = new URL("/og-image.png", Astro.site).href;
         const umami = document.createElement("script");
         umami.src = "https://umami.xingkaixin.me/script.js";
         umami.dataset.websiteId = "6d3319ec-6268-4f7b-aba8-96a2fcdb1ea4";
+        umami.dataset.excludeHash = "true";
+        umami.dataset.performance = "true";
+        // Static pages navigate by document; search and TOC changes are not pageviews.
+        umami.dataset.autoPageview = "false";
+        umami.addEventListener("load", () => window.umami?.track());
 
         document.head.append(cloudflare, umami);
       }

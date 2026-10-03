@@ -98,6 +98,16 @@ After changing Pages analytics settings, redeploy and check the production page:
 old deployments can still contain the Pages-injected snippet. Verify that only
 the manual Cloudflare beacon loads and that its reporting requests succeed.
 
+Umami records one pageview per document load. Automatic History API pageviews are
+disabled because catalog searches use `replaceState`; hashes are excluded so table
+of contents links do not fragment page reports. Query parameters remain available
+for UTM attribution. Core Web Vitals collection is enabled.
+
+`install-command-copy` is sent only after the clipboard write succeeds, with
+`scope` (`all` or `skill`), `skill` (slug or `all`), and `locale`. Code samples do
+not count as installations. The Umami goal “安装命令复制” matches that event; it
+measures install intent, not a completed CLI installation.
+
 ## Languages
 
 The site renders in English, Chinese, and Japanese. English owns the bare paths
