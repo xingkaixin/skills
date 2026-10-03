@@ -69,10 +69,21 @@ pnpm build
 pnpm deploy:cf
 ```
 
-Astro pre-renders the catalog, every skill detail page, the 404 page, and `sitemap.xml` into `dist/` — the catalog and detail pages once per locale.
+Astro pre-renders the catalog, every skill detail page, the 404 page, and `sitemap.xml` into `dist/` — the catalog, category pages, and detail pages once per locale.
 
 HTML pages use the `file` build format so Pages serves the extensionless canonical
 URLs directly, without redirecting to trailing-slash URLs.
+
+### Search discovery
+
+Category links open static `/categories/{category}` pages in each locale. Category
+membership comes from the generated skill records; localized category titles and
+summaries live in `scripts/catalog/config.ts`.
+
+The sitemap includes only canonical home, category, and skill URLs with reciprocal
+language alternates. It omits `lastmod`: the skill source date does not include
+changes to translated summaries, titles, or page templates. Do not use deployment
+time as a substitute for a page's meaningful content modification date.
 
 ### Analytics
 

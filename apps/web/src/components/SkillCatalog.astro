@@ -1,11 +1,7 @@
 ---
-import arrowRight from "@phosphor-icons/core/regular/arrow-right.svg?no-inline";
-import type { ImageMetadata } from "astro";
-import { Image } from "astro:assets";
-import openFolio from "@/assets/backgrounds/open-folio.png";
-import PhosphorIcon from "@/components/PhosphorIcon.astro";
+import SkillCard from "@/components/SkillCard.astro";
+import { categoryMetadata } from "@/data/catalog";
 import SearchIcon from "@/components/SearchIcon.astro";
-import { skillSearchText } from "@/data/skill-catalog";
 import type { SkillRecord } from "@/data/skill-record";
 import { localeHref, type Locale } from "@/i18n/config";
 import { ui } from "@/i18n/ui";
@@ -18,19 +14,6 @@ interface Props {
 
 const { skills, categories, locale } = Astro.props;
 const strings = ui[locale].catalog;
-const cardArtwork = import.meta.glob<{ default: ImageMetadata }>(
-  "../assets/card-backgrounds/*.png",
-  { eager: true },
-);
-
-function cardArtRotation(slug: string) {
-  let hash = 0;
-  for (const character of slug) {
-    hash = (Math.imul(hash, 31) + character.charCodeAt(0)) >>> 0;
-  }
-  return `${(hash % 3 - 1) * 8}deg`;
-}
-
 // Server render matches the default "recent" sort so the no-JS view is already ordered.
 const ordered = [...skills].sort(
   (a, b) => b.lastModified.localeCompare(a.lastModified) || a.slug.localeCompare(b.slug),
@@ -103,16 +86,16 @@ const sortOptions = [
   <div id="categories" class="border-b border-divider px-6 sm:px-10">
     <div
       class="mx-auto flex max-w-6xl flex-wrap items-center gap-2 py-3"
-      role="group"
-      aria-label={strings.filterLabel}
+      role="navigation"
+      aria-label={ui[locale].header.categories}
     >
-      <button type="button" class="chip pressable" data-category="all" aria-pressed="true">
+      <a href={localeHref(locale)} class="chip pressable" data-category="all" aria-current="page">
         {strings.all}<span class="chip-count">{skills.length}</span>
-      </button>
+      </a>
       {categories.map((category) => (
-        <button type="button" class="chip pressable" data-category={category} aria-pressed="false">
+        <a href={localeHref(locale, `/categories/${category}`)} class="chip pressable" data-category={category} title={categoryMetadata[category].webTitle[locale]}>
           {category}<span class="chip-count">{counts.get(category)}</span>
-        </button>
+        </a>
       ))}
     </div>
   </div>
@@ -120,41 +103,7 @@ const sortOptions = [
   <div class="px-6 pt-7 sm:px-10">
     <div class="mx-auto grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-3" data-catalog-grid>
     {ordered.map((skill) => (
-      <a
-        href={localeHref(locale, `/skills/${skill.slug}`)}
-        class="skill-card"
-        data-skill
-        data-category={skill.category}
-        data-slug={skill.slug}
-        data-modified={skill.lastModified}
-        data-haystack={skillSearchText(skill)}
-      >
-        <Image
-          src={cardArtwork[`../assets/card-backgrounds/${skill.category}.png`]?.default ?? openFolio}
-          alt=""
-          aria-hidden="true"
-          class="skill-card-art"
-          style={`--card-art-rotation: ${cardArtRotation(skill.slug)}`}
-          width={208}
-          height={208}
-          densities={[1, 2]}
-          format="webp"
-          quality={75}
-          loading="lazy"
-          fetchpriority="low"
-          decoding="async"
-        />
-        <span class="flex items-center justify-between gap-2">
-          <span class="eyebrow text-accent">{skill.category}</span>
-          <span class="font-mono text-[10px] text-text-muted">{skill.sourceKind}</span>
-        </span>
-        <h2 class="font-mono text-sm font-medium break-words text-text">{skill.slug}</h2>
-        <p class="line-clamp-3 text-[13px] leading-6 text-text-secondary">{skill.displayDescription[locale]}</p>
-        <span class="mt-auto flex items-center justify-between pt-1.5 font-mono text-[10.5px] text-text-muted">
-          <span>{strings.updated(skill.lastModified)}</span>
-          <PhosphorIcon src={arrowRight} class="h-3.5 w-3.5" />
-        </span>
-      </a>
+      <SkillCard skill={skill} locale={locale} />
     ))}
     </div>
   </div>
@@ -176,7 +125,7 @@ const sortOptions = [
   if (root) {
     const grid = root.querySelector<HTMLElement>("[data-catalog-grid]")!;
     const cards = Array.from(root.querySelectorAll<HTMLElement>("[data-skill]"));
-    const chips = Array.from(root.querySelectorAll<HTMLButtonElement>("button[data-category]"));
+    const chips = Array.from(root.querySelectorAll<HTMLAnchorElement>("a[data-category]"));
     const sorts = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-sort]"));
     const search = root.querySelector<HTMLInputElement>("#catalog-search")!;
     const form = root.querySelector<HTMLFormElement>("[data-catalog-search]")!;
@@ -221,7 +170,10 @@ const sortOptions = [
         if (matches) visible += 1;
       }
 
-      setPressed(chips, "category", state.category);
+      for (const chip of chips) {
+        if (chip.dataset.category === state.category) chip.setAttribute("aria-current", "page");
+        else chip.removeAttribute("aria-current");
+      }
       setPressed(sorts, "sort", state.sort);
       // Two rendered samples stand in for the count function, which cannot
       // cross into the client bundle: swap the digit in whichever fits.
@@ -251,13 +203,6 @@ const sortOptions = [
       state.query = search.value;
       render(true);
     });
-
-    for (const chip of chips) {
-      chip.addEventListener("click", () => {
-        state.category = chip.dataset.category!;
-        render(true);
-      });
-    }
 
     for (const button of sorts) {
       button.addEventListener("click", () => {

@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { SITE_URL } from "@/data/catalog";
-import { skillsData } from "@/data/skills.generated";
+import { skillCategories, skillsData } from "@/data/skills.generated";
 import {
   DEFAULT_LOCALE,
   LOCALES,
@@ -8,13 +8,6 @@ import {
   localeTags,
   type Locale,
 } from "@/i18n/config";
-
-interface Page {
-  path: string;
-  lastModified: string;
-  changefreq: string;
-  priority: string;
-}
 
 export const GET: APIRoute = () =>
   new Response(renderSitemap(), {
@@ -24,25 +17,13 @@ export const GET: APIRoute = () =>
   });
 
 function renderSitemap(): string {
-  const homeLastModified =
-    skillsData
-      .map((skill) => skill.lastModified)
-      .sort()
-      .at(-1) ?? new Date().toISOString().split("T")[0];
-
-  const pages: Page[] = [
-    { path: "/", lastModified: homeLastModified, changefreq: "weekly", priority: "1.0" },
-    ...skillsData.map((skill) => ({
-      path: `/skills/${skill.slug}`,
-      lastModified: skill.lastModified,
-      changefreq: "monthly",
-      priority: "0.8",
-    })),
+  const paths = [
+    "/",
+    ...skillCategories.map((category) => `/categories/${category}`),
+    ...skillsData.map((skill) => `/skills/${skill.slug}`),
   ];
-
-  // Every locale gets its own entry, each listing all of them as alternates.
-  const urls = pages.flatMap((page) =>
-    LOCALES.map((locale) => sitemapUrl(page, locale)),
+  const urls = paths.flatMap((path) =>
+    LOCALES.map((locale) => sitemapUrl(path, locale)),
   );
 
   return [
@@ -54,21 +35,18 @@ function renderSitemap(): string {
   ].join("\n");
 }
 
-function sitemapUrl(page: Page, locale: Locale): string {
+function sitemapUrl(path: string, locale: Locale): string {
   const alternates = [
     ...LOCALES.map((alternate) =>
-      alternateLink(localeTags[alternate], absolute(page.path, alternate)),
+      alternateLink(localeTags[alternate], absolute(path, alternate)),
     ),
-    alternateLink("x-default", absolute(page.path, DEFAULT_LOCALE)),
+    alternateLink("x-default", absolute(path, DEFAULT_LOCALE)),
   ];
 
   return [
     "  <url>",
-    `    <loc>${escapeXml(absolute(page.path, locale))}</loc>`,
+    `    <loc>${escapeXml(absolute(path, locale))}</loc>`,
     ...alternates,
-    `    <lastmod>${page.lastModified}</lastmod>`,
-    `    <changefreq>${page.changefreq}</changefreq>`,
-    `    <priority>${page.priority}</priority>`,
     "  </url>",
   ].join("\n");
 }

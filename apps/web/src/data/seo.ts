@@ -1,4 +1,4 @@
-import { SITE_NAME, SITE_REPO, SITE_URL } from "@/data/catalog";
+import { categoryMetadata, SITE_NAME, SITE_REPO, SITE_URL } from "@/data/catalog";
 import { skillsData } from "@/data/skills.generated";
 import type { SkillRecord } from "@/data/skill-record";
 import { localeHref, type Locale } from "@/i18n/config";
@@ -23,7 +23,7 @@ export interface PageSeo {
 }
 
 export function homeTitle(locale: Locale): string {
-  return `${SITE_NAME} - ${ui[locale].siteTagline}`;
+  return `${ui[locale].siteTagline} | Claude Code & Codex`;
 }
 
 export function getHomeSeo(locale: Locale): PageSeo {
@@ -41,9 +41,7 @@ export function getHomeSeo(locale: Locale): PageSeo {
 
 export function getSkillSeo(skill: SkillRecord, locale: Locale): PageSeo {
   return {
-    title: skillTitles[skill.slug]
-      ? `${skill.slug}: ${skillTitles[skill.slug][locale]} | Skills`
-      : `${skill.slug} - ${SITE_NAME}`,
+    title: `${skillTitles[skill.slug]?.[locale] ?? skill.slug} | Agent Skills`,
     description: skill.displayDescription[locale],
     ogType: "article",
     structuredData: [
@@ -51,6 +49,44 @@ export function getSkillSeo(skill: SkillRecord, locale: Locale): PageSeo {
       createSkillStructuredData(skill, locale),
       createSkillBreadcrumbStructuredData(skill, locale),
     ],
+  };
+}
+
+export function getCategorySeo(category: string, locale: Locale): PageSeo {
+  const metadata = categoryMetadata[category];
+  const url = absolute(locale, `/categories/${category}`);
+  const skills = skillsData.filter((skill) => skill.category === category);
+  return {
+    title: `${metadata.webTitle[locale]} | Claude Code & Codex`,
+    description: metadata.webDescription[locale],
+    ogType: "website",
+    structuredData: [siteEntity(locale), {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "@id": `${url}#collection`,
+      url,
+      name: metadata.webTitle[locale],
+      description: metadata.webDescription[locale],
+      inLanguage: locale,
+      isPartOf: { "@id": `${SITE_URL}/#website` },
+      mainEntity: {
+        "@type": "ItemList",
+        numberOfItems: skills.length,
+        itemListElement: skills.map((skill, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: skillTitles[skill.slug]?.[locale] ?? skill.slug,
+          url: absolute(locale, `/skills/${skill.slug}`),
+        })),
+      },
+    }, {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Skills", item: absolute(locale) },
+        { "@type": "ListItem", position: 2, name: metadata.webTitle[locale], item: url },
+      ],
+    }],
   };
 }
 
@@ -107,7 +143,7 @@ function createSkillStructuredData(skill: SkillRecord, locale: Locale): JsonLdNo
     "@type": "TechArticle",
     "@id": `${url}#article`,
     url,
-    headline: `${skill.slug} skill`,
+    headline: skillTitles[skill.slug]?.[locale] ?? skill.slug,
     description: skill.displayDescription[locale],
     inLanguage: locale,
     datePublished: skill.firstAdded,
@@ -117,7 +153,7 @@ function createSkillStructuredData(skill: SkillRecord, locale: Locale): JsonLdNo
     isPartOf: { "@id": `${SITE_URL}/#website` },
     about: ["AI agent skill", skill.category],
     keywords: [skill.slug, skill.category].join(", "),
-    sameAs: skill.sourceRepo,
+    isBasedOn: skill.sourceRepo,
   };
 }
 
@@ -138,6 +174,12 @@ function createSkillBreadcrumbStructuredData(
       {
         "@type": "ListItem",
         position: 2,
+        name: categoryMetadata[skill.category].webTitle[locale],
+        item: absolute(locale, `/categories/${skill.category}`),
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
         name: skill.slug,
         item: absolute(locale, `/skills/${skill.slug}`),
       },

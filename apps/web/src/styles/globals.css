@@ -95,8 +95,6 @@ button {
   text-transform: uppercase;
 }
 
-/* Filter chip and segmented sort control both read their state from
-   aria-pressed, so the client script only flips the attribute. */
 .chip {
   display: inline-flex;
   align-items: center;
@@ -119,7 +117,7 @@ button {
   color: var(--color-text);
 }
 
-.chip[aria-pressed="true"] {
+.chip[aria-current="page"] {
   border-color: var(--color-text);
   background: var(--color-text);
   color: #ffffff;

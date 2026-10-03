@@ -4,6 +4,7 @@ export {
   SITE_REPO,
   SITE_URL,
   skillCatalog,
+  categoryMetadata,
 } from "../../../../scripts/catalog/config.ts";
 export type {
   SkillCatalogEntry,
