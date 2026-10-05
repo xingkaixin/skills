@@ -6,7 +6,7 @@
     "build": "pnpm generate:web-data && pnpm --filter web build",
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "check:generated": "node scripts/generate-web-skills.ts --check",
-    "deploy:cf": "pnpm --filter web deploy:cf",
+    "deploy:cf": "pnpm build && pnpm --filter web deploy:cf",
     "descriptions:status": "node scripts/skill-descriptions.ts",
     "descriptions:touch": "node scripts/skill-descriptions.ts --touch",
     "dev": "pnpm generate:web-data && pnpm --filter web dev",

@@ -81,11 +81,6 @@ export default function agentAssets(): AstroIntegration {
             },
           } } },
         });
-        await json("/_routes.json", {
-          version: 1,
-          include: ["/", "/skills/*", ...LOCALES.filter((locale) => localeHref(locale) !== "/").flatMap((locale) => [`/${locale}`, `/${locale}/*`]), "/.well-known/api-catalog"],
-          exclude: [],
-        });
       },
     },
   };

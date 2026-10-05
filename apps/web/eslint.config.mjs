@@ -6,7 +6,7 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default defineConfig([
-  globalIgnores(["dist/**", "node_modules/**", ".astro/**", ".wrangler/**"]),
+  globalIgnores(["dist/**", "node_modules/**", ".astro/**", ".cloudflare/**"]),
   {
     files: ["**/*.{js,mjs,cjs,ts,tsx,mts,cts}"],
     extends: [js.configs.recommended, ...tseslint.configs.recommended],

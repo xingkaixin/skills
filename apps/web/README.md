@@ -1,6 +1,6 @@
 # skills-web
 
-Skills catalog frontend — a static site built with Astro and deployed to Cloudflare Pages.
+Skills catalog frontend — a static site built with Astro and deployed to Cloudflare Workers.
 
 ## Tech Stack
 
@@ -28,7 +28,7 @@ Open [http://localhost:4321](http://localhost:4321) in your browser.
 | `pnpm typecheck` | Check root TypeScript and Astro templates |
 | `pnpm test` | Run catalog and stock-report tests |
 | `pnpm check` | Run every required verification |
-| `pnpm deploy:cf` | Deploy to Cloudflare Pages |
+| `pnpm deploy:cf` | Deploy to Cloudflare Workers |
 
 ## Project Structure
 
@@ -62,16 +62,23 @@ src/
 
 ## Deploy
 
-### Cloudflare Pages
+### Cloudflare Workers
 
 ```bash
-pnpm build
 pnpm deploy:cf
 ```
 
+Use the `cf` CLI installed globally through mise and sign in with `cf auth login`.
+Do not install `cf` as a project dependency. The root deployment command generates
+catalog data, builds Astro, and runs `cf deploy --prebuilt` from `apps/web`.
+`build-cloudflare.mjs` packages the static assets and `worker.js` into
+`.cloudflare/output/v0/`, including the `skills.xingkaixin.me` custom domain.
+Run `pnpm --filter web exec cf deploy --prebuilt --dry-run` after a build to
+validate the deployment without uploading it.
+
 Astro pre-renders the catalog, every skill detail page, the 404 page, and `sitemap.xml` into `dist/` — the catalog, category pages, and detail pages once per locale.
 
-HTML pages use the `file` build format so Pages serves the extensionless canonical
+HTML pages use the `file` build format so Workers serves the extensionless canonical
 URLs directly, without redirecting to trailing-slash URLs.
 
 ### Search discovery
@@ -87,16 +94,9 @@ time as a substitute for a page's meaningful content modification date.
 
 ### Analytics
 
-`BaseLayout.astro` loads the existing `skills.xingkaixin.me` Cloudflare Web
-Analytics site and Umami on the production domain. Keep Pages Web Analytics
-disabled. In the `xingkaixin.me` zone, use a Configuration Rule matching only
-`http.host eq "skills.xingkaixin.me"` with Disable RUM enabled to prevent an
-additional automatic beacon. The manual beacon continues to report to its
-existing analytics site.
-
-After changing Pages analytics settings, redeploy and check the production page:
-old deployments can still contain the Pages-injected snippet. Verify that only
-the manual Cloudflare beacon loads and that its reporting requests succeed.
+`BaseLayout.astro` loads only Umami on the production domain. Keep the zone's
+Configuration Rule for `http.host eq "skills.xingkaixin.me"` with Disable RUM
+enabled to prevent automatic Cloudflare Web Analytics injection.
 
 Umami records one pageview per document load. Automatic History API pageviews are
 disabled because catalog searches use `replaceState`; hashes are excluded so table
@@ -158,28 +158,30 @@ The build generates `/api/skills.json`, `/openapi.json`,
 pages from the same catalog and skill sources. `/api-docs.md` describes the
 read-only catalog API. Do not edit these build outputs in `dist/`.
 
-The Pages advanced-mode worker in `public/_worker.js` negotiates Markdown for
+The Worker in `worker.js` negotiates Markdown for
 explicit `Accept: text/markdown` requests, respecting quality values. HTML stays
 the default. Both representations carry `Vary: Accept` and `private, no-store`
 to prevent caches from mixing representations. The worker also adds discovery
 Link headers and the API catalog media type, including for HEAD requests.
-`_routes.json` limits worker invocation to page and API catalog routes; ordinary
-static assets bypass it. This uses Pages Functions, not the paid Markdown for
-Agents switch, and page requests consume the project's Functions allowance.
+`assets.runWorkerFirst` in `build-cloudflare.mjs` limits Worker-first routing
+to page and API catalog routes; ordinary static assets bypass it. Page requests
+use the Workers request allowance.
 
 `robots.txt` declares `ai-train=yes, search=yes, ai-input=yes` for all agents.
 
-Astro dev/preview do not execute the Pages worker. To verify production HTTP
-behavior locally, run from the repository root:
+Astro dev/preview do not execute the Worker. After building, validate the cf
+Build Output and run the existing response tests from the repository root:
 
 ```sh
 pnpm build
-pnpm --filter web exec wrangler pages dev dist --port 8788
-curl -i -H 'Accept: text/markdown' http://localhost:8788/
-curl -I http://localhost:8788/.well-known/api-catalog
+pnpm --filter web exec cf deploy --prebuilt --dry-run
+node --test tests/agent-response.test.js
 ```
 
-Deploy the entire `dist/` directory, including `_worker.js` and `_routes.json`,
-using the existing Pages deployment command. After deployment, scan the public
-URL with `POST https://isitagentready.com/api/scan` and JSON body
-`{"url":"https://skills.xingkaixin.me"}`.
+After deploying, verify HTML and Markdown negotiation, HEAD discovery headers,
+static asset caching, and the custom 404 page on the production domain:
+
+```sh
+curl -i -H 'Accept: text/markdown' https://skills.xingkaixin.me/
+curl -I https://skills.xingkaixin.me/.well-known/api-catalog
+```

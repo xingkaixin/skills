@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import worker, { prefersMarkdown } from "../apps/web/public/_worker.js";
+import worker, { prefersMarkdown } from "../apps/web/worker.js";
 
 test("content negotiation honors explicit Markdown, quality, and HTML defaults", () => {
   for (const accept of ["", "*/*", "text/*", "text/html", "text/markdown;q=0", "text/markdown;q=0.2,text/html;q=0.8", "text/markdown;q=invalid", "text/markdown;q=0.5,*/*;q=1"]) {
