@@ -90,11 +90,6 @@ const ogImageUrl = new URL("/og-image.png", Astro.site).href;
     ))}
     <script is:inline define:vars={{ siteOrigin: new URL(SITE_URL).origin }}>
       if (window.location.origin === siteOrigin) {
-        const cloudflare = document.createElement("script");
-        cloudflare.type = "module";
-        cloudflare.src = "https://static.cloudflareinsights.com/beacon.min.js";
-        cloudflare.dataset.cfBeacon = '{"token":"c3176e48d15945b890292c7f23f0359e"}';
-
         const umami = document.createElement("script");
         umami.src = "https://umami.xingkaixin.me/script.js";
         umami.dataset.websiteId = "6d3319ec-6268-4f7b-aba8-96a2fcdb1ea4";
@@ -104,7 +99,7 @@ const ogImageUrl = new URL("/og-image.png", Astro.site).href;
         umami.dataset.autoPageview = "false";
         umami.addEventListener("load", () => window.umami?.track());
 
-        document.head.append(cloudflare, umami);
+        document.head.append(umami);
       }
     </script>
   </head>
