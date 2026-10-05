@@ -12,7 +12,8 @@ await writeFile(new URL("config.json", output), JSON.stringify({
 await writeFile(new URL("worker.config.json", worker), JSON.stringify({
   name: "skills",
   compatibilityDate: "2026-07-29",
-  workersDev: true,
+  workersDev: false,
+  previewUrls: false,
   domains: ["skills.xingkaixin.me"],
   assets: {
     htmlHandling: "drop-trailing-slash",
