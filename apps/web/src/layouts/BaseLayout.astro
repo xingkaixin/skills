@@ -1,5 +1,6 @@
 ---
 import "@/styles/globals.css";
+import SiteFooter from "@/components/SiteFooter.astro";
 import { SITE_NAME, SITE_URL } from "@/data/catalog";
 import type { JsonLdNode } from "@/data/seo";
 import { ui } from "@/i18n/ui";
@@ -107,6 +108,7 @@ const ogImageUrl = new URL("/og-image.png", Astro.site).href;
     <a href="#main-content" class="skip-link">{strings.skipToContent}</a>
     <div class="font-sans min-h-screen">
       <slot />
+      <SiteFooter locale={locale} path={path} />
     </div>
     <script>
       if ("modelContext" in document && document.modelContext) {

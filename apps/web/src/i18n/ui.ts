@@ -13,11 +13,13 @@ const en = {
   siteDescription:
     "Install AI agent skills for Claude Code and Codex. Browse reusable instructions for code review, frontend development, writing, design, and releases.",
   header: {
+    skills: "Skills",
     categories: "Categories",
     faq: "FAQ",
     search: "Search",
     searchSkills: "Search skills",
     repository: "GitHub",
+    mods: "Claude Code Mods",
     language: "Language",
   },
   home: {
@@ -28,6 +30,12 @@ const en = {
     installAll: "Install the whole catalog",
     installOne: "or add one:",
     faqHeading: "FAQ",
+  },
+  footer: {
+    tagline: "An open catalog of agent skills for Claude Code and Codex, maintained by XingKaiXin.",
+    project: "Project",
+    repository: "GitHub repository",
+    issue: "Report an issue",
   },
   catalog: {
     searchPlaceholder: "Search skills, e.g. release, iOS, commit",
@@ -93,11 +101,13 @@ const zh: UiStrings = {
   siteDescription:
     "浏览并安装适用于 Claude Code 和 Codex 的 Agent Skills，涵盖代码审查、前端开发、写作、设计与发布。按任务选择技能，复制命令即可安装。",
   header: {
+    skills: "技能",
     categories: "分类",
     faq: "常见问题",
     search: "搜索",
     searchSkills: "搜索 skill",
     repository: "GitHub",
+    mods: "Claude Code Mods",
     language: "语言",
   },
   home: {
@@ -108,6 +118,12 @@ const zh: UiStrings = {
     installAll: "安装整个目录",
     installOne: "或只装一个：",
     faqHeading: "常见问题",
+  },
+  footer: {
+    tagline: "适用于 Claude Code 和 Codex 的开源 Agent Skills 目录，由 XingKaiXin 维护。",
+    project: "项目",
+    repository: "GitHub 仓库",
+    issue: "反馈问题",
   },
   catalog: {
     searchPlaceholder: "搜索 skill，例如 release、iOS、commit",
@@ -171,11 +187,13 @@ const ja: UiStrings = {
   siteDescription:
     "Claude Code と Codex 向けの Agent Skills を探してインストール。コードレビュー、フロントエンド開発、執筆、デザイン、リリースに使える手順を収録。",
   header: {
+    skills: "スキル",
     categories: "カテゴリ",
     faq: "よくある質問",
     search: "検索",
     searchSkills: "スキルを検索",
     repository: "GitHub",
+    mods: "Claude Code Mods",
     language: "言語",
   },
   home: {
@@ -186,6 +204,12 @@ const ja: UiStrings = {
     installAll: "カタログ全体をインストール",
     installOne: "個別に追加する場合:",
     faqHeading: "よくある質問",
+  },
+  footer: {
+    tagline: "Claude Code と Codex 向けのオープンな Agent Skills カタログ。XingKaiXin が管理しています。",
+    project: "プロジェクト",
+    repository: "GitHub リポジトリ",
+    issue: "問題を報告",
   },
   catalog: {
     searchPlaceholder: "スキルを検索（例: release、iOS、commit）",

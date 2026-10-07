@@ -1,8 +1,11 @@
 ---
+import arrowUpRight from "@phosphor-icons/core/regular/arrow-up-right.svg?no-inline";
+import githubLogo from "@phosphor-icons/core/regular/github-logo.svg?no-inline";
 import SiteBrand from "@/components/SiteBrand.astro";
 import SearchIcon from "@/components/SearchIcon.astro";
 import LanguageSwitcher from "@/components/LanguageSwitcher.astro";
-import { SITE_REPO } from "@/data/catalog";
+import PhosphorIcon from "@/components/PhosphorIcon.astro";
+import { MODS_REPO, SITE_REPO } from "@/data/catalog";
 import { localeHref, type Locale } from "@/i18n/config";
 import { ui } from "@/i18n/ui";
 
@@ -16,43 +19,57 @@ interface Props {
 const { variant = "home", locale, path } = Astro.props;
 const strings = ui[locale];
 const linkClass =
-  "pressable inline-flex min-h-11 items-center whitespace-nowrap rounded-lg px-2 text-[13px] text-text-secondary transition hover:text-text sm:px-3";
-const buttonClass =
-  "pressable inline-flex min-h-11 items-center rounded-lg border border-border px-3 text-[13px] text-text transition hover:border-text";
+  "pressable min-h-11 items-center gap-1 whitespace-nowrap rounded-lg px-2.5 text-[13px] text-text-secondary transition-colors hover:text-text sm:px-3";
+const homeLinks = [
+  { href: "#skills", label: strings.header.skills },
+  { href: "#categories", label: strings.header.categories },
+  { href: "#faq", label: strings.header.faq },
+];
 ---
 
-<header class="border-b border-divider px-6 sm:px-10">
-  <div class="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 py-3 md:flex md:justify-between md:gap-4">
+<header class="sticky top-0 z-30 border-b border-divider bg-white/85 px-6 backdrop-blur-md sm:px-10">
+  <div class="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-1 py-3">
     <SiteBrand locale={locale} />
-    <div class="col-span-2 row-start-2 flex min-w-0 items-center justify-between gap-3 md:ml-auto">
-      {variant === "home" ? (
-        <nav class="flex items-center gap-1">
-          <a href="#categories" class={linkClass}>{strings.header.categories}</a>
-          <a href="#faq" class={linkClass}>{strings.header.faq}</a>
-        </nav>
-      ) : (
-        <form
-          action={localeHref(locale)}
-          method="get"
-          role="search"
-          class="flex min-h-11 min-w-0 flex-1 items-center gap-2 rounded-lg border border-border px-3 py-2 transition focus-within:border-text md:w-60 md:flex-none"
-        >
-          <SearchIcon />
-          <label class="sr-only" for="header-search">{strings.header.searchSkills}</label>
-          <input
-            id="header-search"
-            type="search"
-            name="q"
-            placeholder={strings.header.search}
-            data-search-focus
-            class="w-full min-w-0 bg-transparent text-base text-text outline-none placeholder:text-text-muted md:text-[13px]"
-          />
-          <kbd class="hidden rounded border border-border px-1.5 py-0.5 font-mono text-[10px] text-text-muted md:block">⌘K</kbd>
-        </form>
-      )}
+    {variant === "home" ? (
+      <nav class="order-last -mx-2.5 flex w-full items-center md:order-none md:mx-0 md:ml-auto md:w-auto">
+        {homeLinks.map((link) => (
+          <a href={link.href} class:list={[linkClass, "inline-flex"]}>{link.label}</a>
+        ))}
+      </nav>
+    ) : (
+      <form
+        action={localeHref(locale)}
+        method="get"
+        role="search"
+        class="order-last flex min-h-11 w-full min-w-0 items-center gap-2 rounded-lg border border-border px-3 transition-colors focus-within:border-text md:order-none md:ml-auto md:w-64"
+      >
+        <SearchIcon />
+        <label class="sr-only" for="header-search">{strings.header.searchSkills}</label>
+        <input
+          id="header-search"
+          type="search"
+          name="q"
+          placeholder={strings.header.search}
+          data-search-focus
+          class="w-full min-w-0 bg-transparent text-base text-text outline-none placeholder:text-text-muted md:text-[13px]"
+        />
+        <kbd class="hidden rounded border border-border px-1.5 py-0.5 font-mono text-[10px] text-text-muted md:block">⌘K</kbd>
+      </form>
+    )}
+    <div class="ml-auto flex items-center gap-2 md:ml-0">
+      <a href={MODS_REPO} class:list={[linkClass, "hidden sm:inline-flex"]}>
+        {strings.header.mods}
+        <PhosphorIcon src={arrowUpRight} class="h-3 w-3" />
+      </a>
       <LanguageSwitcher locale={locale} path={path} />
+      <a
+        href={SITE_REPO}
+        class="pressable inline-flex min-h-11 items-center gap-2 rounded-lg border border-border px-3 text-[13px] text-text transition-colors hover:border-text"
+      >
+        <PhosphorIcon src={githubLogo} class="h-4 w-4" />
+        <span class="sr-only sm:not-sr-only">{strings.header.repository}</span>
+      </a>
     </div>
-    <a href={SITE_REPO} class={buttonClass}>{strings.header.repository}</a>
   </div>
 </header>
 

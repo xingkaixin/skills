@@ -2,6 +2,7 @@ export {
   SKILLS_INSTALL_SOURCE,
   SITE_NAME,
   SITE_REPO,
+  MODS_REPO,
   SITE_URL,
   skillCatalog,
   categoryMetadata,
