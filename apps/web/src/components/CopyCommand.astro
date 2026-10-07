@@ -6,20 +6,18 @@ interface Props {
   command: string;
   locale: Locale;
   skill?: string;
-  tone?: "outline" | "solid";
   class?: string;
 }
 
-const { command, locale, skill, tone = "outline", class: className = "" } = Astro.props;
+const { command, locale, skill, class: className = "" } = Astro.props;
 const strings = ui[locale].copy;
 ---
 
 <div class:list={["command-box", className]}>
-  <code class="min-w-0 whitespace-pre-wrap [overflow-wrap:anywhere] font-mono text-[13px] text-text">{command}</code>
+  <code class="min-w-0 flex-1 whitespace-pre-wrap [overflow-wrap:anywhere] font-mono text-[13px] leading-6">{command}</code>
   <button
     type="button"
     class="copy-button pressable"
-    data-tone={tone}
     data-copy={command}
     data-copy-label={strings.action}
     data-copy-done={strings.done}

@@ -24,7 +24,7 @@ export default function agentAssets(): AstroIntegration {
           const home = localeHref(locale);
           await write(`/markdown${home === "/" ? "/index" : home}.md`, [
             `# ${strings.home.heading}`,
-            strings.home.intro(skillsData.length),
+            strings.home.intro,
             `\`\`\`sh\n${getInstallCommand(skillsData, "all")}\n\`\`\``,
             ...skillsData.map((skill) => `## [${skill.slug}](${SITE_URL}${localeHref(locale, `/skills/${skill.slug}`)})\n\n${skill.displayDescription[locale]}\n\n${skill.category}`),
             `## ${strings.home.faqHeading}`,

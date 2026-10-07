@@ -35,13 +35,13 @@ const sortOptions = [
   data-count-one={strings.count(1)}
   data-count-many={strings.count(2)}
 >
-  <div class="border-b border-divider px-6 sm:px-10">
-    <div class="mx-auto flex max-w-6xl flex-wrap items-center gap-3 py-3 sm:flex-nowrap sm:gap-4">
+  <div class="z-20 flex flex-col gap-3 bg-white/90 py-3 backdrop-blur-md md:sticky md:top-[69px]">
+    <div class="flex flex-wrap items-center gap-3">
       <form
         action={localeHref(locale)}
         method="get"
         role="search"
-        class="flex flex-1 basis-full items-center gap-2.5 rounded-lg border border-border px-3.5 py-2.5 transition focus-within:border-text sm:basis-auto"
+        class="flex min-h-12 flex-[1_1_20rem] items-center gap-2.5 rounded-xl border border-border bg-white px-3.5 transition-colors focus-within:border-text"
         data-catalog-search
       >
         <SearchIcon />
@@ -52,15 +52,11 @@ const sortOptions = [
           name="q"
           placeholder={strings.searchPlaceholder}
           data-search-focus
-          class="w-full min-w-0 bg-transparent text-[13px] text-text outline-none placeholder:text-text-muted"
+          class="w-full min-w-0 bg-transparent text-base text-text outline-none placeholder:text-text-muted sm:text-sm"
         />
         <kbd class="hidden rounded border border-border px-1.5 py-0.5 font-mono text-[10px] text-text-muted sm:block">⌘K</kbd>
       </form>
-      <div
-        class="flex shrink-0 items-center gap-1 rounded-lg border border-border p-[3px]"
-        role="group"
-        aria-label={strings.sortLabel}
-      >
+      <div class="seg-group" role="group" aria-label={strings.sortLabel}>
         {sortOptions.map((option, index) => (
           <button
             type="button"
@@ -72,23 +68,8 @@ const sortOptions = [
           </button>
         ))}
       </div>
-      <span
-        class="ml-auto font-mono text-xs text-text-muted"
-        data-catalog-count
-        aria-live="polite"
-        aria-atomic="true"
-      >
-        {strings.count(skills.length)}
-      </span>
     </div>
-  </div>
-
-  <div id="categories" class="border-b border-divider px-6 sm:px-10">
-    <div
-      class="mx-auto flex max-w-6xl flex-wrap items-center gap-2 py-3"
-      role="navigation"
-      aria-label={ui[locale].header.categories}
-    >
+    <nav class="flex flex-wrap items-center gap-2" aria-label={strings.filterLabel}>
       <a href={localeHref(locale)} class="chip pressable" data-category="all" aria-current="page">
         {strings.all}<span class="chip-count">{skills.length}</span>
       </a>
@@ -97,18 +78,20 @@ const sortOptions = [
           {category}<span class="chip-count">{counts.get(category)}</span>
         </a>
       ))}
-    </div>
+    </nav>
   </div>
 
-  <div class="px-6 pt-7 sm:px-10">
-    <div class="mx-auto grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-3" data-catalog-grid>
+  <p class="mt-3 text-[13px] text-text-muted" data-catalog-count aria-live="polite" aria-atomic="true">
+    {strings.count(skills.length)}
+  </p>
+
+  <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-catalog-grid>
     {ordered.map((skill) => (
       <SkillCard skill={skill} locale={locale} />
     ))}
-    </div>
   </div>
 
-  <p class="px-6 pt-10 text-center text-sm text-text-secondary sm:px-10" data-catalog-empty hidden>
+  <p class="mt-4 rounded-xl border border-dashed border-border px-6 py-10 text-center text-sm text-text-secondary" data-catalog-empty hidden>
     {strings.empty}
   </p>
 </div>

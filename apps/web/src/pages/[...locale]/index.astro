@@ -1,15 +1,17 @@
 ---
-import { Image } from "astro:assets";
-import knowledgeModules from "@/assets/backgrounds/knowledge-modules.png";
-import openFolio from "@/assets/backgrounds/open-folio.png";
+import caretDown from "@phosphor-icons/core/regular/caret-down.svg?no-inline";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import CopyCommand from "@/components/CopyCommand.astro";
+import PhosphorIcon from "@/components/PhosphorIcon.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
 import SkillCatalog from "@/components/SkillCatalog.astro";
+import { categoryMetadata, SITE_REPO } from "@/data/catalog";
 import { getInstallCommand } from "@/data/skill-catalog";
+import { extractToc } from "@/data/skill-toc";
+import { skillContent } from "@/data/skills.content.generated";
 import { skillCategories, skillsData } from "@/data/skills.generated";
 import { getHomeSeo } from "@/data/seo";
-import { DEFAULT_LOCALE, LOCALES, type Locale } from "@/i18n/config";
+import { DEFAULT_LOCALE, LOCALES, localeHref, type Locale } from "@/i18n/config";
 import { ui } from "@/i18n/ui";
 
 export function getStaticPaths() {
@@ -20,10 +22,32 @@ export function getStaticPaths() {
   }));
 }
 
+// An English skill keeps the example readable on every locale. Rendered
+// headings sit one level below the source, so depth 0 is a Markdown "#".
+const EXAMPLE_SLUG = "use-modern-go";
+
 const { locale } = Astro.props as { locale: Locale };
 const seo = getHomeSeo(locale);
 const strings = ui[locale];
-const installCommand = getInstallCommand(skillsData, "all");
+const latestUpdate = skillsData.reduce(
+  (latest, skill) => (skill.lastModified > latest ? skill.lastModified : latest),
+  "",
+);
+const example = skillsData.find((skill) => skill.slug === EXAMPLE_SLUG);
+if (!example) throw new Error(`Unknown example skill: ${EXAMPLE_SLUG}`);
+const exampleHeadings = extractToc(skillContent[EXAMPLE_SLUG]).slice(0, 6);
+const installPanels = [
+  { id: "install-all", label: strings.home.installAll, command: getInstallCommand(skillsData, "all"), skill: undefined },
+  { id: "install-one", label: strings.home.installOne, command: getInstallCommand(skillsData, "skill", EXAMPLE_SLUG), skill: EXAMPLE_SLUG },
+];
+const categoryTiles = skillCategories.map((category) => ({
+  category,
+  title: categoryMetadata[category].webTitle[locale],
+  description: categoryMetadata[category].webDescription[locale],
+  count: skillsData.filter((skill) => skill.category === category).length,
+}));
+const sectionHeading = "text-[1.75rem] leading-tight font-semibold tracking-[-0.025em] text-text sm:text-[1.875rem]";
+const sectionIntro = "mt-2.5 max-w-[60ch] text-[15px] leading-7 text-text-secondary";
 ---
 
 <BaseLayout
@@ -37,137 +61,181 @@ const installCommand = getInstallCommand(skillsData, "all");
   <SiteHeader variant="home" locale={locale} path="/" />
 
   <main id="main-content">
-    <section class="home-hero border-b border-divider px-6 pt-14 pb-10 sm:px-10">
-      <Image
-        src={knowledgeModules}
-        alt=""
-        aria-hidden="true"
-        class="section-art hero-art"
-        widths={[640, 960, 1440, knowledgeModules.width]}
-        sizes="100vw"
-        format="webp"
-        quality={80}
-        loading="eager"
-        fetchpriority="high"
-        decoding="async"
-      />
-      <div class="relative mx-auto grid max-w-6xl grid-cols-1 gap-10 lg:grid-cols-[1.15fr_1fr] lg:items-end">
-        <div>
-          <p class="eyebrow text-accent">{strings.home.eyebrow}</p>
+    <section aria-labelledby="hero-heading" class="border-b border-divider bg-surface px-6 sm:px-10">
+      <div class="mx-auto grid max-w-6xl gap-14 py-16 sm:py-20 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+        <div class="min-w-0">
+          <p class="rise inline-flex items-center gap-2 rounded-full border border-border bg-white px-2.5 py-1.5 font-mono text-xs text-text-secondary">
+            <span class="h-1.5 w-1.5 rounded-full bg-accent"></span>
+            {strings.home.badge(skillsData.length, latestUpdate)}
+          </p>
           <h1
+            id="hero-heading"
             class:list={[
-              "mt-3.5 text-[2.25rem] leading-[1.12] font-semibold tracking-[-0.02em] text-balance sm:text-[2.75rem]",
+              "rise rise-delay-1 mt-5 text-[2.5rem] leading-[1.06] font-semibold tracking-[-0.035em] text-balance sm:text-[3.5rem]",
               // A `ch` is the width of "0", so a full-width character spends
-              // two of them; CJK headings need the wider measure to
-              // break across the same number of lines.
-              locale === "en" ? "max-w-[15ch]" : "max-w-[24ch]",
+              // two of them; CJK headings need the wider measure.
+              locale === "en" ? "max-w-[15ch]" : "max-w-[22ch]",
             ]}
           >
             {strings.home.heading.split(/(Agent Skills)/).map((part) => (
               <span class:list={[part === "Agent Skills" && "whitespace-nowrap"]}>{part}</span>
             ))}
           </h1>
-          <p class="mt-4.5 max-w-[46ch] text-[15px] leading-7 text-text-secondary">
-            {strings.home.intro(skillsData.length)}
+          <p class="rise rise-delay-2 mt-5 max-w-[52ch] text-base leading-[1.75] text-text-secondary sm:text-[17px]">
+            {strings.home.intro}
           </p>
+
+          <div class="rise rise-delay-2 mt-8 max-w-[36rem]" data-install-tabs>
+            <div class="seg-group" role="tablist" aria-label={strings.home.installScope}>
+              {installPanels.map((panel, index) => (
+                <button
+                  type="button"
+                  role="tab"
+                  id={`${panel.id}-tab`}
+                  class="seg-button pressable"
+                  aria-selected={index === 0 ? "true" : "false"}
+                  aria-controls={panel.id}
+                >
+                  {panel.label}
+                </button>
+              ))}
+            </div>
+            {installPanels.map((panel, index) => (
+              <div id={panel.id} role="tabpanel" aria-labelledby={`${panel.id}-tab`} class="mt-2.5" hidden={index > 0}>
+                <CopyCommand command={panel.command} locale={locale} skill={panel.skill} />
+              </div>
+            ))}
+            <p class="mt-3 text-[13px] leading-6 text-text-muted">{strings.home.installNote}</p>
+          </div>
         </div>
-        <div class="flex flex-col gap-3">
-          <p class="text-xs text-text-secondary">{strings.home.installAll}</p>
-          <CopyCommand command={installCommand} locale={locale} />
-          <p class="font-mono text-xs text-text-muted">
-            {strings.home.installOne} <span class="text-text-secondary">--skill &lt;slug&gt;</span>
-          </p>
+
+        <figure class="rise rise-delay-2 m-0 min-w-0 overflow-hidden rounded-2xl border border-border bg-white shadow-[0_24px_60px_-32px_rgba(15,18,24,0.35)]">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-border bg-surface px-4 py-3">
+            <a href={localeHref(locale, `/skills/${EXAMPLE_SLUG}`)} class="min-w-0 truncate font-mono text-xs text-text-secondary hover:text-text">
+              skills/{example.category}/{EXAMPLE_SLUG}/SKILL.md
+            </a>
+            <span class="text-[11px] text-text-muted">{strings.home.exampleLabel}</span>
+          </div>
+          <div class="px-5 pt-5 pb-6 font-mono text-[13px] leading-7 text-text" lang="en">
+            <span class="block text-text-muted">---</span>
+            <span class="block"><span class="text-accent">name</span>: {example.name}</span>
+            <span class="block"><span class="text-accent">description</span>: {example.description}</span>
+            <span class="block text-text-muted">---</span>
+            <span class="mt-7 block">
+              {exampleHeadings.map((heading) => (
+                <span class:list={["block", heading.depth === 0 ? "font-semibold text-text" : "text-text-secondary"]}>
+                  {"#".repeat(heading.depth + 1)} {heading.label}
+                </span>
+              ))}
+            </span>
+          </div>
+          <figcaption class="border-t border-border bg-surface px-5 py-3.5 text-[13px] leading-6 text-text-secondary">
+            {strings.home.exampleCaption}
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="categories" aria-labelledby="categories-heading" class="px-6 pt-20 sm:px-10 sm:pt-24">
+      <div class="mx-auto max-w-6xl">
+        <h2 id="categories-heading" class={sectionHeading}>{strings.home.categoriesHeading}</h2>
+        <p class={sectionIntro}>{strings.home.categoriesIntro(skillCategories.length)}</p>
+        <ul class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          {categoryTiles.map((tile) => (
+            <li>
+              <a
+                href={localeHref(locale, `/categories/${tile.category}`)}
+                class="category-tile pressable flex h-full flex-col gap-2 rounded-xl border border-border bg-white p-4.5"
+              >
+                <span class="flex items-baseline justify-between gap-3">
+                  <span class="text-[15px] leading-snug font-semibold text-text">{tile.title}</span>
+                  <span class="shrink-0 font-mono text-xs text-text-muted">{tile.count}</span>
+                </span>
+                <span class="line-clamp-3 text-[13px] leading-6 text-text-secondary">{tile.description}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section id="skills" aria-labelledby="skills-heading" class="px-6 pt-20 pb-24 sm:px-10">
+      <div class="mx-auto max-w-6xl">
+        <h2 id="skills-heading" class={sectionHeading}>{strings.home.skillsHeading}</h2>
+        <p class={sectionIntro}>{strings.home.skillsIntro}</p>
+        <div class="mt-5">
+          <SkillCatalog skills={skillsData} categories={skillCategories} locale={locale} />
         </div>
       </div>
     </section>
 
-    <div class="home-catalog">
-      <SkillCatalog skills={skillsData} categories={skillCategories} locale={locale} />
-    </div>
-
-    <section id="faq" aria-labelledby="faq-heading" class="home-faq px-6 pt-16 pb-20 sm:px-10">
-      <Image
-        src={openFolio}
-        alt=""
-        aria-hidden="true"
-        class="section-art faq-art"
-        widths={[640, 960, 1440, openFolio.width]}
-        sizes="100vw"
-        format="webp"
-        quality={75}
-        loading="lazy"
-        decoding="async"
-      />
-      <div class="relative mx-auto max-w-6xl border-t border-divider pt-12">
-        <h2 id="faq-heading" class="text-lg font-semibold text-text">{strings.home.faqHeading}</h2>
-        <dl class="mt-6 grid gap-6 sm:grid-cols-2">
-          {strings.faq.map((item) => (
-            <div>
-              <dt class="text-sm font-medium text-text">{item.question}</dt>
-              <dd class="mt-1.5 text-sm leading-7 text-text-secondary">{item.answer}</dd>
-            </div>
+    <section aria-labelledby="how-heading" class="border-y border-divider bg-surface px-6 py-20 sm:px-10 sm:py-24">
+      <div class="mx-auto max-w-6xl">
+        <h2 id="how-heading" class={sectionHeading}>{strings.home.howHeading}</h2>
+        <ol class="mt-9 grid gap-4 md:grid-cols-3">
+          {strings.home.steps.map((step, index) => (
+            <li class="rounded-xl border border-border bg-white p-6">
+              <span class="font-mono text-xs text-accent">{String(index + 1).padStart(2, "0")}</span>
+              <h3 class="mt-3 text-[17px] font-semibold text-text">{step.title}</h3>
+              <p class="mt-2 text-sm leading-7 text-text-secondary">{step.body}</p>
+            </li>
           ))}
-        </dl>
+        </ol>
+      </div>
+    </section>
+
+    <section id="faq" aria-labelledby="faq-heading" class="px-6 py-20 sm:px-10 sm:py-24">
+      <div class="mx-auto flex max-w-6xl flex-wrap gap-12">
+        <div class="flex-[1_1_16rem]">
+          <h2 id="faq-heading" class={sectionHeading}>{strings.home.faqHeading}</h2>
+          <p class={sectionIntro}>
+            {strings.home.faqMore}{" "}
+            <a href={`${SITE_REPO}/issues`} class="text-accent underline-offset-4 hover:underline">{strings.home.faqIssue}</a>
+          </p>
+        </div>
+        <div class="min-w-0 flex-[999_1_32rem] border-t border-border">
+          {strings.faq.map((item, index) => (
+            <details class="faq-item border-b border-border" open={index === 0}>
+              <summary class="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 py-5 text-base font-medium text-text">
+                {item.question}
+                <PhosphorIcon src={caretDown} class="faq-chevron h-4 w-4 text-text-muted" />
+              </summary>
+              <p class="max-w-[68ch] pb-5 text-[15px] leading-7 text-text-secondary">{item.answer}</p>
+            </details>
+          ))}
+        </div>
       </div>
     </section>
   </main>
 </BaseLayout>
 
+<script>
+  const tabs = Array.from(
+    document.querySelectorAll<HTMLButtonElement>("[data-install-tabs] [role=tab]"),
+  );
+
+  for (const tab of tabs) {
+    tab.addEventListener("click", () => {
+      for (const other of tabs) {
+        const selected = other === tab;
+        other.setAttribute("aria-selected", String(selected));
+        document.getElementById(other.getAttribute("aria-controls")!)!.hidden = !selected;
+      }
+    });
+  }
+</script>
+
 <style>
-  .home-hero,
-  .home-faq {
-    position: relative;
+  .category-tile {
+    transition:
+      border-color 180ms ease,
+      transform 180ms ease,
+      box-shadow 180ms ease;
   }
 
-  .home-hero {
-    background: #f4f7fb;
-  }
-
-  .section-art {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    pointer-events: none;
-    user-select: none;
-  }
-
-  .hero-art {
-    object-position: center top;
-    opacity: 0.8;
-    mask-image: linear-gradient(#000 25%, transparent 100%);
-  }
-
-  .home-catalog {
-    background: linear-gradient(#ffffff 8rem, #f5f7fa 32rem);
-  }
-
-  .home-faq {
-    background: linear-gradient(#f5f7fa, #f0f4f9);
-  }
-
-  .faq-art {
-    opacity: 0.55;
-    object-position: right bottom;
-    mask-image: linear-gradient(transparent, #000 65%);
-  }
-
-  @media (max-width: 1023px) {
-    .hero-art {
-      object-position: 62% top;
-      opacity: 0.42;
-    }
-  }
-
-  @media (max-width: 639px) {
-    .hero-art {
-      object-position: 58% top;
-      opacity: 0.25;
-    }
-
-    .faq-art {
-      opacity: 0.3;
-    }
+  .category-tile:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px -12px rgba(49, 85, 234, 0.35);
   }
 </style>
