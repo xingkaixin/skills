@@ -173,6 +173,12 @@
     "zh": "读长文或演讲时不做平铺总结，而是依次戴上挑战者、建设者、实践者三副眼镜，对同一批观点做三重加工。",
     "ja": "長文や講演を要約で終わらせず、挑戦者・構築者・実践者という三つの視点を順に通して読み解く。"
   },
+  "unslop-zh": {
+    "sourceHash": "4b8204f4850fc4e4",
+    "en": "Strip AI tells from Chinese prose: scan 30 fixed patterns, from buzzword verbs and Europeanized grammar to dash overuse, then rewrite in the original voice.",
+    "zh": "去掉中文文本里的 AI 腔：按 30 条固定规则扫描黑话动词、欧化句式、破折号滥用等痕迹，再保留原意与语气改写。",
+    "ja": "中国語の文章から AI っぽさを消す。流行語の動詞、欧化した文法、ダッシュの多用など 30 の定型パターンを洗い出し、元の意味と語調のまま書き直す。"
+  },
   "use-modern-go": {
     "sourceHash": "f524eb2b7e2e072b",
     "en": "Write Go that matches the version the project actually targets, reaching for slices, maps, and cmp instead of the legacy patterns they replaced.",

@@ -467,6 +467,22 @@ export const skillsData: SkillRecord[] = [
     "contentLanguage": "zh-CN"
   },
   {
+    "slug": "unslop-zh",
+    "name": "unslop-zh",
+    "description": "去除中文写作中的 AI 腔：扫描 30 个固定模式并改写，保留原意与语气。Use for /unslop-zh、'去 AI 腔'、'把这段过一遍 unslop'。",
+    "displayDescription": {
+      "en": "Strip AI tells from Chinese prose: scan 30 fixed patterns, from buzzword verbs and Europeanized grammar to dash overuse, then rewrite in the original voice.",
+      "zh": "去掉中文文本里的 AI 腔：按 30 条固定规则扫描黑话动词、欧化句式、破折号滥用等痕迹，再保留原意与语气改写。",
+      "ja": "中国語の文章から AI っぽさを消す。流行語の動詞、欧化した文法、ダッシュの多用など 30 の定型パターンを洗い出し、元の意味と語調のまま書き直す。"
+    },
+    "category": "writing",
+    "sourceRepo": "https://github.com/xingkaixin/skills",
+    "sourceKind": "self",
+    "firstAdded": "2026-10-26",
+    "lastModified": "2026-10-26",
+    "contentLanguage": "zh-CN"
+  },
+  {
     "slug": "use-modern-go",
     "name": "use-modern-go",
     "description": "Apply modern Go syntax guidelines based on project's Go version. Use when user ask for modern Go code guidelines.",
