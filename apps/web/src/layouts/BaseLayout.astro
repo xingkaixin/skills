@@ -1,5 +1,8 @@
 ---
 import "@/styles/globals.css";
+import jetbrainsMonoRegular from "@/assets/fonts/jetbrains-mono-400-core.woff2?url";
+import soraRegular from "@/assets/fonts/sora-400-core.woff2?url";
+import soraSemibold from "@/assets/fonts/sora-600-core.woff2?url";
 import SiteFooter from "@/components/SiteFooter.astro";
 import { SITE_NAME, SITE_URL } from "@/data/catalog";
 import type { JsonLdNode } from "@/data/seo";
@@ -45,6 +48,9 @@ const jsonLdSources = structuredData.map((node) =>
   JSON.stringify(node).replace(/</g, "\\u003c"),
 );
 const ogImageUrl = new URL("/og-image.png", Astro.site).href;
+// Only the faces every page renders; the other weights would be wasted bytes
+// on category pages.
+const preloadFonts = [soraRegular, soraSemibold, jetbrainsMonoRegular];
 ---
 
 <!doctype html>
@@ -53,6 +59,9 @@ const ogImageUrl = new URL("/og-image.png", Astro.site).href;
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {preloadFonts.map((href) => (
+      <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />
+    ))}
     <meta name="theme-color" content="#ffffff" />
     <title>{title}</title>
     <meta name="description" content={description} />
