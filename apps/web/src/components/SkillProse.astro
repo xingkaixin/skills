@@ -37,12 +37,13 @@ const strings = ui[locale].copy;
 
       const bar = document.createElement("div");
       bar.className = "code-block-bar";
-      bar.innerHTML = `<span class="eyebrow text-text-muted">${language}</span>`;
+      bar.innerHTML = `<span class="text-small text-ink-subtle">${language}</span>`;
 
       const button = document.createElement("button");
       button.type = "button";
       button.className = "copy-button pressable";
-      button.textContent = copyLabel;
+      button.innerHTML = "<span data-copy-text></span>";
+      button.firstElementChild!.textContent = copyLabel;
       button.dataset.copy = code.textContent ?? "";
       button.dataset.copyLabel = copyLabel;
       button.dataset.copyDone = copyDone;

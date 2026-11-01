@@ -1,9 +1,6 @@
 ---
-import arrowRight from "@phosphor-icons/core/regular/arrow-right.svg?no-inline";
-import type { ImageMetadata } from "astro";
-import { Image } from "astro:assets";
-import openFolio from "@/assets/backgrounds/open-folio.png";
-import PhosphorIcon from "@/components/PhosphorIcon.astro";
+import arrowRight from "lucide-static/icons/arrow-right.svg?raw";
+import Icon from "@/components/Icon.astro";
 import { skillSearchText } from "@/data/skill-catalog";
 import { skillTitles } from "@/data/skill-titles";
 import type { SkillRecord } from "@/data/skill-record";
@@ -17,53 +14,28 @@ interface Props {
 
 const { skill, locale } = Astro.props;
 const strings = ui[locale].catalog;
-const cardArtwork = import.meta.glob<{ default: ImageMetadata }>(
-  "../assets/card-backgrounds/*.png",
-  { eager: true },
-);
-
-function cardArtRotation(slug: string) {
-  let hash = 0;
-  for (const character of slug) {
-    hash = (Math.imul(hash, 31) + character.charCodeAt(0)) >>> 0;
-  }
-  return `${(hash % 3 - 1) * 8}deg`;
-}
 ---
 
 <a
   href={localeHref(locale, `/skills/${skill.slug}`)}
-  class="skill-card"
+  class="lm-card skill-card"
+  data-sketch
+  data-radius="8"
   data-skill
   data-category={skill.category}
   data-slug={skill.slug}
   data-modified={skill.lastModified}
   data-haystack={skillSearchText(skill)}
 >
-  <Image
-    src={cardArtwork[`../assets/card-backgrounds/${skill.category}.png`]?.default ?? openFolio}
-    alt=""
-    aria-hidden="true"
-    class="skill-card-art"
-    style={`--card-art-rotation: ${cardArtRotation(skill.slug)}`}
-    width={208}
-    height={208}
-    densities={[1, 2]}
-    format="webp"
-    quality={75}
-    loading="lazy"
-    fetchpriority="low"
-    decoding="async"
-  />
-  <span class="flex items-center justify-between gap-2">
-    <span class="eyebrow text-accent">{skill.category}</span>
-    <span class="rounded-full bg-fill px-2 py-0.5 text-[11px] text-text-secondary">{strings.sourceKinds[skill.sourceKind]}</span>
+  <span class="flex items-center justify-between gap-2 text-small">
+    <span class="text-accent">{skill.category}</span>
+    <span class="text-ink-subtle">{strings.sourceKinds[skill.sourceKind]}</span>
   </span>
-  <h3 class="mt-1 text-[17px] leading-snug font-semibold tracking-[-0.01em] text-text">{skillTitles[skill.slug]?.[locale] ?? skill.slug}</h3>
-  <p class="-mt-1.5 font-mono text-[11.5px] break-words text-text-muted">{skill.slug}</p>
-  <p class="line-clamp-3 text-sm leading-6 text-text-secondary">{skill.displayDescription[locale]}</p>
-  <span class="mt-auto flex items-center justify-between pt-2 text-xs text-text-muted">
+  <h3 class="mt-1 text-subheading text-ink">{skillTitles[skill.slug]?.[locale] ?? skill.slug}</h3>
+  <p class="-mt-1.5 font-mono text-caption break-words text-ink-subtle">{skill.slug}</p>
+  <p class="line-clamp-3 text-body text-ink-muted">{skill.displayDescription[locale]}</p>
+  <span class="mt-auto flex items-center justify-between pt-2 text-small text-ink-subtle">
     <span>{strings.updated(skill.lastModified)}</span>
-    <PhosphorIcon src={arrowRight} class="card-arrow h-4 w-4" />
+    <Icon svg={arrowRight} class="card-arrow h-4 w-4" />
   </span>
 </a>

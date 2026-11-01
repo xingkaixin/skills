@@ -14,10 +14,12 @@ const strings = ui[locale].copy;
 ---
 
 <div class:list={["command-box", className]}>
-  <code class="min-w-0 flex-1 whitespace-pre-wrap [overflow-wrap:anywhere] font-mono text-[13px] leading-6">{command}</code>
+  <code class="min-w-0 flex-1 whitespace-pre-wrap [overflow-wrap:anywhere] font-mono text-code">{command}</code>
   <button
     type="button"
-    class="copy-button pressable"
+    class="lm-btn lm-btn--primary copy-button pressable"
+    data-sketch
+    data-wash
     data-copy={command}
     data-copy-label={strings.action}
     data-copy-done={strings.done}
@@ -25,7 +27,7 @@ const strings = ui[locale].copy;
     data-install-skill={skill ?? "all"}
     data-install-locale={locale}
   >
-    {strings.action}
+    <span data-copy-text>{strings.action}</span>
   </button>
 </div>
 
@@ -37,19 +39,22 @@ const strings = ui[locale].copy;
     const button = (event.target as Element | null)?.closest<HTMLElement>("[data-copy]");
     if (!button) return;
 
+    // The label has its own element: the button also holds the drawn layer.
+    const label = button.querySelector("[data-copy-text]")!;
+
     try {
       await navigator.clipboard.writeText(button.getAttribute("data-copy") ?? "");
     } catch {
-      button.textContent = button.getAttribute("data-copy-failed") ?? button.getAttribute("data-copy-label");
+      label.textContent = button.getAttribute("data-copy-failed") ?? button.getAttribute("data-copy-label");
       window.setTimeout(() => {
-        button.textContent = button.getAttribute("data-copy-label");
+        label.textContent = button.getAttribute("data-copy-label");
       }, RESET_DELAY);
       return;
     }
 
-    button.textContent = button.getAttribute("data-copy-done");
+    label.textContent = button.getAttribute("data-copy-done");
     window.setTimeout(() => {
-      button.textContent = button.getAttribute("data-copy-label");
+      label.textContent = button.getAttribute("data-copy-label");
     }, RESET_DELAY);
 
     const skill = button.dataset.installSkill;

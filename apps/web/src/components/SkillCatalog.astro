@@ -35,13 +35,14 @@ const sortOptions = [
   data-count-one={strings.count(1)}
   data-count-many={strings.count(2)}
 >
-  <div class="z-20 flex flex-col gap-3 bg-white/90 py-3 backdrop-blur-md md:sticky md:top-[69px]">
+  <div class="z-20 flex flex-col gap-3 py-3 md:sticky md:top-[68px] md:bg-paper/60 md:backdrop-blur-md">
     <div class="flex flex-wrap items-center gap-3">
       <form
         action={localeHref(locale)}
         method="get"
         role="search"
-        class="flex min-h-12 flex-[1_1_20rem] items-center gap-2.5 rounded-xl border border-border bg-white px-3.5 transition-colors focus-within:border-text"
+        data-sketch
+        class="flex min-h-12 flex-[1_1_20rem] items-center gap-2.5 px-3.5"
         data-catalog-search
       >
         <SearchIcon />
@@ -52,15 +53,16 @@ const sortOptions = [
           name="q"
           placeholder={strings.searchPlaceholder}
           data-search-focus
-          class="w-full min-w-0 bg-transparent text-base text-text outline-none placeholder:text-text-muted sm:text-sm"
+          class="w-full min-w-0 bg-transparent text-base text-ink outline-none placeholder:text-ink-subtle sm:text-body"
         />
-        <kbd class="hidden rounded border border-border px-1.5 py-0.5 font-mono text-[10px] text-text-muted sm:block">⌘K</kbd>
+        <kbd class="hidden font-mono text-caption text-ink-subtle sm:block">⌘K</kbd>
       </form>
       <div class="seg-group" role="group" aria-label={strings.sortLabel}>
         {sortOptions.map((option, index) => (
           <button
             type="button"
             class="seg-button pressable"
+            data-sketch="wash"
             data-sort={option.key}
             aria-pressed={index === 0 ? "true" : "false"}
           >
@@ -70,18 +72,18 @@ const sortOptions = [
       </div>
     </div>
     <nav class="flex flex-wrap items-center gap-2" aria-label={strings.filterLabel}>
-      <a href={localeHref(locale)} class="chip pressable" data-category="all" aria-current="page">
-        {strings.all}<span class="chip-count">{skills.length}</span>
+      <a href={localeHref(locale)} class="chip pressable" data-sketch data-wash data-category="all" aria-current="page">
+        {strings.all}<span>{skills.length}</span>
       </a>
       {categories.map((category) => (
-        <a href={localeHref(locale, `/categories/${category}`)} class="chip pressable" data-category={category} title={categoryMetadata[category].webTitle[locale]}>
-          {category}<span class="chip-count">{counts.get(category)}</span>
+        <a href={localeHref(locale, `/categories/${category}`)} class="chip pressable" data-sketch data-wash data-category={category} title={categoryMetadata[category].webTitle[locale]}>
+          {category}<span>{counts.get(category)}</span>
         </a>
       ))}
     </nav>
   </div>
 
-  <p class="mt-3 text-[13px] text-text-muted" data-catalog-count aria-live="polite" aria-atomic="true">
+  <p class="mt-3 text-small text-ink-subtle" data-catalog-count aria-live="polite" aria-atomic="true">
     {strings.count(skills.length)}
   </p>
 
@@ -91,7 +93,7 @@ const sortOptions = [
     ))}
   </div>
 
-  <p class="mt-4 rounded-xl border border-dashed border-border px-6 py-10 text-center text-sm text-text-secondary" data-catalog-empty hidden>
+  <p class="mt-4 px-6 py-10 text-center text-body text-ink-muted" data-sketch data-radius="8" data-catalog-empty hidden>
     {strings.empty}
   </p>
 </div>

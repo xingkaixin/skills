@@ -1,12 +1,12 @@
 ---
-import magnifyingGlass from "@phosphor-icons/core/regular/magnifying-glass.svg?no-inline";
-import PhosphorIcon from "@/components/PhosphorIcon.astro";
+import search from "lucide-static/icons/search.svg?raw";
+import Icon from "@/components/Icon.astro";
 
 interface Props {
   class?: string;
 }
 
-const { class: className = "h-[15px] w-[15px]" } = Astro.props;
+const { class: className = "h-4 w-4" } = Astro.props;
 ---
 
-<PhosphorIcon src={magnifyingGlass} class:list={["text-text-muted", className]} />
+<Icon svg={search} class:list={["text-ink-subtle", className]} />

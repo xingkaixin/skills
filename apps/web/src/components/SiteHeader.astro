@@ -1,10 +1,11 @@
 ---
-import arrowUpRight from "@phosphor-icons/core/regular/arrow-up-right.svg?no-inline";
-import githubLogo from "@phosphor-icons/core/regular/github-logo.svg?no-inline";
+import arrowUpRight from "lucide-static/icons/arrow-up-right.svg?raw";
+import gitBranch from "lucide-static/icons/git-branch.svg?raw";
+import Divider from "@/components/Divider.astro";
+import Icon from "@/components/Icon.astro";
 import SiteBrand from "@/components/SiteBrand.astro";
 import SearchIcon from "@/components/SearchIcon.astro";
 import LanguageSwitcher from "@/components/LanguageSwitcher.astro";
-import PhosphorIcon from "@/components/PhosphorIcon.astro";
 import { MODS_REPO, SITE_REPO } from "@/data/catalog";
 import { localeHref, type Locale } from "@/i18n/config";
 import { ui } from "@/i18n/ui";
@@ -19,7 +20,7 @@ interface Props {
 const { variant = "home", locale, path } = Astro.props;
 const strings = ui[locale];
 const linkClass =
-  "pressable min-h-11 items-center gap-1 whitespace-nowrap rounded-lg px-2.5 text-[13px] text-text-secondary transition-colors hover:text-text sm:px-3";
+  "pressable min-h-11 items-center gap-1 whitespace-nowrap px-2.5 text-small text-ink-muted transition-colors hover:text-ink sm:px-3";
 const homeLinks = [
   { href: "#skills", label: strings.header.skills },
   { href: "#categories", label: strings.header.categories },
@@ -27,7 +28,7 @@ const homeLinks = [
 ];
 ---
 
-<header class="sticky top-0 z-30 border-b border-divider bg-white/85 px-6 backdrop-blur-md sm:px-10">
+<header class="sticky top-0 z-30 bg-paper/90 px-6 backdrop-blur-md sm:px-10">
   <div class="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-1 py-3">
     <SiteBrand locale={locale} />
     {variant === "home" ? (
@@ -41,7 +42,8 @@ const homeLinks = [
         action={localeHref(locale)}
         method="get"
         role="search"
-        class="order-last flex min-h-11 w-full min-w-0 items-center gap-2 rounded-lg border border-border px-3 transition-colors focus-within:border-text md:order-none md:ml-auto md:w-64"
+        data-sketch
+        class="order-last flex min-h-11 w-full min-w-0 items-center gap-2 px-3 md:order-none md:ml-auto md:w-64"
       >
         <SearchIcon />
         <label class="sr-only" for="header-search">{strings.header.searchSkills}</label>
@@ -51,26 +53,24 @@ const homeLinks = [
           name="q"
           placeholder={strings.header.search}
           data-search-focus
-          class="w-full min-w-0 bg-transparent text-base text-text outline-none placeholder:text-text-muted md:text-[13px]"
+          class="w-full min-w-0 bg-transparent text-base text-ink outline-none placeholder:text-ink-subtle md:text-small"
         />
-        <kbd class="hidden rounded border border-border px-1.5 py-0.5 font-mono text-[10px] text-text-muted md:block">⌘K</kbd>
+        <kbd class="hidden font-mono text-caption text-ink-subtle md:block">⌘K</kbd>
       </form>
     )}
     <div class="ml-auto flex items-center gap-2 md:ml-0">
       <a href={MODS_REPO} class:list={[linkClass, "hidden sm:inline-flex"]}>
         {strings.header.mods}
-        <PhosphorIcon src={arrowUpRight} class="h-3 w-3" />
+        <Icon svg={arrowUpRight} class="h-3 w-3" />
       </a>
       <LanguageSwitcher locale={locale} path={path} />
-      <a
-        href={SITE_REPO}
-        class="pressable inline-flex min-h-11 items-center gap-2 rounded-lg border border-border px-3 text-[13px] text-text transition-colors hover:border-text"
-      >
-        <PhosphorIcon src={githubLogo} class="h-4 w-4" />
+      <a href={SITE_REPO} class="lm-btn pressable" data-sketch data-wash>
+        <Icon svg={gitBranch} class="h-4 w-4" />
         <span class="sr-only sm:not-sr-only">{strings.header.repository}</span>
       </a>
     </div>
   </div>
+  <Divider tone="strong" class="absolute inset-x-0 -bottom-1" />
 </header>
 
 <script>
