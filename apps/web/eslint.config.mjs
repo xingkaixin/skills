@@ -21,7 +21,25 @@ export default defineConfig([
     },
     rules: {
       // Scan literals to cover Astro's class:list and frontmatter class strings.
-      "shadcn/no-raw-colors": ["error", { scanAllStrings: true }],
+      "shadcn/no-raw-colors": [
+        "error",
+        {
+          scanAllStrings: true,
+          // Lanmo's type scale and overlay shadow, which the rule reads as colors.
+          allow: [
+            "text-hero",
+            "text-display",
+            "text-title",
+            "text-heading",
+            "text-subheading",
+            "text-body",
+            "text-small",
+            "text-caption",
+            "text-code",
+            "shadow-overlay",
+          ],
+        },
+      ],
       "shadcn/no-arbitrary-values": [
         "error",
         { deny: ["color"], scanAllStrings: true },

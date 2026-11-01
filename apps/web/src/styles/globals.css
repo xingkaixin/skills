@@ -2,32 +2,82 @@
 @import "./fonts.css";
 
 @theme inline {
-  --color-bg: #ffffff;
-  --color-surface: #fafafa;
-  --color-panel: rgba(255, 255, 255, 0.97);
-  --color-border: #e3e3df;
-  --color-divider: #eeeeec;
-  --color-text: #111111;
-  --color-text-secondary: #5b6270;
-  --color-text-muted: #606a78;
-  --color-accent: #3155ea;
-  --color-accent-strong: #1e40b8;
-  --color-fill: #f2f4f7;
-  --color-ink: #0f1218;
-  --color-accent-soft: #f4f7fd;
-  --color-accent-border: #dbe4f4;
-  --font-sans: var(--font-sora);
-  --font-mono: var(--font-jetbrains-mono);
+  --color-paper: #f5f6f8;
+  --color-surface: #fcfcfd;
+  --color-surface-muted: #eceff4;
+  --color-ink: #1c2840;
+  --color-ink-muted: #3f4c66;
+  --color-ink-subtle: #5a6680;
+  --color-line-strong: #24345a;
+  --color-line: #7d8aa3;
+  --color-line-faint: #c9d0dc;
+  --color-accent: #2f5bb7;
+  --color-accent-strong: #1e3f8a;
+  --color-accent-wash: #7d9be0;
+  --color-vermilion: #b8402c;
+  --color-mark: #c7d6f6;
+
+  --font-hand: "Xiaolai", "Kaiti SC", STKaiti, cursive;
+  --font-mono: "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+
+  /* The one size above Lanmo's scale: with a single weight, a landing hero
+     needs more than `display` to stand apart from the section titles. */
+  --text-hero: 3rem;
+  --text-hero--line-height: 3.5rem;
+  --text-display: 2rem;
+  --text-display--line-height: 2.375rem;
+  --text-title: 1.5rem;
+  --text-title--line-height: 2rem;
+  --text-heading: 1.25rem;
+  --text-heading--line-height: 1.75rem;
+  --text-subheading: 1.0625rem;
+  --text-subheading--line-height: 1.5rem;
+  --text-body: 0.9375rem;
+  --text-body--line-height: 1.5rem;
+  --text-small: 0.8125rem;
+  --text-small--line-height: 1.25rem;
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1rem;
+  --text-code: 0.8125rem;
+  --text-code--line-height: 1.375rem;
+
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  --shadow-overlay: 0 3px 12px #1c284033;
 }
 
 :root {
-  background: #ffffff;
-  --font-sora: 'Sora', sans-serif;
-  --font-jetbrains-mono: 'JetBrains Mono', monospace;
+  --stroke-main: 1.8px;
+  --stroke-echo: 1px;
+  --stroke-bold: 2.6px;
+  --stroke-quiet: 1.1px;
+  --wash-rest: 0.6;
+  --wash-hover: 0.85;
+  --wash-ghost: 0.32;
+  --ease-hand: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@layer base {
+  /* In a layer so positioning utilities such as `absolute` still win. */
+  [data-sketch] {
+    position: relative;
+    isolation: isolate;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: var(--radius-md);
+  }
 }
 
 html {
   min-height: 100%;
+  background: var(--color-paper);
+  /* Xiaolai has one weight; a synthesized bold smears the handwriting. */
+  font-synthesis: none;
   /* Keeps in-page anchors clear of the sticky header. */
   scroll-padding-top: 6rem;
 }
@@ -35,9 +85,20 @@ html {
 body {
   min-height: 100%;
   overflow-x: hidden;
-  background: var(--color-bg);
-  color: var(--color-text);
-  font-family: var(--font-sans);
+  background-color: var(--color-paper);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .11 0 0 0 0 .16 0 0 0 0 .25 0 0 0 .11 -.02'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .2 0 0 0 0 .3 0 0 0 0 .5 0 0 0 .09 -.03'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
+  color: var(--color-ink);
+  font-family: var(--font-hand);
+  font-size: var(--text-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-mark);
+  color: var(--color-ink);
 }
 
 .skip-link {
@@ -45,9 +106,9 @@ body {
   top: 0.5rem;
   left: 0.5rem;
   z-index: 50;
-  border-radius: 0.375rem;
-  background: var(--color-text);
-  color: #ffffff;
+  border-radius: var(--radius-md);
+  background: var(--color-ink);
+  color: var(--color-paper);
   padding: 0.75rem 1rem;
   transform: translateY(-150%);
   transition: transform 120ms ease;
@@ -57,42 +118,160 @@ body {
   transform: translateY(0);
 }
 
-.pressable:active {
-  transform: scale(0.97);
-}
-
 a,
 button {
   cursor: pointer;
 }
 
-::selection {
-  background: #111111;
-  color: #ffffff;
+.pressable {
+  transition: transform 120ms var(--ease-hand);
 }
 
-/* Mono micro-label used for section kickers, meta keys and card eyebrows.
-   Colour stays at the call site — these labels are muted or accent by context. */
-.eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.625rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+.pressable:active {
+  transform: translateY(1px) rotate(-0.4deg);
+}
+
+/* The drawn layer. scripts/sketch.ts fills it; these rules are Lanmo's. */
+.lm-ink {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.lm-s {
+  fill: none;
+  stroke: var(--lm-stroke, var(--color-line-strong));
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 120ms;
+}
+
+.lm-s1 {
+  stroke-width: var(--lm-w1, var(--stroke-main));
+  opacity: 0.95;
+}
+
+.lm-s2 {
+  stroke-width: var(--lm-w2, var(--stroke-echo));
+  opacity: 0.55;
+}
+
+.lm-wash {
+  opacity: var(--lm-wash-op, 0);
+  transition: opacity 180ms var(--ease-hand);
+}
+
+.lm-wash line {
+  stroke: var(--lm-wash, var(--color-accent-wash));
+  stroke-linecap: round;
+}
+
+.lm-wash-tint {
+  fill: var(--lm-wash, var(--color-accent-wash));
+  opacity: 0.22;
+}
+
+/* Until the script runs, or without it, outlines are a plain hairline. */
+[data-sketch=""]:not([data-sketched]) {
+  box-shadow: inset 0 0 0 1px var(--lm-stroke, var(--color-line-strong));
+}
+
+[data-sketch=""]:focus-visible,
+form[data-sketch=""]:focus-within {
+  outline: none;
+  --lm-stroke: var(--color-accent);
+  --lm-w1: var(--stroke-bold);
+}
+
+.lm-divider {
+  display: block;
+  width: 100%;
+  height: 8px;
+  --lm-stroke: var(--color-line);
+  --lm-w1: var(--stroke-quiet);
+  --lm-w2: 0.6px;
+}
+
+.lm-divider--strong {
+  --lm-stroke: var(--color-line-strong);
+  --lm-w1: var(--stroke-main);
+  --lm-w2: var(--stroke-echo);
+}
+
+.lm-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.lm-card::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  z-index: -2;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  opacity: 0.55;
+}
+
+.lm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  min-height: 2.75rem;
+  padding: 0 0.75rem;
+  font-size: var(--text-small);
+  color: var(--color-ink);
+  white-space: nowrap;
+  --lm-wash: var(--color-line);
+}
+
+.lm-btn:hover {
+  --lm-wash-op: var(--wash-ghost);
+}
+
+.lm-btn--primary {
+  --lm-wash: var(--color-accent-wash);
+  --lm-wash-op: var(--wash-rest);
+}
+
+.lm-btn--primary:hover {
+  --lm-wash-op: var(--wash-hover);
+}
+
+.lm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 1.75rem;
+  padding: 0 0.75rem;
+  font-size: var(--text-small);
+  color: var(--color-ink-muted);
+  --lm-w1: var(--stroke-quiet);
+  --lm-w2: 0.5px;
+}
+
+.lm-mark {
+  display: inline-block;
+  padding-bottom: 2px;
+  --lm-stroke: var(--color-accent);
 }
 
 .category-pill {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  border: 1px solid var(--color-accent-border);
-  border-radius: 999px;
-  background: var(--color-accent-soft);
-  color: var(--color-accent);
-  padding: 0.25rem 0.65rem;
-  font-family: var(--font-mono);
-  font-size: 0.625rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  min-height: 1.75rem;
+  padding: 0 0.75rem;
+  font-size: var(--text-small);
+  color: var(--color-ink);
+  --lm-stroke: var(--color-accent);
+  --lm-wash: var(--color-accent-wash);
+  --lm-wash-op: var(--wash-rest);
+  --lm-w1: var(--stroke-quiet);
+  --lm-w2: 0.5px;
 }
 
 .chip {
@@ -100,109 +279,70 @@ button {
   align-items: center;
   gap: 0.4rem;
   flex-shrink: 0;
-  border: 1px solid var(--color-border);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--color-text-secondary);
   min-height: 2.25rem;
   padding: 0 0.8rem;
-  font-size: 0.8125rem;
-  transition:
-    border-color 140ms ease,
-    background 140ms ease,
-    color 140ms ease;
+  font-size: var(--text-small);
+  color: var(--color-ink-muted);
+  transition: color 120ms;
+  --lm-wash: var(--color-line);
 }
 
 .chip:hover {
-  border-color: var(--color-text);
-  color: var(--color-text);
+  color: var(--color-ink);
+  --lm-wash-op: var(--wash-ghost);
 }
 
 .chip[aria-current="page"] {
-  border-color: var(--color-text);
-  background: var(--color-text);
-  color: #ffffff;
-}
-
-.chip-count {
-  font-family: var(--font-mono);
-  font-size: 0.625rem;
+  color: var(--color-ink);
+  --lm-wash: var(--color-accent-wash);
+  --lm-wash-op: var(--wash-rest);
 }
 
 .seg-group {
   display: inline-flex;
   flex-shrink: 0;
-  gap: 2px;
-  border-radius: 0.625rem;
-  background: #eceef2;
-  padding: 3px;
+  gap: 4px;
 }
 
 .seg-button {
   min-height: 2.5rem;
-  border-radius: 0.5rem;
   padding: 0 0.875rem;
-  font-size: 0.8125rem;
-  color: var(--color-text-secondary);
-  transition:
-    background 150ms ease,
-    color 150ms ease,
-    box-shadow 150ms ease;
+  color: var(--color-ink-muted);
+  transition: color 120ms;
+  --lm-wash: var(--color-line);
 }
 
 .seg-button:hover {
-  color: var(--color-text);
+  color: var(--color-ink);
+  --lm-wash-op: 0.25;
 }
 
 .seg-button[aria-pressed="true"],
 .seg-button[aria-selected="true"] {
-  background: #ffffff;
-  color: var(--color-text);
-  box-shadow: 0 1px 2px rgba(15, 18, 24, 0.08);
+  color: var(--color-ink);
+  --lm-wash: var(--color-accent-wash);
+  --lm-wash-op: var(--wash-rest);
+}
+
+.skill-card,
+.category-tile {
+  --lm-stroke: var(--color-line);
 }
 
 .skill-card {
-  position: relative;
-  isolation: isolate;
-  display: flex;
-  flex-direction: column;
   gap: 0.75rem;
-  overflow: hidden;
-  border: 1px solid var(--color-border);
-  border-radius: 0.875rem;
-  background: #ffffff;
   padding: 1.375rem;
-  transition:
-    border-color 160ms ease,
-    transform 160ms ease,
-    box-shadow 160ms ease;
 }
 
-.skill-card-art {
-  position: absolute;
-  z-index: -1;
-  right: -1.75rem;
-  bottom: -1.5rem;
-  width: 13rem;
-  height: 13rem;
-  object-fit: cover;
-  opacity: 0.5;
-  mask-image: linear-gradient(to left, #000 15%, transparent 95%);
-  transform: rotate(var(--card-art-rotation));
-  pointer-events: none;
-  user-select: none;
-}
-
-.skill-card:hover {
-  border-color: #c9d0dc;
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px -16px rgba(15, 18, 24, 0.25);
+.skill-card:hover,
+.category-tile:hover {
+  --lm-stroke: var(--color-accent);
 }
 
 .card-arrow {
   transition:
-    transform 180ms ease,
-    color 180ms ease;
+    transform 120ms var(--ease-hand),
+    color 120ms;
 }
 
 .skill-card:hover .card-arrow {
@@ -211,14 +351,14 @@ button {
 }
 
 .toc-link {
-  border-left: 2px solid var(--color-border);
+  border-left: 2px solid var(--color-line-faint);
   padding: 0.375rem 0 0.375rem 0.875rem;
-  font-size: 0.78rem;
+  font-size: var(--text-small);
   line-height: 1.5;
-  color: var(--color-text-muted);
+  color: var(--color-ink-subtle);
   transition:
-    border-color 140ms ease,
-    color 140ms ease;
+    border-color 120ms,
+    color 120ms;
 }
 
 .toc-link-nested {
@@ -226,26 +366,24 @@ button {
 }
 
 .toc-link:hover {
-  color: var(--color-text);
+  color: var(--color-ink);
 }
 
 .toc-link[aria-current="true"] {
   border-left-color: var(--color-accent);
-  color: var(--color-text);
-  font-weight: 500;
+  color: var(--color-ink);
 }
 
 .meta-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  border-top: 1px solid var(--color-border);
-  background: #fbfbfc;
+  border-top: 1px solid var(--color-line-faint);
 }
 
 .meta-grid > * {
   min-width: 0;
-  border-top: 1px solid var(--color-border);
-  border-left: 1px solid var(--color-border);
+  border-top: 1px solid var(--color-line-faint);
+  border-left: 1px solid var(--color-line-faint);
   padding: 0.875rem 1.125rem;
 }
 
@@ -262,9 +400,9 @@ button {
     grid-template-columns: repeat(4, 1fr);
   }
 
-  .meta-grid > * {
+  .meta-grid > :nth-child(n) {
     border-top: 0;
-    border-left: 1px solid var(--color-border);
+    border-left: 1px solid var(--color-line-faint);
   }
 
   .meta-grid > :first-child {
@@ -276,81 +414,32 @@ button {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  border-radius: 0.75rem;
-  background: var(--color-ink);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-muted);
   padding: 0.5rem 0.5rem 0.5rem 1rem;
-  box-shadow: 0 16px 40px -24px rgba(15, 18, 24, 0.55);
-}
-
-.command-box code {
-  color: #f3f5f8;
 }
 
 .command-box code::before {
   content: "$ ";
-  color: #7f8ba3;
+  color: var(--color-ink-subtle);
   user-select: none;
 }
 
 .copy-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
   flex-shrink: 0;
-  border: 1px solid var(--color-border);
-  border-radius: 0.4375rem;
-  background: #ffffff;
-  color: var(--color-text-secondary);
-  padding: 0.45rem 0.7rem;
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  transition:
-    border-color 140ms ease,
-    color 140ms ease,
-    opacity 140ms ease;
+  color: var(--color-ink-muted);
+  font-size: var(--text-small);
+  transition: color 120ms;
 }
 
 .copy-button:hover {
-  border-color: var(--color-text);
-  color: var(--color-text);
+  color: var(--color-ink);
 }
 
 .command-box .copy-button {
   min-height: 2.5rem;
   min-width: 5rem;
-  justify-content: center;
-  border: 0;
-  border-radius: 0.5rem;
-  background: var(--color-accent);
-  color: #ffffff;
-  padding: 0 0.875rem;
-  font-family: var(--font-sans);
-  font-size: 0.8125rem;
-  font-weight: 500;
-}
-
-.command-box .copy-button:hover {
-  background: var(--color-accent-strong);
-  color: #ffffff;
-}
-
-.rise {
-  animation: rise 500ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-
-.rise-delay-1 {
-  animation-delay: 80ms;
-}
-
-.rise-delay-2 {
-  animation-delay: 160ms;
-}
-
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
+  color: var(--color-ink);
 }
 
 .faq-item summary::-webkit-details-marker {
@@ -358,7 +447,7 @@ button {
 }
 
 .faq-chevron {
-  transition: transform 200ms ease;
+  transition: transform 180ms var(--ease-hand);
 }
 
 .faq-item[open] .faq-chevron {
@@ -366,9 +455,9 @@ button {
 }
 
 .skill-prose {
-  color: #2b3240;
-  font-size: 1rem;
-  line-height: 1.85;
+  color: var(--color-ink);
+  font-size: var(--text-body);
+  line-height: 1.5rem;
   max-width: 45rem;
   overflow-wrap: break-word;
 }
@@ -379,8 +468,7 @@ button {
 .skill-prose h4,
 .skill-prose h5,
 .skill-prose h6 {
-  color: var(--color-text);
-  font-weight: 600;
+  color: var(--color-ink);
   line-height: 1.3;
   margin: 2em 0 0.75em;
 }
@@ -393,12 +481,12 @@ button {
   scroll-margin-top: 5rem;
 }
 
-.skill-prose h1 { font-size: 1.625rem; }
-.skill-prose h2 { font-size: 1.5rem; letter-spacing: -0.02em; }
-.skill-prose h3 { font-size: 1.125rem; }
-.skill-prose h4 { font-size: 1rem; }
+.skill-prose h1 { font-size: var(--text-title); }
+.skill-prose h2 { font-size: var(--text-title); }
+.skill-prose h3 { font-size: var(--text-heading); }
+.skill-prose h4 { font-size: var(--text-subheading); }
 .skill-prose h5,
-.skill-prose h6 { font-size: 0.95rem; }
+.skill-prose h6 { font-size: var(--text-body); }
 
 .skill-prose p,
 .skill-prose ul,
@@ -418,28 +506,38 @@ button {
 .skill-prose ol { list-style: decimal; }
 .skill-prose li { margin: 0.3em 0; }
 
+.skill-prose strong,
+.skill-prose b {
+  /* One weight only, so emphasis moves to colour. */
+  font-weight: 400;
+  color: var(--color-accent-strong);
+}
+
 .skill-prose a {
   color: var(--color-accent);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
+.skill-prose a:hover {
+  color: var(--color-accent-strong);
+}
+
 .skill-prose code {
   font-family: var(--font-mono);
   font-size: 0.85em;
-  background: #f4f4f2;
-  color: var(--color-text);
+  background: var(--color-surface-muted);
+  color: var(--color-ink);
   padding: 0.12em 0.35em;
-  border-radius: 0.25rem;
+  border-radius: var(--radius-sm);
 }
 
 /* Wrapped at runtime by the code-block enhancer so each block gets a
    language label and a copy button; the bare <pre> fallback still reads fine. */
 .code-block {
   margin: 1.25em 0;
-  border: 1px solid var(--color-border);
-  border-radius: 0.625rem;
-  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-muted);
 }
 
 .code-block-bar {
@@ -447,57 +545,59 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  padding: 0.5rem 0.875rem;
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
+  padding: 0.5rem 0.875rem 0;
 }
 
 .skill-prose pre {
   margin: 1.25em 0;
-  background: #ffffff;
-  border: 1px solid var(--color-border);
-  border-radius: 0.625rem;
+  background: var(--color-surface-muted);
+  border-radius: var(--radius-lg);
   padding: 1rem 1.125rem;
   overflow-x: auto;
 }
 
 .code-block pre {
   margin: 0;
-  border: 0;
-  border-radius: 0;
+  padding-top: 0.5rem;
+  background: transparent;
 }
 
 .skill-prose pre code {
   background: transparent;
   padding: 0;
-  font-size: 0.78rem;
-  line-height: 1.8;
+  font-size: var(--text-code);
+  line-height: var(--text-code--line-height);
 }
 
 .skill-prose blockquote {
-  border-left: 2px solid var(--color-accent);
-  background: #f8fafd;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-muted);
   padding: 1rem 1.25rem;
-  color: #4b5563;
+  color: var(--color-ink-muted);
 }
 
 .skill-prose table {
   border-collapse: collapse;
   display: block;
   overflow-x: auto;
-  font-size: 0.85rem;
+  font-size: var(--text-small);
 }
 
 .skill-prose th,
 .skill-prose td {
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-line-faint);
   padding: 0.45rem 0.7rem;
   text-align: left;
 }
 
+.skill-prose th {
+  background: var(--color-surface-muted);
+  font-weight: 400;
+}
+
 .skill-prose hr {
   border: 0;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--color-line-faint);
   margin: 2em 0;
 }
 

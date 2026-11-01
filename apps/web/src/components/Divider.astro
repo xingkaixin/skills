@@ -1,0 +1,15 @@
+---
+interface Props {
+  /** "strong" is for structural rules such as the header's bottom edge. */
+  tone?: "quiet" | "strong";
+  class?: string;
+}
+
+const { tone = "quiet", class: className } = Astro.props;
+---
+
+<div
+  aria-hidden="true"
+  data-sketch="line"
+  class:list={["lm-divider", tone === "strong" && "lm-divider--strong", className]}
+></div>

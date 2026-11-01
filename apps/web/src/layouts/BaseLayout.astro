@@ -55,7 +55,7 @@ const ogImageUrl = new URL("/og-image.png", Astro.site).href;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preload" href={xiaolaiCore} as="font" type="font/woff2" crossorigin />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#f5f6f8" />
     <title>{title}</title>
     <meta name="description" content={description} />
     {noindex ? (
@@ -108,11 +108,13 @@ const ogImageUrl = new URL("/og-image.png", Astro.site).href;
   </head>
   <body>
     <a href="#main-content" class="skip-link">{strings.skipToContent}</a>
-    <div class="font-sans min-h-screen">
+    <div class="min-h-screen">
       <slot />
       <SiteFooter locale={locale} path={path} />
     </div>
     <script>
+      import "@/scripts/sketch";
+
       if ("modelContext" in document && document.modelContext) {
         const { registerWebMcpTools } = await import("@/webmcp/register");
         registerWebMcpTools();
