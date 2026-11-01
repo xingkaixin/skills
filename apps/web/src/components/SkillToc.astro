@@ -18,7 +18,7 @@ const headingId = collapsible ? "mobile-toc-heading" : "toc-heading";
 {entries.length > 0 && (
   <nav aria-labelledby={headingId} data-toc>
     <Container>
-      <Heading id={headingId} class:list={["mb-2.5 text-text-muted", collapsible ? "cursor-pointer py-2 text-sm" : "eyebrow ml-3.5 tracking-[0.18em]"]}>
+      <Heading id={headingId} class:list={["mb-2.5 text-ink-subtle", collapsible ? "cursor-pointer py-2 text-body" : "ml-3.5 text-small"]}>
         {ui[locale].skill.onThisPage}
       </Heading>
       <div class="flex max-h-[60vh] flex-col overflow-y-auto">
