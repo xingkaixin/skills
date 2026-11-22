@@ -1,7 +1,7 @@
 ---
 import Divider from "@/components/Divider.astro";
 import SiteBrand from "@/components/SiteBrand.astro";
-import { categoryMetadata, MODS_REPO, SITE_REPO } from "@/data/catalog";
+import { AUTHOR_SITE_URL, categoryMetadata, MODS_REPO, SITE_REPO } from "@/data/catalog";
 import { skillCategories } from "@/data/skills.generated";
 import { LOCALES, localeHref, localeNames, localeTags, type Locale } from "@/i18n/config";
 import { ui } from "@/i18n/ui";
@@ -14,6 +14,7 @@ interface Props {
 
 const { locale, path } = Astro.props;
 const strings = ui[locale];
+const authorBlogUrl = locale === "zh" ? AUTHOR_SITE_URL : `${AUTHOR_SITE_URL}en/`;
 const linkClass = "text-ink-muted transition-colors hover:text-ink";
 ---
 
@@ -41,6 +42,7 @@ const linkClass = "text-ink-muted transition-colors hover:text-ink";
       <ul class="mt-4 flex flex-col gap-2.5 text-body">
         <li><a href={SITE_REPO} class={linkClass}>{strings.footer.repository}</a></li>
         <li><a href={MODS_REPO} class={linkClass}>{strings.header.mods} ↗</a></li>
+        <li><a href={authorBlogUrl} class={linkClass}>{strings.footer.blog} ↗</a></li>
         <li><a href={`${SITE_REPO}/issues`} class={linkClass}>{strings.footer.issue}</a></li>
       </ul>
     </nav>

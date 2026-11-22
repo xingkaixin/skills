@@ -57,6 +57,7 @@ const en = {
     tagline: "An open catalog of agent skills for Claude Code and Codex, maintained by XingKaiXin.",
     project: "Project",
     repository: "GitHub repository",
+    blog: "XingKaiXin's Blog",
     issue: "Report an issue",
   },
   catalog: {
@@ -170,6 +171,7 @@ const zh: UiStrings = {
     tagline: "适用于 Claude Code 和 Codex 的开源 Agent Skills 目录，由 XingKaiXin 维护。",
     project: "项目",
     repository: "GitHub 仓库",
+    blog: "XingKaiXin 的博客",
     issue: "反馈问题",
   },
   catalog: {
@@ -281,6 +283,7 @@ const ja: UiStrings = {
     tagline: "Claude Code と Codex 向けのオープンな Agent Skills カタログ。XingKaiXin が管理しています。",
     project: "プロジェクト",
     repository: "GitHub リポジトリ",
+    blog: "XingKaiXin のブログ",
     issue: "問題を報告",
   },
   catalog: {

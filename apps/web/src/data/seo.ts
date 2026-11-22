@@ -1,4 +1,4 @@
-import { categoryMetadata, SITE_NAME, SITE_REPO, SITE_URL } from "@/data/catalog";
+import { AUTHOR_SITE_URL, categoryMetadata, SITE_NAME, SITE_URL } from "@/data/catalog";
 import { skillsData } from "@/data/skills.generated";
 import type { SkillRecord } from "@/data/skill-record";
 import { localeHref, type Locale } from "@/i18n/config";
@@ -195,7 +195,7 @@ function siteEntity(locale: Locale): JsonLdNode {
         "@type": "Person",
         "@id": `${SITE_URL}/#publisher`,
         name: "XingKaiXin",
-        url: SITE_REPO,
+        url: AUTHOR_SITE_URL,
       },
       {
         "@type": "WebSite",
