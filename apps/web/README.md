@@ -75,7 +75,7 @@ Use the `cf` CLI installed globally through mise and sign in with `cf auth login
 Do not install `cf` as a project dependency. The root deployment command generates
 catalog data, builds Astro, and runs `cf deploy --prebuilt` from `apps/web`.
 `build-cloudflare.mjs` packages the static assets and `worker.js` into
-`.cloudflare/output/v0/`, including the `skills.xingkaixin.me` custom domain.
+`.cloudflare/output/v1/`, including the `skills.xingkaixin.me` custom domain.
 Run `pnpm --filter web exec cf deploy --prebuilt --dry-run` after a build to
 validate the deployment without uploading it.
 

@@ -1,8 +1,9 @@
 import { cp, mkdir, rm, writeFile } from "node:fs/promises";
 
-const output = new URL("./.cloudflare/output/v0/", import.meta.url);
+const outputRoot = new URL("./.cloudflare/output/", import.meta.url);
+const output = new URL("v1/", outputRoot);
 const worker = new URL("workers/default/", output);
-await rm(output, { recursive: true, force: true });
+await rm(outputRoot, { recursive: true, force: true });
 await mkdir(new URL("bundle/", worker), { recursive: true });
 await cp(new URL("./dist/", import.meta.url), new URL("assets/", worker), { recursive: true });
 await cp(new URL("./worker.js", import.meta.url), new URL("bundle/worker.js", worker));
