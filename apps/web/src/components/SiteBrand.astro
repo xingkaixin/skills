@@ -10,6 +10,8 @@ const { locale } = Astro.props;
 ---
 
 <a href={localeHref(locale)} class="inline-flex items-center gap-2.5">
-  <img src="/favicon.svg" alt="" width="28" height="28" class="h-7 w-7 shrink-0" />
+  <svg viewBox="0 0 64 64" width="28" height="28" aria-hidden="true" class="h-7 w-7 shrink-0">
+    <use href="#lm-brand" />
+  </svg>
   <span class="text-body text-ink">{SITE_NAME}</span>
 </a>

@@ -131,6 +131,22 @@ button {
   transform: translateY(1px) rotate(-0.4deg);
 }
 
+.icon {
+  display: inline-flex;
+  flex: none;
+}
+
+.icon svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 1.5;
+}
+
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
+}
+
 /* The drawn layer. scripts/sketch.ts fills it; these rules are Lanmo's. */
 .lm-ink {
   position: absolute;
@@ -164,7 +180,9 @@ button {
   transition: opacity 180ms var(--ease-hand);
 }
 
-.lm-wash line {
+.lm-wash line,
+.lm-wash path {
+  fill: none;
   stroke: var(--lm-wash, var(--color-accent-wash));
   stroke-linecap: round;
 }

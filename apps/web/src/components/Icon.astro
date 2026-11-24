@@ -6,21 +6,13 @@ interface Props {
 }
 
 const { svg, class: className } = Astro.props;
-// The license banner and source formatting would repeat on every card.
-const markup = svg.replace(/<!--.*?-->|\n\s*/gs, " ").trim();
+// Strip license banner, XML namespace, redundant dimensions, and formatting.
+const markup = svg
+  .replace(/<!--.*?-->/gs, "")
+  .replace(/\s+(?:xmlns|class|width|height|stroke-width)="[^"]*"/g, "")
+  .replace(/\s+/g, " ")
+  .replace(/>\s+</g, "><")
+  .trim();
 ---
 
 <span aria-hidden="true" class:list={["icon", className]} set:html={markup} />
-
-<style>
-  .icon {
-    display: inline-flex;
-    flex: none;
-  }
-
-  .icon :global(svg) {
-    width: 100%;
-    height: 100%;
-    stroke-width: 1.5;
-  }
-</style>

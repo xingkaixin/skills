@@ -7,7 +7,7 @@ import {
   type InstallScope,
   type SkillSort,
 } from "@/data/skill-catalog";
-import { skillCategories, skillsData } from "@/data/skills.generated";
+import type { SkillRecord } from "@/data/skill-record";
 import {
   DEFAULT_LOCALE,
   LOCALES,
@@ -34,18 +34,34 @@ export function registerWebMcpTools(): void {
   if (!modelContext) return;
 
   const controller = new AbortController();
-  window.addEventListener("pagehide", () => controller.abort(), { once: true });
+  // Keep tools registered while the document sits in BFCache; abort only on real unload.
+  const onPageHide = (event: PageTransitionEvent) => {
+    if (event.persisted) return;
+    window.removeEventListener("pagehide", onPageHide);
+    controller.abort();
+  };
+  window.addEventListener("pagehide", onPageHide);
 
-  void Promise.all(
-    catalogTools().map((tool) =>
-      modelContext.registerTool(tool, { signal: controller.signal }),
-    ),
-  ).catch((error: unknown) => {
-    console.error("Unable to register WebMCP catalog tools.", error);
-  });
+  void fetch("/api/skills.json", { signal: controller.signal })
+    .then((response) => {
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return response.json() as Promise<SkillRecord[]>;
+    })
+    .then((skillsData) =>
+      Promise.all(
+        catalogTools(skillsData).map((tool) =>
+          modelContext.registerTool(tool, { signal: controller.signal }),
+        ),
+      ),
+    )
+    .catch((error: unknown) => {
+      if (controller.signal.aborted) return;
+      console.error("Unable to register WebMCP catalog tools.", error);
+    });
 }
 
-function catalogTools(): WebMcpTool[] {
+function catalogTools(skillsData: SkillRecord[]): WebMcpTool[] {
+  const skillCategories = Array.from(new Set(skillsData.map((skill) => skill.category))).sort();
   const localeSchema = {
     type: "string",
     enum: [...LOCALES],

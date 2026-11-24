@@ -19,7 +19,7 @@ await writeFile(new URL("worker.config.json", worker), JSON.stringify({
   assets: {
     htmlHandling: "drop-trailing-slash",
     notFoundHandling: "404-page",
-    runWorkerFirst: ["/", "/skills/*", "/zh", "/zh/*", "/ja", "/ja/*", "/.well-known/api-catalog"],
+    runWorkerFirst: ["/", "/skills/*", "/zh", "/zh/skills/*", "/ja", "/ja/skills/*", "/.well-known/api-catalog"],
   },
   env: { ASSETS: { type: "assets" } },
   manifest: {

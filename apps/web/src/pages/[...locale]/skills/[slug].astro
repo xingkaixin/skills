@@ -1,5 +1,4 @@
 ---
-import arrowRight from "lucide-static/icons/arrow-right.svg?raw";
 import info from "lucide-static/icons/info.svg?raw";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import CopyCommand from "@/components/CopyCommand.astro";
@@ -162,7 +161,9 @@ const bodyLanguageNote =
               <span class="text-small text-accent">{item.category}</span>
               <h3 class="text-subheading text-ink">{skillTitles[item.slug]?.[locale] ?? item.slug}</h3>
               <p class="text-body text-ink-muted">{item.reason}</p>
-              <Icon svg={arrowRight} class="card-arrow mt-auto h-4 w-4 self-end text-ink-subtle" />
+              <span aria-hidden="true" class="icon card-arrow mt-auto h-4 w-4 self-end text-ink-subtle">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><use href="#lm-ic-ar" /></svg>
+              </span>
             </a>
           ))}
         </div>

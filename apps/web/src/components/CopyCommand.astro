@@ -34,16 +34,20 @@ const strings = ui[locale].copy;
 <script>
   const RESET_DELAY = 1400;
 
-  // Delegated so it also covers the copy buttons SkillProse builds at runtime.
+  // Delegated so it covers both install commands and build-time code blocks.
   document.addEventListener("click", async (event) => {
-    const button = (event.target as Element | null)?.closest<HTMLElement>("[data-copy]");
+    const button = (event.target as Element | null)?.closest<HTMLElement>("[data-copy], [data-copy-code]");
     if (!button) return;
 
     // The label has its own element: the button also holds the drawn layer.
     const label = button.querySelector("[data-copy-text]")!;
+    const text =
+      button.getAttribute("data-copy") ??
+      button.closest(".code-block")?.querySelector("pre code")?.textContent ??
+      "";
 
     try {
-      await navigator.clipboard.writeText(button.getAttribute("data-copy") ?? "");
+      await navigator.clipboard.writeText(text);
     } catch {
       label.textContent = button.getAttribute("data-copy-failed") ?? button.getAttribute("data-copy-label");
       window.setTimeout(() => {

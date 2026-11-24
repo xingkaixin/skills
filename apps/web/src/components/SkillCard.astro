@@ -1,7 +1,4 @@
 ---
-import arrowRight from "lucide-static/icons/arrow-right.svg?raw";
-import Icon from "@/components/Icon.astro";
-import { skillSearchText } from "@/data/skill-catalog";
 import { skillTitles } from "@/data/skill-titles";
 import type { SkillRecord } from "@/data/skill-record";
 import { localeHref, type Locale } from "@/i18n/config";
@@ -25,7 +22,6 @@ const strings = ui[locale].catalog;
   data-category={skill.category}
   data-slug={skill.slug}
   data-modified={skill.lastModified}
-  data-haystack={skillSearchText(skill)}
 >
   <span class="flex items-center justify-between gap-2 text-small">
     <span class="text-accent">{skill.category}</span>
@@ -33,9 +29,11 @@ const strings = ui[locale].catalog;
   </span>
   <h3 class="mt-1 text-subheading text-ink">{skillTitles[skill.slug]?.[locale] ?? skill.slug}</h3>
   <p class="-mt-1.5 font-mono text-caption break-words text-ink-subtle">{skill.slug}</p>
-  <p class="line-clamp-3 text-body text-ink-muted">{skill.displayDescription[locale]}</p>
+  <p class="line-clamp-3 text-body text-ink-muted" data-skill-summary>{skill.displayDescription[locale]}</p>
   <span class="mt-auto flex items-center justify-between pt-2 text-small text-ink-subtle">
     <span>{strings.updated(skill.lastModified)}</span>
-    <Icon svg={arrowRight} class="card-arrow h-4 w-4" />
+    <span aria-hidden="true" class="icon card-arrow h-4 w-4">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><use href="#lm-ic-ar" /></svg>
+    </span>
   </span>
 </a>
