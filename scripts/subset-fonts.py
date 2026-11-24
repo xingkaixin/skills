@@ -3,7 +3,7 @@
 # requires-python = ">=3.11"
 # dependencies = ["fonttools[woff]==4.63.0"]
 # ///
-"""Subset the site's web font into a preloaded core file and a CJK file.
+"""Subset the site's web font into a preloaded core file and compact CJK slices.
 
 Run manually from the repository root, after a build so the script can read
 the rendered pages:
@@ -16,9 +16,11 @@ apps/web/src/styles/fonts.css. Re-run when content starts using a character
 the subsets do not hold; until then that character falls back to Kaiti.
 """
 
+from collections import defaultdict
 import hashlib
 import html
 import io
+import re
 import urllib.request
 from pathlib import Path
 
@@ -41,10 +43,21 @@ SOURCE = ROOT / ".cache" / "fonts" / "Xiaolai-Regular.ttf"
 FAMILY = "Xiaolai"
 FEATURES = ["calt"]
 CJK_START = 0x2E80
-CJK_RANGE = f"U+{CJK_START:X}-FFFF"
 # The footer's language links render these on every page; without them each
-# English page would download the whole CJK file.
+# English page would download CJK slices.
 LANGUAGE_LABELS = {ord(c) for c in "中文日本語"}
+
+SCRIPT_STYLE_RE = re.compile(r"<(?:script|style)\b[\s\S]*?</(?:script|style)>", re.IGNORECASE)
+TAG_RE = re.compile(r"<[^>]+>")
+RENDERED_ATTR_RE = re.compile(
+    r'(?:placeholder|data-copy-\w+|data-count-\w+|data-local-only|data-empty)="([^"]*)"',
+    re.IGNORECASE,
+)
+HEADER_RE = re.compile(r"<header\b[\s\S]*?</header>", re.IGNORECASE)
+HERO_RE = re.compile(r'<section\b[^>]*aria-labelledby="hero-heading"[\s\S]*?</section>', re.IGNORECASE)
+
+GLYPH_BYTES = 185
+SLICE_OVERHEAD_BYTES = 2000
 
 
 def source_font() -> Path:
@@ -58,12 +71,159 @@ def source_font() -> Path:
     return SOURCE
 
 
-def used_codepoints() -> set[int]:
+def extract_visible_codepoints(fragment: str) -> set[int]:
+    stripped = SCRIPT_STYLE_RE.sub("", fragment)
+    attrs = " ".join(RENDERED_ATTR_RE.findall(stripped))
+    text = html.unescape(TAG_RE.sub("", stripped) + " " + attrs)
+    return {ord(c) for c in set(text) if c.isprintable()}
+
+
+def collect_pages() -> tuple[dict[str, set[int]], dict[str, set[int]]]:
     pages = sorted(DIST.rglob("*.html"))
     if not pages:
         raise SystemExit(f"No pages in {DIST.relative_to(ROOT)}; run `pnpm build` first.")
-    text = "".join(html.unescape(page.read_text(encoding="utf-8")) for page in pages)
-    return {ord(c) for c in set(text) if c.isprintable()}
+    visible: dict[str, set[int]] = {}
+    above_fold: dict[str, set[int]] = {}
+    for page in pages:
+        rel = str(page.relative_to(DIST))
+        raw = page.read_text(encoding="utf-8")
+        visible[rel] = extract_visible_codepoints(raw)
+        if rel in ("zh.html", "ja.html"):
+            header = HEADER_RE.search(raw)
+            hero = HERO_RE.search(raw)
+            fold_html = (header.group(0) if header else "") + (hero.group(0) if hero else "")
+            above_fold[rel] = extract_visible_codepoints(fold_html)
+    return visible, above_fold
+
+
+def cluster_domain(
+    codepoints: set[int],
+    page_sets: list[set[int]],
+    target_k: int,
+    max_glyphs: int = 0,
+) -> list[set[int]]:
+    if not codepoints:
+        return []
+    if target_k <= 1:
+        return [set(codepoints)]
+
+    by_mask: dict[int, list[int]] = defaultdict(list)
+    for cp in sorted(codepoints):
+        mask = 0
+        for idx, pset in enumerate(page_sets):
+            if cp in pset:
+                mask |= 1 << idx
+        by_mask[mask].append(cp)
+
+    groups = [[set(cps), mask, mask.bit_count()] for mask, cps in by_mask.items()]
+    alive = list(range(len(groups)))
+
+    def merge_cost(i: int, j: int) -> float:
+        ci, mi, pi = len(groups[i][0]), groups[i][1], groups[i][2]
+        cj, mj, pj = len(groups[j][0]), groups[j][1], groups[j][2]
+        penalty = (ci + cj - max_glyphs) * 4000.0 if max_glyphs and ci + cj > max_glyphs else 0.0
+        pu = (mi | mj).bit_count()
+        return (
+            pu * ((ci + cj) * GLYPH_BYTES + SLICE_OVERHEAD_BYTES)
+            - pi * (ci * GLYPH_BYTES + SLICE_OVERHEAD_BYTES)
+            - pj * (cj * GLYPH_BYTES + SLICE_OVERHEAD_BYTES)
+            + penalty
+        )
+
+    def best_for(idx: int) -> tuple[float, int]:
+        best_delta = float("inf")
+        best_j = -1
+        for j in alive:
+            if j == idx:
+                continue
+            delta = merge_cost(idx, j)
+            if delta < best_delta:
+                best_delta = delta
+                best_j = j
+        return best_delta, best_j
+
+    if len(alive) > target_k:
+        nearest = {idx: best_for(idx) for idx in alive}
+        while len(alive) > target_k:
+            best_i = min(alive, key=lambda i: nearest[i][0])
+            _, best_j = nearest[best_i]
+            groups[best_i][0] |= groups[best_j][0]
+            groups[best_i][1] |= groups[best_j][1]
+            groups[best_i][2] = groups[best_i][1].bit_count()
+            alive.remove(best_j)
+            del nearest[best_j]
+            nearest[best_i] = best_for(best_i)
+            for k in alive:
+                if k == best_i:
+                    continue
+                if nearest[k][1] in (best_i, best_j):
+                    nearest[k] = best_for(k)
+                else:
+                    delta = merge_cost(k, best_i)
+                    if delta < nearest[k][0]:
+                        nearest[k] = (delta, best_i)
+
+    return [
+        groups[i][0]
+        for i in sorted(alive, key=lambda i: (-groups[i][2], min(groups[i][0])))
+    ]
+
+
+def partition_cjk(
+    cjk: set[int],
+    pages: dict[str, set[int]],
+    above_fold: dict[str, set[int]],
+) -> list[tuple[str, set[int]]]:
+    """Partition CJK characters into a compact set of locale and skill-body slices.
+
+    Keeping slice count low avoids HTTP/1.1 queueing, WOFF2 per-file header
+    overhead, and multi-slice relayouts while isolating zh, ja, and skill-body
+    glyphs so each page only fetches what it renders.
+    """
+    page_sets = [pages[key] for key in sorted(pages)]
+    zh_pages = [pages[k] for k in pages if k == "zh.html" or k.startswith("zh/")]
+    ja_pages = [pages[k] for k in pages if k == "ja.html" or k.startswith("ja/")]
+
+    zh_home = pages.get("zh.html", set()) & cjk
+    ja_home = pages.get("ja.html", set()) & cjk
+    both_home = zh_home & ja_home
+    zh_only_home = zh_home - ja_home
+    ja_only_home = ja_home - zh_home
+    body_only = cjk - zh_home - ja_home
+
+    zh_common = {cp for cp in cjk if sum(1 for p in zh_pages if cp in p) >= 8}
+    ja_common = {cp for cp in cjk if sum(1 for p in ja_pages if cp in p) >= 8}
+    zh_fold = above_fold.get("zh.html", set()) & cjk
+    ja_fold = above_fold.get("ja.html", set()) & cjk
+
+    # Compact, strictly disjoint slices:
+    # - cjk-shared: all chars shared by zh.html & ja.html (1 file)
+    # - cjk-zh-ui:  common zh chrome + zh hero (preloaded on zh pages)
+    # - cjk-ja-ui:  common ja chrome + ja hero (preloaded on ja pages)
+    # - cjk-zh-cat / cjk-zh-home: remaining zh catalog chars (split into 2 by page coverage)
+    # - cjk-ja-rest: remaining ja catalog chars (1 file)
+    # - cjk-body-00..04: skill-body-only chars (never loaded on home/category/EN-skill pages)
+    zh_ui = zh_only_home & (zh_common | zh_fold)
+    ja_ui = ja_only_home & (ja_common | ja_fold)
+    zh_rest = zh_only_home - zh_ui
+    ja_rest = ja_only_home - ja_ui
+
+    slices: list[tuple[str, set[int]]] = []
+    for name, group in [
+        ("cjk-shared", both_home),
+        ("cjk-zh-ui", zh_ui),
+        ("cjk-ja-ui", ja_ui),
+    ]:
+        if group:
+            slices.append((name, group))
+
+    for idx, group in enumerate(cluster_domain(zh_rest, page_sets, 2)):
+        slices.append((f"cjk-zh-{idx:02d}", group))
+    for idx, group in enumerate(cluster_domain(ja_rest, page_sets, 2)):
+        slices.append((f"cjk-ja-{idx:02d}", group))
+    for idx, group in enumerate(cluster_domain(body_only, page_sets, 8, max_glyphs=100)):
+        slices.append((f"cjk-body-{idx:02d}", group))
+    return slices
 
 
 def subset(codepoints: set[int], part: str) -> TTFont:
@@ -141,37 +301,48 @@ def font_face(path: Path, codepoints: str) -> str:
 
 
 def main() -> None:
-    used = used_codepoints()
+    pages, above_fold = collect_pages()
+    used = set().union(*pages.values())
     source = TTFont(source_font())
     available = set(source.getBestCmap())
     keep = used & available
 
     core = {cp for cp in keep if cp < CJK_START} | LANGUAGE_LABELS
     cjk = keep - core
+    cjk_slices = partition_cjk(cjk, pages, above_fold)
 
     FONTS_OUT.mkdir(parents=True, exist_ok=True)
     for stale in FONTS_OUT.glob("*.woff2"):
         stale.unlink()
 
     rows: list[str] = []
-    for part, codepoints in {"core": core, "cjk": cjk}.items():
+    total_bytes = 0
+    all_parts: list[tuple[str, set[int]]] = [("core", core), *cjk_slices]
+    for part, codepoints in all_parts:
         font = subset(codepoints, part)
         written = set(font.getBestCmap())
         if written != codepoints:
             raise SystemExit(f"{output(part).name}: cmap differs from requested characters")
-        rows.append(f"{part}: {output(part).stat().st_size:>7} B {len(codepoints):>5} characters")
+        size = output(part).stat().st_size
+        total_bytes += size
+        rows.append(f"{part:14s}: {size:>7} B {len(codepoints):>5} characters")
+
+    covered = set().union(*(cps for _, cps in all_parts))
+    if covered != keep | LANGUAGE_LABELS:
+        raise SystemExit("Font slices do not cover all requested codepoints")
 
     missing = "".join(chr(cp) for cp in sorted(used - available))
+    rows.append(f"total ({len(all_parts)} files): {total_bytes} B")
     rows.append(f"not in {FAMILY}: {missing!r}")
 
-    # When ranges overlap the last rule wins, so core must follow cjk for the
-    # language labels to come from the preloaded file.
+    # When ranges overlap the last rule wins, so core must follow cjk slices
+    # for the language labels to come from the preloaded file.
     header = f"""/* Generated by scripts/subset-fonts.py from Xiaolai {SOURCE_VERSION}. Do not edit.
-   The core file holds Latin text and is preloaded; the CJK file only
-   downloads when a page renders one of its characters. */
+   The core file holds Latin text and is preloaded; compact locale and
+   skill-body CJK slices let each page download only the glyphs it renders. */
 """
     blocks = [
-        font_face(output("cjk"), CJK_RANGE),
+        *(font_face(output(part), unicode_range(codepoints)) for part, codepoints in cjk_slices),
         font_face(output("core"), f"U+0-{CJK_START - 1:X}, {unicode_range(LANGUAGE_LABELS)}"),
     ]
     CSS_OUT.write_text(header + "\n" + "\n".join(blocks), encoding="utf-8")
