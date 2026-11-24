@@ -25,7 +25,9 @@ const SVG_NS = "http://www.w3.org/2000/svg";
 const GRAIN_ID = "lm-grain";
 
 const seeds = new WeakMap<Element, number>();
+const drawnSizes = new WeakMap<Element, string>();
 let clipCount = 0;
+let grainMounted = false;
 
 function hashString(value: string) {
   let hash = 2166136261;
@@ -157,6 +159,14 @@ function element(name: string, attributes: Record<string, string | number>, pare
   return node;
 }
 
+const HATCH_BUCKETS: ReadonlyArray<readonly [opacity: number, width: number]> = [
+  [0.5, 1.2],
+  [0.7, 1.6],
+  [0.9, 2.0],
+];
+
+// Quantizing hatch strokes into 3 compound paths replaces 60–150 <line> nodes
+// per hatched control with 3 <path> nodes while keeping the irregular hand texture.
 function appendHatch(svg: Element, random: Random, width: number, height: number, radius: number) {
   const clipId = `lm-clip-${clipCount++}`;
   const inset = 2 + random() * 1.5;
@@ -177,6 +187,7 @@ function appendHatch(svg: Element, random: Random, width: number, height: number
   const grained = element("g", { filter: `url(#${GRAIN_ID})` }, wash);
   element("rect", { class: "lm-wash-tint", width, height }, grained);
 
+  const paths = ["", "", ""];
   const spacing = 3.2;
   for (let c = spacing * random(); c < width + height; c += spacing * (0.7 + random() * 0.6)) {
     const ax = Math.max(0, c - height);
@@ -187,15 +198,20 @@ function appendHatch(svg: Element, random: Random, width: number, height: number
 
     const startInk = (random() - 0.35) * 4;
     const endInk = (random() - 0.35) * 4;
+    const bucket = Math.min(2, Math.floor(random() * 3));
+    random();
+    paths[bucket] += `M${round(ax - startInk * 0.707)} ${round(ay + startInk * 0.707)}L${round(bx + endInk * 0.707)} ${round(by - endInk * 0.707)}`;
+  }
+
+  for (let i = 0; i < HATCH_BUCKETS.length; i++) {
+    if (!paths[i]) continue;
+    const [opacity, strokeWidth] = HATCH_BUCKETS[i];
     element(
-      "line",
+      "path",
       {
-        x1: round(ax - startInk * 0.707),
-        y1: round(ay + startInk * 0.707),
-        x2: round(bx + endInk * 0.707),
-        y2: round(by - endInk * 0.707),
-        "stroke-opacity": round(0.4 + random() * 0.6),
-        "stroke-width": round(1 + random() * 1.2),
+        d: paths[i],
+        "stroke-opacity": opacity,
+        "stroke-width": strokeWidth,
       },
       grained,
     );
@@ -207,11 +223,27 @@ function appendStrokes(parent: Element, first: string, second: string) {
   element("path", { class: "lm-s lm-s2", d: second }, parent);
 }
 
-function draw(target: HTMLElement) {
-  const width = target.offsetWidth;
-  const height = target.offsetHeight;
-  if (width < 2 || height < 2) return;
+function ensureGrainFilter() {
+  if (grainMounted) return;
+  grainMounted = true;
+  const svg = element("svg", { width: 0, height: 0, "aria-hidden": "true", style: "position: absolute" });
+  const filter = element("filter", { id: GRAIN_ID, x: "-10%", y: "-10%", width: "120%", height: "120%" }, svg);
+  element("feTurbulence", { type: "fractalNoise", baseFrequency: 1.1, numOctaves: 2, result: "noise" }, filter);
+  element(
+    "feDisplacementMap",
+    { in: "SourceGraphic", in2: "noise", scale: 1.3, xChannelSelector: "R", yChannelSelector: "G", result: "rough" },
+    filter,
+  );
+  element(
+    "feColorMatrix",
+    { in: "noise", type: "matrix", values: "0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1.8 0 0 0 -0.12", result: "tooth" },
+    filter,
+  );
+  element("feComposite", { in: "rough", in2: "tooth", operator: "in" }, filter);
+  document.body.append(svg);
+}
 
+function buildSvg(target: HTMLElement, width: number, height: number) {
   const mode = target.dataset.sketch;
   const radius = Number(target.dataset.radius ?? 6);
   const random = seededRandom(seeds.get(target) ?? 1);
@@ -223,6 +255,12 @@ function draw(target: HTMLElement) {
     "aria-hidden": "true",
     focusable: "false",
   });
+
+  const needsGrain =
+    mode === "wash" ||
+    target.dataset.wash !== undefined ||
+    (mode !== "line" && mode !== "underline");
+  if (needsGrain) ensureGrainFilter();
 
   if (mode === "wash" || target.dataset.wash !== undefined) {
     appendHatch(svg, random, width, height, radius);
@@ -251,43 +289,61 @@ function draw(target: HTMLElement) {
     );
   }
 
-  const previous = target.querySelector(":scope > .lm-ink");
-  if (previous) previous.replaceWith(svg);
-  else target.prepend(svg);
-  target.dataset.sketched = "";
+  return svg;
 }
 
-function appendGrainFilter() {
-  const svg = element("svg", { width: 0, height: 0, "aria-hidden": "true", style: "position: absolute" });
-  const filter = element("filter", { id: GRAIN_ID, x: "-10%", y: "-10%", width: "120%", height: "120%" }, svg);
-  element("feTurbulence", { type: "fractalNoise", baseFrequency: 1.1, numOctaves: 2, result: "noise" }, filter);
-  element(
-    "feDisplacementMap",
-    { in: "SourceGraphic", in2: "noise", scale: 1.3, xChannelSelector: "R", yChannelSelector: "G", result: "rough" },
-    filter,
-  );
-  element(
-    "feColorMatrix",
-    { in: "noise", type: "matrix", values: "0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1.8 0 0 0 -0.12", result: "tooth" },
-    filter,
-  );
-  element("feComposite", { in: "rough", in2: "tooth", operator: "in" }, filter);
-  document.body.append(svg);
+function entryBoxSize(entry: ResizeObserverEntry): [number, number] {
+  const box = entry.borderBoxSize?.[0];
+  if (box) return [Math.round(box.inlineSize), Math.round(box.blockSize)];
+  return [Math.round(entry.contentRect.width), Math.round(entry.contentRect.height)];
 }
 
 const targets = document.querySelectorAll<HTMLElement>("[data-sketch]");
 
 if (targets.length > 0) {
-  appendGrainFilter();
+  // Read sizes straight from ResizeObserverEntry and batch all DOM writes
+  // together so initial render performs zero forced synchronous layouts.
+  const resizeObserver = new ResizeObserver((entries) => {
+    const pending: Array<[HTMLElement, Element]> = [];
+    for (const entry of entries) {
+      const target = entry.target as HTMLElement;
+      const [width, height] = entryBoxSize(entry);
+      if (width < 2 || height < 2) continue;
 
-  // Also fires when a hidden element first gets a size: closed menus and
-  // filtered-out cards draw the moment they appear.
-  const observer = new ResizeObserver((entries) => {
-    for (const entry of entries) draw(entry.target as HTMLElement);
+      const sizeKey = `${width}x${height}`;
+      if (drawnSizes.get(target) === sizeKey) continue;
+      drawnSizes.set(target, sizeKey);
+      pending.push([target, buildSvg(target, width, height)]);
+    }
+
+    for (const [target, svg] of pending) {
+      const previous = target.querySelector(":scope > .lm-ink");
+      if (previous) previous.replaceWith(svg);
+      else target.prepend(svg);
+      target.dataset.sketched = "";
+    }
   });
+
+  // Only draw elements in or approaching the viewport so below-the-fold cards
+  // do not block first paint or inflate the initial DOM.
+  const observed = new WeakSet<Element>();
+  const visibilityObserver = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const target = entry.target as HTMLElement;
+        visibilityObserver.unobserve(target);
+        if (!observed.has(target)) {
+          observed.add(target);
+          resizeObserver.observe(target);
+        }
+      }
+    },
+    { rootMargin: "300px 0px" },
+  );
 
   targets.forEach((target, index) => {
     seeds.set(target, hashString(`${target.textContent}${index}`));
-    observer.observe(target);
+    visibilityObserver.observe(target);
   });
 }

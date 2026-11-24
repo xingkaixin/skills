@@ -9,48 +9,20 @@ interface Props {
 
 const { html, locale } = Astro.props;
 const strings = ui[locale].copy;
+
+function escapeAttr(value: string): string {
+  return value.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+}
+
+// Wrap fenced code blocks at build time so readers see the copy bar on first
+// paint with zero layout shift and no runtime DOM rewrite.
+const enhancedHtml = html.replace(
+  /<pre><code(?: class="([^"]*)")?>([\s\S]*?)<\/code><\/pre>/g,
+  (match, classAttr: string | undefined) => {
+    const language = classAttr?.match(/language-([\w-]+)/)?.[1] ?? "code";
+    return `<div class="code-block"><div class="code-block-bar"><span class="text-small text-ink-subtle">${escapeAttr(language)}</span><button type="button" class="copy-button pressable" data-copy-code data-copy-label="${escapeAttr(strings.action)}" data-copy-done="${escapeAttr(strings.done)}" data-copy-failed="${escapeAttr(strings.failed)}"><span data-copy-text>${escapeAttr(strings.action)}</span></button></div>${match}</div>`;
+  },
+);
 ---
 
-<article
-  class="skill-prose"
-  data-copy-label={strings.action}
-  data-copy-done={strings.done}
-  set:html={html}
-/>
-
-<script>
-  // Code blocks arrive as bare <pre><code>. Wrap each one at runtime with a bar
-  // carrying its language and a copy button, so the generator stays untouched.
-  const prose = document.querySelector<HTMLElement>(".skill-prose");
-
-  if (prose) {
-    const copyLabel = prose.dataset.copyLabel ?? "Copy";
-    const copyDone = prose.dataset.copyDone ?? "Copied";
-
-    for (const pre of prose.querySelectorAll<HTMLElement>("pre")) {
-      const code = pre.querySelector("code");
-      if (!code) continue;
-
-      const language = code.className.match(/language-([\w-]+)/)?.[1] ?? "code";
-      const block = document.createElement("div");
-      block.className = "code-block";
-
-      const bar = document.createElement("div");
-      bar.className = "code-block-bar";
-      bar.innerHTML = `<span class="text-small text-ink-subtle">${language}</span>`;
-
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "copy-button pressable";
-      button.innerHTML = "<span data-copy-text></span>";
-      button.firstElementChild!.textContent = copyLabel;
-      button.dataset.copy = code.textContent ?? "";
-      button.dataset.copyLabel = copyLabel;
-      button.dataset.copyDone = copyDone;
-      bar.append(button);
-
-      pre.replaceWith(block);
-      block.append(bar, pre);
-    }
-  }
-</script>
+<article class="skill-prose" set:html={enhancedHtml} />
