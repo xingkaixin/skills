@@ -34,6 +34,8 @@ const sortOptions = [
   data-catalog
   data-count-one={strings.count(1)}
   data-count-many={strings.count(2)}
+  data-empty={strings.empty}
+  data-local-only={strings.searchLocalOnly}
 >
   <div class="z-20 flex flex-col gap-3 py-3 md:sticky md:top-[68px] md:bg-paper/60 md:backdrop-blur-md">
     <div class="flex flex-wrap items-center gap-3">
@@ -94,16 +96,21 @@ const sortOptions = [
   </div>
 
   <p class="mt-4 px-6 py-10 text-center text-body text-ink-muted" data-sketch data-radius="8" data-catalog-empty hidden>
-    {strings.empty}
+    <span data-catalog-empty-text>{strings.empty}</span>
   </p>
 </div>
 
 <script>
-  import {
-    CATALOG_SEARCH_EVENT,
-    matchesSkillQuery,
-    type CatalogSearchState,
-  } from "@/data/skill-catalog";
+  import type { CatalogSearchState } from "@/data/skill-query";
+
+  // Keep this 3-line matcher local so Rollup does not emit a tiny shared chunk
+  // waterfall between the homepage catalog and lazy-loaded WebMCP tools.
+  const CATALOG_SEARCH_EVENT = "skills:catalog-search";
+  const matchesSkillQuery = (haystack: string, query: string) => {
+    const terms = query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+    const normalized = haystack.toLocaleLowerCase();
+    return terms.every((term) => normalized.includes(term));
+  };
 
   const root = document.querySelector<HTMLElement>("[data-catalog]");
 
@@ -116,7 +123,52 @@ const sortOptions = [
     const form = root.querySelector<HTMLFormElement>("[data-catalog-search]")!;
     const countLabel = root.querySelector<HTMLElement>("[data-catalog-count]")!;
     const empty = root.querySelector<HTMLElement>("[data-catalog-empty]")!;
+    const emptyText = root.querySelector<HTMLElement>("[data-catalog-empty-text]")!;
     const knownCategories = new Set(chips.map((chip) => chip.dataset.category));
+
+    // Start with the subset of fields also present in skillSearchText (slug,
+    // category, localized summary) so local matches never drop out when the
+    // full index loads, then enrich with other locales and trigger descriptions.
+    const haystacks = new Map<HTMLElement, string>(
+      cards.map((card) => {
+        const summary = card.querySelector("[data-skill-summary]")?.textContent ?? "";
+        return [
+          card,
+          `${card.dataset.slug ?? ""} ${card.dataset.category ?? ""} ${summary}`.toLocaleLowerCase(),
+        ];
+      }),
+    );
+    let fullIndexLoaded = false;
+    let fullIndexFailed = false;
+    let fullIndexPromise: Promise<void> | null = null;
+
+    function ensureFullIndex() {
+      if (fullIndexLoaded) return Promise.resolve();
+      if (fullIndexPromise) return fullIndexPromise;
+      fullIndexFailed = false;
+      fullIndexPromise = fetch("/api/search-index.json")
+        .then((res) => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.json() as Promise<Record<string, string>>;
+        })
+        .then((index) => {
+          for (const card of cards) {
+            const full = index[card.dataset.slug!];
+            if (full) haystacks.set(card, full);
+          }
+          fullIndexLoaded = true;
+          fullIndexFailed = false;
+        })
+        .catch(() => {
+          // Reset so subsequent input or focus retries after transient failures.
+          fullIndexFailed = true;
+          fullIndexPromise = null;
+        })
+        .finally(() => {
+          if (state.query.trim()) render(false);
+        });
+      return fullIndexPromise;
+    }
 
     const params = new URLSearchParams(window.location.search);
     const initialCategory = params.get("category");
@@ -145,13 +197,15 @@ const sortOptions = [
 
     function render(syncUrl: boolean) {
       const needle = state.query.trim().toLowerCase();
+      const awaitingIndex = Boolean(needle && !fullIndexLoaded && fullIndexPromise);
+      const matched: boolean[] = [];
       let visible = 0;
 
       for (const card of cards) {
         const matches =
           (state.category === "all" || card.dataset.category === state.category) &&
-          matchesSkillQuery(card.dataset.haystack!, needle);
-        card.toggleAttribute("hidden", !matches);
+          (!needle || matchesSkillQuery(haystacks.get(card)!, needle));
+        matched.push(matches);
         if (matches) visible += 1;
       }
 
@@ -160,12 +214,28 @@ const sortOptions = [
         else chip.removeAttribute("aria-current");
       }
       setPressed(sorts, "sort", state.sort);
-      // Two rendered samples stand in for the count function, which cannot
-      // cross into the client bundle: swap the digit in whichever fits.
-      const countTemplate =
-        visible === 1 ? root!.dataset.countOne! : root!.dataset.countMany!;
-      countLabel.textContent = countTemplate.replace(/\d+/, String(visible));
-      empty.toggleAttribute("hidden", visible > 0);
+
+      // Always apply current card filtering so stale cards never linger when a
+      // query changes while the full index is in flight; defer the empty state
+      // and 0-count confirmation until the index request settles.
+      cards.forEach((card, index) => card.toggleAttribute("hidden", !matched[index]));
+      if (awaitingIndex && visible === 0) {
+        countLabel.textContent = "...";
+        empty.toggleAttribute("hidden", true);
+      } else {
+        const localOnlyNotice = root!.dataset.localOnly!;
+        const countTemplate =
+          visible === 1 ? root!.dataset.countOne! : root!.dataset.countMany!;
+        const countText = countTemplate.replace(/\d+/, String(visible));
+        if (needle && fullIndexFailed) {
+          countLabel.textContent = visible > 0 ? `${countText} · ${localOnlyNotice}` : localOnlyNotice;
+          emptyText.textContent = localOnlyNotice;
+        } else {
+          countLabel.textContent = countText;
+          emptyText.textContent = root!.dataset.empty!;
+        }
+        empty.toggleAttribute("hidden", visible > 0);
+      }
 
       if (!syncUrl) return;
 
@@ -181,11 +251,18 @@ const sortOptions = [
     }
 
     search.value = state.query;
-    render(false);
+    if (state.query) {
+      void ensureFullIndex();
+      render(false);
+    } else if (state.category !== "all") {
+      render(false);
+    }
 
     form.addEventListener("submit", (event) => event.preventDefault());
+    search.addEventListener("focus", () => void ensureFullIndex());
     search.addEventListener("input", () => {
       state.query = search.value;
+      if (state.query.trim()) void ensureFullIndex();
       render(true);
     });
 
@@ -212,6 +289,7 @@ const sortOptions = [
       state.category = detail.category;
       state.sort = detail.sort;
       search.value = detail.query;
+      if (detail.query) void ensureFullIndex();
       reorder();
       render(true);
     });

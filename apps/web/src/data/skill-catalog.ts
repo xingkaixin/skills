@@ -1,18 +1,17 @@
 import { SITE_URL, SKILLS_INSTALL_SOURCE } from "./catalog.ts";
 import type { SkillRecord } from "./skill-record.ts";
+import {
+  CATALOG_SEARCH_EVENT,
+  matchesSkillQuery,
+  type CatalogSearchState,
+  type SkillSort,
+} from "./skill-query.ts";
 import { localeHref, type Locale } from "../i18n/config.ts";
 
 export const MAX_SKILL_SEARCH_RESULTS = 20;
-export const CATALOG_SEARCH_EVENT = "skills:catalog-search";
+export { CATALOG_SEARCH_EVENT, matchesSkillQuery, type CatalogSearchState, type SkillSort };
 
-export type SkillSort = "recent" | "az";
 export type InstallScope = "all" | "skill";
-
-export interface CatalogSearchState {
-  query: string;
-  category: string;
-  sort: SkillSort;
-}
 
 export interface SkillSearchOptions {
   query?: string;
@@ -59,12 +58,6 @@ export function skillSearchText(skill: SkillRecord): string {
   ]
     .join(" ")
     .toLocaleLowerCase();
-}
-
-export function matchesSkillQuery(haystack: string, query: string): boolean {
-  const terms = query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
-  const normalizedHaystack = haystack.toLocaleLowerCase();
-  return terms.every((term) => normalizedHaystack.includes(term));
 }
 
 export function searchSkills(

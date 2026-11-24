@@ -1,6 +1,9 @@
 ---
 import "@/styles/globals.css";
 import xiaolaiCore from "@/assets/fonts/xiaolai-core.woff2?url";
+import xiaolaiShared from "@/assets/fonts/xiaolai-cjk-shared.woff2?url";
+import xiaolaiZhUi from "@/assets/fonts/xiaolai-cjk-zh-ui.woff2?url";
+import xiaolaiJaUi from "@/assets/fonts/xiaolai-cjk-ja-ui.woff2?url";
 import SiteFooter from "@/components/SiteFooter.astro";
 import { SITE_NAME, SITE_URL } from "@/data/catalog";
 import type { JsonLdNode } from "@/data/seo";
@@ -46,6 +49,25 @@ const jsonLdSources = structuredData.map((node) =>
   JSON.stringify(node).replace(/</g, "\\u003c"),
 );
 const ogImageUrl = new URL("/og-image.png", Astro.site).href;
+const preloadFonts = [
+  xiaolaiCore,
+  ...(locale === "zh" ? [xiaolaiShared, xiaolaiZhUi] : []),
+  ...(locale === "ja" ? [xiaolaiShared, xiaolaiJaUi] : []),
+];
+const speculationRules = JSON.stringify({
+  prerender: [
+    {
+      where: {
+        and: [
+          { href_matches: "/*" },
+          { not: { href_matches: "/api/*" } },
+          { not: { href_matches: "/markdown/*" } },
+        ],
+      },
+      eagerness: "moderate",
+    },
+  ],
+});
 ---
 
 <!doctype html>
@@ -54,7 +76,9 @@ const ogImageUrl = new URL("/og-image.png", Astro.site).href;
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preload" href={xiaolaiCore} as="font" type="font/woff2" crossorigin />
+    {preloadFonts.map((fontHref) => (
+      <link rel="preload" href={fontHref} as="font" type="font/woff2" crossorigin />
+    ))}
     <meta name="theme-color" content="#f5f6f8" />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -88,30 +112,58 @@ const ogImageUrl = new URL("/og-image.png", Astro.site).href;
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
-    {jsonLdSources.map((source) => (
-      <script is:inline type="application/ld+json" set:html={source} />
-    ))}
     <script is:inline define:vars={{ siteOrigin: new URL(SITE_URL).origin }}>
       if (window.location.origin === siteOrigin) {
-        const umami = document.createElement("script");
-        umami.src = "https://umami.xingkaixin.me/script.js";
-        umami.dataset.websiteId = "6d3319ec-6268-4f7b-aba8-96a2fcdb1ea4";
-        umami.dataset.excludeHash = "true";
-        umami.dataset.performance = "true";
-        // Static pages navigate by document; search and TOC changes are not pageviews.
-        umami.dataset.autoPageview = "false";
-        umami.addEventListener("load", () => window.umami?.track());
-
-        document.head.append(umami);
+        const loadUmami = () => {
+          const umami = document.createElement("script");
+          umami.async = true;
+          umami.src = "https://umami.xingkaixin.me/script.js";
+          umami.dataset.websiteId = "6d3319ec-6268-4f7b-aba8-96a2fcdb1ea4";
+          umami.dataset.excludeHash = "true";
+          umami.dataset.performance = "true";
+          // Static pages navigate by document; search and TOC changes are not pageviews.
+          umami.dataset.autoPageview = "false";
+          umami.addEventListener("load", () => window.umami?.track());
+          document.head.append(umami);
+        };
+        const schedule = () => {
+          if ("requestIdleCallback" in window) window.requestIdleCallback(loadUmami, { timeout: 2500 });
+          else window.setTimeout(loadUmami, 0);
+        };
+        const init = () => {
+          if (document.readyState === "complete") schedule();
+          else window.addEventListener("load", schedule, { once: true });
+        };
+        // Do not record pageviews for Speculation Rules prerendered documents until activated.
+        if (document.prerendering) {
+          document.addEventListener("prerenderingchange", init, { once: true });
+        } else {
+          init();
+        }
       }
     </script>
   </head>
   <body>
+    <svg width="0" height="0" aria-hidden="true" style="position:absolute">
+      <symbol id="lm-brand" viewBox="0 0 64 64">
+        <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M32 7v49M9 27h46M31 30 13 53M33 30l18 23" stroke="var(--color-accent)" stroke-width="9" />
+          <path d="m45 8 9 9" stroke="var(--color-vermilion)" stroke-width="8" />
+        </g>
+      </symbol>
+      <symbol id="lm-ic-ar" viewBox="0 0 24 24">
+        <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+      </symbol>
+    </svg>
     <a href="#main-content" class="skip-link">{strings.skipToContent}</a>
     <div class="min-h-screen">
       <slot />
       <SiteFooter locale={locale} path={path} />
     </div>
+    {jsonLdSources.map((source) => (
+      <script is:inline type="application/ld+json" set:html={source} />
+    ))}
+    <script is:inline type="speculationrules" set:html={speculationRules} />
     <script>
       import "@/scripts/sketch";
 
