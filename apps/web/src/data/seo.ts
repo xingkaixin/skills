@@ -39,10 +39,23 @@ export function getHomeSeo(locale: Locale): PageSeo {
   };
 }
 
+const skillTitleTemplates: Record<Locale, (heading: string) => string> = {
+  en: (heading) => `${heading} — Claude Code & Codex Skill`,
+  zh: (heading) => `${heading} — Claude Code / Codex Skill`,
+  ja: (heading) => `${heading} — Claude Code・Codex スキル`,
+};
+
+const skillDescriptionTemplates: Record<Locale, (summary: string) => string> = {
+  en: (summary) => `Installable Claude Code & Codex skill: ${summary}`,
+  zh: (summary) => `Claude Code / Codex 技能（一行命令安装）：${summary}`,
+  ja: (summary) => `Claude Code・Codex 向けスキル（npx で導入）：${summary}`,
+};
+
 export function getSkillSeo(skill: SkillRecord, locale: Locale): PageSeo {
+  const heading = skillTitles[skill.slug]?.[locale] ?? skill.slug;
   return {
-    title: `${skillTitles[skill.slug]?.[locale] ?? skill.slug} | Agent Skills`,
-    description: skill.displayDescription[locale],
+    title: skillTitleTemplates[locale](heading),
+    description: skillDescriptionTemplates[locale](skill.displayDescription[locale]),
     ogType: "article",
     structuredData: [
       siteEntity(locale),
@@ -151,8 +164,8 @@ function createSkillStructuredData(skill: SkillRecord, locale: Locale): JsonLdNo
     author: { "@id": `${SITE_URL}/#publisher` },
     publisher: { "@id": `${SITE_URL}/#publisher` },
     isPartOf: { "@id": `${SITE_URL}/#website` },
-    about: ["AI agent skill", skill.category],
-    keywords: [skill.slug, skill.category].join(", "),
+    about: ["AI agent skill", "Claude Code", "Codex", skill.category],
+    keywords: [skill.slug, skill.category, "Claude Code", "Codex", "Agent Skill"].join(", "),
     isBasedOn: skill.sourceRepo,
   };
 }
